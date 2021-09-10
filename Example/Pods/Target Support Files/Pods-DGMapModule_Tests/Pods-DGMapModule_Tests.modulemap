@@ -1,0 +1,6 @@
+module Pods_DGMapModule_Tests {
+  umbrella header "Pods-DGMapModule_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

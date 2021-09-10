@@ -1,4 +1,7 @@
-use_frameworks!
+source 'https://github.com/lyleLH/MTSpecs.git'
+source 'https://cdn.cocoapods.org/'                  #官方仓库地址 cdn
+ 
+#use_frameworks!
 
 platform :ios, '9.0'
 

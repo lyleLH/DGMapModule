@@ -37,6 +37,14 @@ TODO: Add long description of the pod here.
   # }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+#   s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
+  
+  s.dependency 'AFNetworking'
+#  pod 'AMap3DMap'
+
+  s.dependency 'AMapSearch' #搜索服务SDK
+  s.dependency 'AMapLocation'
+  s.dependency 'AMapNavi'  #这个要放到其他高德sdk后
+  s.dependency 'JZLocationConverter'#gps纠偏
 end

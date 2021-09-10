@@ -1,0 +1,82 @@
+PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
+  - AMapFoundation (1.6.8)
+  - AMapLocation (2.7.0):
+    - AMapFoundation (~> 1.6.8)
+  - AMapNavi (8.0.0):
+    - AMapFoundation (~> 1.6.8)
+  - AMapSearch (7.9.0):
+    - AMapFoundation (~> 1.6.6)
+  - DGMapModule (0.1.0):
+    - AFNetworking
+    - AMapLocation
+    - AMapNavi
+    - AMapSearch
+    - JZLocationConverter
+  - Expecta (1.0.6)
+  - "Expecta+Snapshots (3.1.1)":
+    - Expecta (~> 1.0)
+    - FBSnapshotTestCase/Core (~> 2.0)
+    - Specta (~> 1.0)
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+  - JZLocationConverter (1.0.0)
+  - Specta (1.0.7)
+
+DEPENDENCIES:
+  - DGMapModule (from `../`)
+  - Expecta
+  - "Expecta+Snapshots"
+  - FBSnapshotTestCase
+  - Specta
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+    - AMapFoundation
+    - AMapLocation
+    - AMapNavi
+    - AMapSearch
+    - Expecta
+    - "Expecta+Snapshots"
+    - FBSnapshotTestCase
+    - JZLocationConverter
+    - Specta
+
+EXTERNAL SOURCES:
+  DGMapModule:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  AMapFoundation: 32e9a0264ee62f5aa2aaf82bdafdda7985ce09c7
+  AMapLocation: 720eb034995c6198d480f8f7bbd714bb08bb9ef7
+  AMapNavi: ff53a6c78b8bcdbc2bd017d2a2b1059e0e1b0d44
+  AMapSearch: 94cff5f6ab7233c1639111e486861ac2acea6d4b
+  DGMapModule: b92d7d2c93f04a34ab0ed494189c9db424a24f36
+  Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
+  "Expecta+Snapshots": dcff217eef506dabd6dfdc7864ea2da321fafbb8
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  JZLocationConverter: 3d816bee6484aed9c155a6045a02ce444833e2f0
+  Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
+
+PODFILE CHECKSUM: e183306e8308a097a68faab51e21cc36c2f969e4
+
+COCOAPODS: 1.11.0

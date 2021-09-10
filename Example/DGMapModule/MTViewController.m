@@ -7,7 +7,7 @@
 //
 
 #import "MTViewController.h"
-
+#import <DGMapModule/DGMapModuleHeader.h>
 @interface MTViewController ()
 
 @end
@@ -18,6 +18,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    MapManager *manager = [MapManager sharedManager];
+    manager.controller = self;
+    [manager initMapView];
 }
 
 - (void)didReceiveMemoryWarning

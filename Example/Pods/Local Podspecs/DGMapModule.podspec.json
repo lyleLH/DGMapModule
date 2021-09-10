@@ -1,0 +1,39 @@
+{
+  "name": "DGMapModule",
+  "version": "0.1.0",
+  "summary": "A short description of DGMapModule.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Tom.Liu/DGMapModule",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Tom.Liu": "tomliu@yeahka.com"
+  },
+  "source": {
+    "git": "https://github.com/Tom.Liu/DGMapModule.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "DGMapModule/Classes/**/*",
+  "dependencies": {
+    "AFNetworking": [
+
+    ],
+    "AMapSearch": [
+
+    ],
+    "AMapLocation": [
+
+    ],
+    "AMapNavi": [
+
+    ],
+    "JZLocationConverter": [
+
+    ]
+  }
+}

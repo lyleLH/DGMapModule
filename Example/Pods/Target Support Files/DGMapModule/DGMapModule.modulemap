@@ -1,0 +1,6 @@
+framework module DGMapModule {
+  umbrella header "DGMapModule-umbrella.h"
+
+  export *
+  module * { export * }
+}

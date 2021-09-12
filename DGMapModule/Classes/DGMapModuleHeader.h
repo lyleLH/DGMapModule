@@ -10,5 +10,6 @@
 
 #import "DGMapModule.h"
 #import "MapManager.h"
+#import "DGMapModuleServiceProtocol.h"
 
 #endif /* DGMapModuleHeader_h */

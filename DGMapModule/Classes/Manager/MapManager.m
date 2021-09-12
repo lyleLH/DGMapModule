@@ -9,7 +9,7 @@
 #import "MapManager.h"
 #import "SpeechSynthesizer.h"
 #import "MoreMenuView.h"
-
+#import "CustomAnnotationView.h"
 
 #define SCREEN_W [UIScreen mainScreen].bounds.size.width
 #define SCREEN_H [UIScreen mainScreen].bounds.size.height
@@ -42,7 +42,7 @@ static CLLocationCoordinate2D distinateCoor;//目的地坐标
     _mapView.showsUserLocation = YES;
     _mapView.userTrackingMode = MAUserTrackingModeFollow;
     //设置地图缩放比例，即显示区域
-    [_mapView setZoomLevel:15.1 animated:YES];
+    [_mapView setZoomLevel:19 animated:YES];
     _mapView.delegate = self;
     //设置定位精度
     _mapView.desiredAccuracy = kCLLocationAccuracyBest;
@@ -102,43 +102,29 @@ static CLLocationCoordinate2D distinateCoor;//目的地坐标
     //将标记点的位置放在地图的中心
     _mapView.centerCoordinate = coor;
 }
+ 
 #pragma mark --设置大头针上方气泡的内容的代理方法
 -(MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation{
     //大头针标注
     if ([annotation isKindOfClass:[MAUserLocation class]]) {
         return nil;
     }else{
-        static NSString *pointReuseIndentifier = @"pointReuseIndentifier";
-        MAAnnotationView*annotationView = (MAAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndentifier];
-        if (annotationView == nil) {
-            annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndentifier];
-        }
-        annotationView.frame = CGRectMake(0, 0, 100, 100);
-        annotationView.canShowCallout= YES;       //设置气泡可以弹出，默认为NO
-        //annotationView.animatesDrop = YES;        //设置标注动画显示，默认为NO
-        annotationView.draggable = YES;           //设置标注可以拖动，默认为NO
-        //        annotationView.pinColor = MAPinAnnotationColorPurple;
+        static NSString *customReuseIndetifier = @"customReuseIndetifier";
         
-        //设置大头针显示的图片
-        if (!self.locationPointImgName) {
-            annotationView.image = [UIImage imageNamed:@"定位"];
-        }else{
-            annotationView.image = [UIImage imageNamed:self.locationPointImgName];
+        CustomAnnotationView *annotationView = (CustomAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:customReuseIndetifier];
+        
+        if (annotationView == nil)
+        {
+            annotationView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:customReuseIndetifier];
+            // must set to NO, so we can show the custom callout view.
+            annotationView.canShowCallout = NO;
+            annotationView.draggable = YES;
+            annotationView.calloutOffset = CGPointMake(0, -5);
         }
-        //点击大头针显示的左边的视图
-        UIImageView *imageV = [[UIImageView alloc]init];
-        if (!self.destinationImgName) {
-            imageV.image = [UIImage imageNamed:@"目的地"];
-        }else{
-            imageV.image = [UIImage imageNamed:self.destinationImgName];
-        }
-        annotationView.leftCalloutAccessoryView = imageV;
-//        点击大头针显示的右边视图
-        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-        rightButton.backgroundColor = [UIColor grayColor];
-        [rightButton setTitle:@"导航" forState:UIControlStateNormal];
-        [rightButton addTarget:self action:@selector(navBtnClick) forControlEvents:UIControlEventTouchUpInside];
-        annotationView.rightCalloutAccessoryView = rightButton;
+        
+//        annotationView.portrait = [UIImage imageNamed:@"hema"];
+//        annotationView.name     = @"河马";
+        
         return annotationView;
     }
 }
@@ -191,7 +177,7 @@ static CLLocationCoordinate2D distinateCoor;//目的地坐标
 -(void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response{
     //我们把编码后的地理位置，显示到 大头针的标题和子标题上
     NSString *title =response.regeocode.addressComponent.city;
-    NSLog(@"%@",title);
+    NSLog(@"[--->]-----%@",title);
     if (title.length == 0) {
         title = response.regeocode.addressComponent.province;
     }
@@ -199,11 +185,20 @@ static CLLocationCoordinate2D distinateCoor;//目的地坐标
     if (request.location.latitude == _currentLocation.coordinate.latitude&&request.location.longitude == _currentLocation.coordinate.longitude) {
         _mapView.userLocation.title = title;
         _mapView.userLocation.subtitle = response.regeocode.formattedAddress;
+        
+        _anomationPoint = [[MAPointAnnotation alloc]init];
+        _anomationPoint.coordinate  = CLLocationCoordinate2DMake(request.location.latitude, request.location.longitude);
+        [self.mapView addAnnotation:_anomationPoint];
+        [self.mapView selectAnnotation:_anomationPoint animated:YES];
+
     }else{
         self.anomationPoint.title = title;
         self.anomationPoint.subtitle = response.regeocode.formattedAddress;
     }
+  
 }
+
+
 #pragma mark 定位更新回调
 -(void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation
 updatingLocation:(BOOL)updatingLocation
@@ -215,6 +210,8 @@ updatingLocation:(BOOL)updatingLocation
     
     
 }
+
+
 -(void)setCurrentLocation:(CLLocation *)currentLocation{
     
     if (!_currentLocation) {

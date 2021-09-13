@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///一个search对象，用于地理位置逆编码
 @property(nonatomic,strong)AMapSearchAPI *search;
 
+//当前定位
+@property(nonatomic,strong,readonly) CLLocation *currentLocation;
+
 - (void)showMapWithFrame:(CGRect)frame inSuperView:(UIView *)superView ;
 //TODO: 在搜索位置时开始顶部提示，搜索到结果之后 将位置信息返回给实例进行保存，取消提示，此时的calloutview 可以开始显示实例所保存的自定义的位置信息
 

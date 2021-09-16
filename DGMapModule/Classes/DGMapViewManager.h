@@ -16,9 +16,16 @@
 #import <AMapNaviKit/AMapNaviKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@protocol DGMapViewManagerDelegate <NSObject>
+
+- (void)userChoosePlaceAddress:(NSString *)address;
+
+@end
+
+
 
 @interface DGMapViewManager : NSObject
-
+@property (nonatomic,weak) id <DGMapViewManagerDelegate> delegate;
 ///地图对象
 @property(nonatomic,strong)MAMapView *mapView;
 ///一个search对象，用于地理位置逆编码

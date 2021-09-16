@@ -14,7 +14,7 @@
 
 
 
-@interface DGMapModule () <AMapSearchDelegate,MAMapViewDelegate>
+@interface DGMapModule ()  <DGMapViewManagerDelegate>
 @property (nonatomic)MapManager *manager ;
 @property (nonatomic)DGMapViewManager *mapViewManager ;
 @end
@@ -24,6 +24,7 @@
 - (instancetype)init {
     if(self = [super init]){
         self.mapViewManager = [[DGMapViewManager alloc] init];
+        self.mapViewManager.delegate = self;
     }
     return  self;
 }
@@ -38,6 +39,12 @@
     
 }
 
+
+#pragma mark DGMapViewManagerDelegate
+
+- (void)userChoosePlaceAddress:(NSString *)address {
+    [self.mapServiceDelegate updateUserChooseAddress:address];
+}
  
 
 

@@ -42,8 +42,8 @@
 
 #pragma mark DGMapViewManagerDelegate
 
-- (void)userChoosePlaceAddress:(NSString *)address {
-    [self.mapServiceDelegate updateUserChooseAddress:address];
+- (void)userChoosePlaceAddress:(NSDictionary *)address details:(nonnull NSDictionary *)details{
+    [self.mapServiceDelegate updateUserChooseAddress:address details: details];
 }
  
 

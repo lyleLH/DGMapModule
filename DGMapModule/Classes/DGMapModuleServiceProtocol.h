@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol DGMapModuleServiceDelegate <NSObject>
 
-- (void)updateUserChooseAddress:(NSString*)address;
+- (void)updateUserChooseAddress:(NSDictionary*)address details:(NSDictionary *)details;
 
 @end
 

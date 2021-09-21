@@ -215,8 +215,8 @@ updatingLocation:(BOOL)updatingLocation {
     NSString *title =response.regeocode.addressComponent.city;
     NSString *address =response.regeocode.formattedAddress;
     NSLog(@"[--->]-----%@--%@",title,address);
-    if([self.delegate respondsToSelector:@selector(userChoosePlaceAddress:)]){
-        [self.delegate userChoosePlaceAddress:address];
+    if([self.delegate respondsToSelector:@selector(userChoosePlaceAddress:details:)]){
+        [self.delegate userChoosePlaceAddress:address details:[response.regeocode.addressComponent mj_keyValues]];
     }
     if (title.length == 0) {
         title = response.regeocode.addressComponent.province;

@@ -98,7 +98,7 @@
             UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(60, 10, 100, 30)];
             name.backgroundColor = [UIColor clearColor];
             name.textColor = [UIColor whiteColor];
-            name.text = @"Hello Amap!";
+            name.text = self.name;
             [self.calloutView addSubview:name];
         }
         
@@ -139,20 +139,20 @@
         
 //        self.backgroundColor = [UIColor grayColor];
         
-        /* Create portrait image view and add to view hierarchy. */
-//        self.portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kHoriMargin, kVertMargin, kPortraitWidth, kPortraitHeight)];
-//        [self addSubview:self.portraitImageView];
-//
-//        /* Create name label. */
-//        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(kPortraitWidth + kHoriMargin,
-//                                                                   kVertMargin,
-//                                                                   kWidth - kPortraitWidth - kHoriMargin,
-//                                                                   kHeight - 2 * kVertMargin)];
-//        self.nameLabel.backgroundColor  = [UIColor clearColor];
-//        self.nameLabel.textAlignment    = NSTextAlignmentCenter;
-//        self.nameLabel.textColor        = [UIColor whiteColor];
-//        self.nameLabel.font             = [UIFont systemFontOfSize:15.f];
-//        [self addSubview:self.nameLabel];
+//         Create portrait image view and add to view hierarchy.
+        self.portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kHoriMargin, kVertMargin, kPortraitWidth, kPortraitHeight)];
+        [self addSubview:self.portraitImageView];
+
+        /* Create name label. */
+        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(kPortraitWidth + kHoriMargin,
+                                                                   kVertMargin,
+                                                                   kWidth - kPortraitWidth - kHoriMargin,
+                                                                   kHeight - 2 * kVertMargin)];
+        self.nameLabel.backgroundColor  = [UIColor clearColor];
+        self.nameLabel.textAlignment    = NSTextAlignmentCenter;
+        self.nameLabel.textColor        = [UIColor whiteColor];
+        self.nameLabel.font             = [UIFont systemFontOfSize:15.f];
+        [self addSubview:self.nameLabel];
     }
     
     return self;

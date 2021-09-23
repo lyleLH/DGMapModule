@@ -8,15 +8,17 @@
 #import "DGMapViewManager.h"
 #import "UIImage+BundleImage.h"
 #import "CustomAnnotationView.h"
-
+#import "CustomCalloutView.h"
 #import <MJExtension/MJExtension.h>
 #define kCalloutViewMargin          -8
 
 
 @interface DGMapViewManager ()<AMapSearchDelegate,MAMapViewDelegate>
 //当前定位
-@property(nonatomic,strong) CLLocation *currentLocation;
+@property(nonatomic,strong) CLLocation * currentStartLocation;
 @property (nonatomic, strong) UIImageView          *centerAnnotationView;
+@property (strong, nonatomic) MAPointAnnotation *startAnnotation;
+@property (strong, nonatomic) MAPointAnnotation *destinationAnnotation;
 
 @end
 
@@ -27,7 +29,7 @@
         _centerAnnotationView = [[UIImageView alloc] initWithImage:[UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"]];
         _centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
         
-        [self.mapView addSubview:_centerAnnotationView];
+//        [self.mapView addSubview:_centerAnnotationView];
     }
     return _centerAnnotationView;
 }
@@ -49,16 +51,17 @@
 //        //把中心点设成自己的坐标
 //        _mapView.centerCoordinate = self.currentLocation.coordinate;
         
-//        MAUserLocationRepresentation *represent = [[MAUserLocationRepresentation alloc] init];
-//        represent.showsAccuracyRing = YES;
-//        represent.showsHeadingIndicator = YES;
-//        represent.fillColor = [UIColor colorWithRed:58.0/255.0 green:227.0/255.0 blue:170.0/255.0 alpha:.3];
-//    //    represent.strokeColor = [UIColor lightGrayColor];;
-//    //    represent.lineWidth = 2.f;
+        MAUserLocationRepresentation *represent = [[MAUserLocationRepresentation alloc] init];
+        represent.showsAccuracyRing = YES;
+        represent.showsHeadingIndicator = YES;
+        represent.fillColor = [UIColor colorWithRed:58.0/255.0 green:227.0/255.0 blue:170.0/255.0 alpha:.3];
+        represent.locationDotFillColor = [UIColor colorWithRed:58.0/255.0 green:227.0/255.0 blue:170.0/255.0 alpha:1];
+    //    represent.strokeColor = [UIColor lightGrayColor];;
+    //    represent.lineWidth = 2.f;
 //        UIImage * image = [UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"];
 //        represent.image =  image;
-//
-//        [_mapView updateUserLocationRepresentation:represent];
+            
+        [_mapView updateUserLocationRepresentation:represent];
         
     }
     return self;
@@ -138,19 +141,27 @@
 
 
 #pragma mark - MAMapViewDelegate
+ 
 
 - (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     if (self.mapView.userTrackingMode == MAUserTrackingModeNone) {
+     
         NSLog(@"%@",NSStringFromCGPoint(CGPointMake(self.mapView.centerCoordinate.latitude, self.mapView.centerCoordinate.longitude)));
+        self.currentStartLocation = [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
         [self actionSearchAroundAt:self.mapView.centerCoordinate];
+        [self.mapView removeAnnotation:self.startAnnotation];
+        //创建大头针对象
+        MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
+        pointAnnotation.coordinate = self.mapView.centerCoordinate;
+        self.startAnnotation = pointAnnotation;
+        [self.mapView addAnnotation:self.startAnnotation];
     }
  }
 
 
 #pragma mark 定位更新回调
--(void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation
-updatingLocation:(BOOL)updatingLocation {
+-(void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation updatingLocation:(BOOL)updatingLocation {
     if(!updatingLocation)
         return ;
     
@@ -161,11 +172,15 @@ updatingLocation:(BOOL)updatingLocation {
     
     if(updatingLocation)
     {
-        NSLog(@"🔥%@",NSStringFromCGPoint(CGPointMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)));
-        self.mapView.userTrackingMode = MAUserTrackingModeFollow;
-        [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
-        self.currentLocation = [userLocation.location copy];
-        [self searchReGeocodeWithCoordinate:self.currentLocation.coordinate];
+        if (self.mapView.userTrackingMode == MAUserTrackingModeFollow) {
+            NSLog(@"用户位置更新🔥%@",NSStringFromCGPoint(CGPointMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)));
+            [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
+            self.currentStartLocation = [userLocation.location copy];
+    //        [self searchReGeocodeWithCoordinate:self.currentLocation.coordinate];
+            self.mapView.userTrackingMode = MAUserTrackingModeNone;
+        }
+        
+      
     }
     
     
@@ -179,8 +194,29 @@ updatingLocation:(BOOL)updatingLocation {
         return nil;
         
     }
+    
+    else if ([annotation isKindOfClass:[MAPointAnnotation class]]) {
+        
+        static NSString *reuseIndetifier = @"CustomAnnotationView";
+        CustomAnnotationView *annotationView = (CustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
+        if (annotationView == nil)
+        {
+            annotationView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIndetifier];
+        }
+        annotationView.image = [UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"];
+        // 设置为NO，用以调用自定义的calloutView
+        annotationView.canShowCallout = NO;
+        // 设置中心点偏移，使得标注底部中间点成为经纬度对应点
+        annotationView.centerOffset = CGPointMake(0, -18);
+        return annotationView;
+    }
+    
+    
     return nil;
 }
+
+
+
 
 - (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view
 {
@@ -197,6 +233,10 @@ updatingLocation:(BOOL)updatingLocation {
         customView.backgroundColor = [UIColor redColor];
         view.customCalloutView = [[MACustomCalloutView alloc] initWithCustomView:customView];
  
+    }else  if([view isKindOfClass:NSClassFromString(@"CustomAnnotationView")]) {//自定义的大头针类
+        CustomAnnotationView * customAnnotationView  = (CustomAnnotationView*)view;
+        customAnnotationView.name = self.startAnnotation.title;
+
     }
      
 }
@@ -222,18 +262,13 @@ updatingLocation:(BOOL)updatingLocation {
         title = response.regeocode.addressComponent.province;
     }
     //    NSLog(@"=====%@",request.location);
-    if (request.location.latitude == _currentLocation.coordinate.latitude&&request.location.longitude == _currentLocation.coordinate.longitude) {
-//        _mapView.userLocation.title = title;
-//        _mapView.userLocation.subtitle = response.regeocode.formattedAddress;
+    if (request.location.latitude == _currentStartLocation.coordinate.latitude&&request.location.longitude == _currentStartLocation.coordinate.longitude) {
+ 
         
-//        _anomationPoint = [[MAPointAnnotation alloc]init];
-//        _anomationPoint.coordinate  = CLLocationCoordinate2DMake(request.location.latitude, request.location.longitude);
-//        [self.mapView addAnnotation:_anomationPoint];
-//        [self.mapView selectAnnotation:self.mapView.userLocation animated:YES];
+        self.startAnnotation.title = title;
 
     }else{
-//        self.anomationPoint.title = title;
-//        self.anomationPoint.subtitle = response.regeocode.formattedAddress;
+ 
     }
 }
 

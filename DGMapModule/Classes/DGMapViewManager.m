@@ -208,10 +208,10 @@ updatingLocation:(BOOL)updatingLocation {
     NSLog(@"----%lf====%lf",point.latitude,point.latitude);
 }
  
-#pragma mark --地址编码回调逆地理编码查询回调函数
+#pragma mark --地址编码回调逆地理编码
  
 - (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
-    //我们把编码后的地理位置，显示到 大头针的标题和子标题上
+ 
     NSString *title =response.regeocode.addressComponent.city;
     NSString *address =response.regeocode.formattedAddress;
     NSLog(@"[--->]-----%@--%@",title,address);

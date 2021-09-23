@@ -92,7 +92,10 @@
                      animations:^{
                          CGPoint center = self.centerAnnotationView.center;
                          center.y -= 20;
-                         [self.centerAnnotationView setCenter:center];}
+                         [self.centerAnnotationView setCenter:center];
+        
+    }
+     
                      completion:nil];
 
     [UIView animateWithDuration:0.45
@@ -101,7 +104,9 @@
                      animations:^{
                          CGPoint center = self.centerAnnotationView.center;
                          center.y += 20;
-                         [self.centerAnnotationView setCenter:center];}
+                         [self.centerAnnotationView setCenter:center];
+     
+    }
                      completion:nil];
 }
 
@@ -142,6 +147,11 @@
 
 #pragma mark - MAMapViewDelegate
  
+- (void)mapView:(MAMapView *)mapView regionWillChangeAnimated:(BOOL)animated wasUserAction:(BOOL)wasUserAction {
+    [self.mapView addSubview:self.centerAnnotationView];
+    [self.mapView removeAnnotation:self.startAnnotation];
+}
+
 
 - (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
@@ -150,12 +160,12 @@
         NSLog(@"%@",NSStringFromCGPoint(CGPointMake(self.mapView.centerCoordinate.latitude, self.mapView.centerCoordinate.longitude)));
         self.currentStartLocation = [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
         [self actionSearchAroundAt:self.mapView.centerCoordinate];
-        [self.mapView removeAnnotation:self.startAnnotation];
+
         //创建大头针对象
         MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
         pointAnnotation.coordinate = self.mapView.centerCoordinate;
         self.startAnnotation = pointAnnotation;
-        [self.mapView addAnnotation:self.startAnnotation];
+       
     }
  }
 
@@ -266,7 +276,8 @@
  
         
         self.startAnnotation.title = title;
-
+        [self.mapView addAnnotation:self.startAnnotation];
+        [self.centerAnnotationView removeFromSuperview];
     }else{
  
     }

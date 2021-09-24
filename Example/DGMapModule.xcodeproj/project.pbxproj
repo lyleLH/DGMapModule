@@ -348,11 +348,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-DGMapModule_Example/Pods-DGMapModule_Example-resources.sh",
 				"${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMapNavi.bundle",
 				"${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMap.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/DGMapModule/DGMapModule.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AMapNavi.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AMap.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/DGMapModule.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

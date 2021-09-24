@@ -47,4 +47,7 @@ TODO: Add long description of the pod here.
   s.dependency 'AMapLocation'
   s.dependency 'AMapNavi'  #这个要放到其他高德sdk后
   s.dependency 'JZLocationConverter'#gps纠偏
+
+  s.dependency 'MTCategoryComponent'
+  s.dependency 'MTLayoutUtilityComponent'
 end

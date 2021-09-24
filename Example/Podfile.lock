@@ -27,6 +27,8 @@ PODS:
     - AMapNavi
     - AMapSearch
     - JZLocationConverter
+    - MTCategoryComponent
+    - MTLayoutUtilityComponent
   - Expecta (1.0.6)
   - "Expecta+Snapshots (3.1.1)":
     - Expecta (~> 1.0)
@@ -38,7 +40,47 @@ PODS:
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
   - JZLocationConverter (1.0.0)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.2.0)
+  - MTCategoryComponent (1.3.0):
+    - MTCategoryComponent/Foundation (= 1.3.0)
+    - MTCategoryComponent/UIKit (= 1.3.0)
+  - MTCategoryComponent/Foundation (1.3.0):
+    - MTCategoryComponent/Foundation/Sources (= 1.3.0)
+  - MTCategoryComponent/Foundation/Sources (1.3.0)
+  - MTCategoryComponent/UIKit (1.3.0):
+    - MTCategoryComponent/UIKit/UIColor (= 1.3.0)
+    - MTCategoryComponent/UIKit/UIControl (= 1.3.0)
+    - MTCategoryComponent/UIKit/UIImage (= 1.3.0)
+    - MTCategoryComponent/UIKit/UIImageView (= 1.3.0)
+    - MTCategoryComponent/UIKit/UIResponder (= 1.3.0)
+    - MTCategoryComponent/UIKit/UITableView (= 1.3.0)
+    - MTCategoryComponent/UIKit/UITextField (= 1.3.0)
+    - MTCategoryComponent/UIKit/UIView (= 1.3.0)
+    - MTCategoryComponent/UIKit/UIViewController (= 1.3.0)
+  - MTCategoryComponent/UIKit/UIColor (1.3.0)
+  - MTCategoryComponent/UIKit/UIControl (1.3.0)
+  - MTCategoryComponent/UIKit/UIImage (1.3.0):
+    - MTCategoryComponent/UIKit/UIColor
+    - MTCategoryComponent/UIKit/UIView
+  - MTCategoryComponent/UIKit/UIImageView (1.3.0)
+  - MTCategoryComponent/UIKit/UIResponder (1.3.0)
+  - MTCategoryComponent/UIKit/UITableView (1.3.0)
+  - MTCategoryComponent/UIKit/UITextField (1.3.0)
+  - MTCategoryComponent/UIKit/UIView (1.3.0):
+    - Masonry
+    - MTCategoryComponent/UIKit/UIColor
+  - MTCategoryComponent/UIKit/UIViewController (1.3.0):
+    - MBProgressHUD
+    - MTCategoryComponent/UIKit/UIColor
+    - Toast
+  - MTLayoutUtilityComponent (1.0.1):
+    - Masonry
+    - MTLayoutUtilityComponent/MTMasConstraintMaker (= 1.0.1)
+  - MTLayoutUtilityComponent/MTMasConstraintMaker (1.0.1):
+    - Masonry
   - Specta (1.0.7)
+  - Toast (4.0.0)
 
 DEPENDENCIES:
   - DGMapModule (from `../`)
@@ -48,6 +90,9 @@ DEPENDENCIES:
   - Specta
 
 SPEC REPOS:
+  https://github.com/lyleLH/MTSpecs.git:
+    - MTCategoryComponent
+    - MTLayoutUtilityComponent
   trunk:
     - AFNetworking
     - AMapFoundation
@@ -58,7 +103,10 @@ SPEC REPOS:
     - "Expecta+Snapshots"
     - FBSnapshotTestCase
     - JZLocationConverter
+    - Masonry
+    - MBProgressHUD
     - Specta
+    - Toast
 
 EXTERNAL SOURCES:
   DGMapModule:
@@ -70,13 +118,18 @@ SPEC CHECKSUMS:
   AMapLocation: 720eb034995c6198d480f8f7bbd714bb08bb9ef7
   AMapNavi: ff53a6c78b8bcdbc2bd017d2a2b1059e0e1b0d44
   AMapSearch: 94cff5f6ab7233c1639111e486861ac2acea6d4b
-  DGMapModule: b92d7d2c93f04a34ab0ed494189c9db424a24f36
+  DGMapModule: e7beff3cf9548e4791e6bf089294ddee1375725b
   Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
   "Expecta+Snapshots": dcff217eef506dabd6dfdc7864ea2da321fafbb8
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   JZLocationConverter: 3d816bee6484aed9c155a6045a02ce444833e2f0
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MTCategoryComponent: 097f709679feff15b613d575f42f4cddfbf6b980
+  MTLayoutUtilityComponent: fd2d96fd8e3c3214b595f32b5e2fb7aceab61336
   Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: e183306e8308a097a68faab51e21cc36c2f969e4
 
-COCOAPODS: 1.11.0
+COCOAPODS: 1.10.2

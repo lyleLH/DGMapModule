@@ -9,6 +9,7 @@
 #import "CustomAnnotationView.h"
 #import "CustomCalloutView.h"
 
+#import "UIImage+BundleImage.h"
 #define kWidth  150.f
 #define kHeight 60.f
 
@@ -25,7 +26,7 @@
 
 @property (nonatomic, strong) UIImageView *portraitImageView;
 @property (nonatomic, strong) UILabel *nameLabel;
-
+@property (nonatomic, strong) NSString *address;
 @end
 
 @implementation CustomAnnotationView
@@ -83,22 +84,26 @@
         {
             /* Construct custom callout. */
             self.calloutView = [[CustomCalloutView alloc] initWithFrame:CGRectMake(0, 0, kCalloutWidth, kCalloutHeight)];
+            
             self.calloutView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2.f + self.calloutOffset.x,
                                                   -CGRectGetHeight(self.calloutView.bounds) / 2.f + self.calloutOffset.y);
             
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            btn.frame = CGRectMake(10, 10, 40, 40);
-            [btn setTitle:@"Test" forState:UIControlStateNormal];
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            btn.frame = CGRectMake(kCalloutWidth- 40-10, 0, 40, kCalloutHeight);
+            [btn setImage:[UIImage mt_imageWithName:@"icon_button_more_white" inBundle:@"DGMapModule"] forState:UIControlStateNormal];
             [btn setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-            [btn setBackgroundColor:[UIColor whiteColor]];
+//            [btn setBackgroundColor:[UIColor whiteColor]];
             [btn addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
             
             [self.calloutView addSubview:btn];
             
-            UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(60, 10, 100, 30)];
+            UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, kCalloutWidth -50 -10, kCalloutHeight - 20)];
+            name.numberOfLines = 0;
+            name.lineBreakMode = NSLineBreakByCharWrapping;
             name.backgroundColor = [UIColor clearColor];
             name.textColor = [UIColor whiteColor];
-            name.text = self.name;
+            name.font = [UIFont systemFontOfSize:14];
+            name.text = _address;
             [self.calloutView addSubview:name];
         }
         
@@ -111,6 +116,12 @@
     
     [super setSelected:selected animated:animated];
 }
+
+- (void)updateContent:(NSString * )content {
+    _address = content;
+}
+
+
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
@@ -140,19 +151,19 @@
 //        self.backgroundColor = [UIColor grayColor];
         
 //         Create portrait image view and add to view hierarchy.
-        self.portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kHoriMargin, kVertMargin, kPortraitWidth, kPortraitHeight)];
-        [self addSubview:self.portraitImageView];
-
-        /* Create name label. */
-        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(kPortraitWidth + kHoriMargin,
-                                                                   kVertMargin,
-                                                                   kWidth - kPortraitWidth - kHoriMargin,
-                                                                   kHeight - 2 * kVertMargin)];
-        self.nameLabel.backgroundColor  = [UIColor clearColor];
-        self.nameLabel.textAlignment    = NSTextAlignmentCenter;
-        self.nameLabel.textColor        = [UIColor whiteColor];
-        self.nameLabel.font             = [UIFont systemFontOfSize:15.f];
-        [self addSubview:self.nameLabel];
+//        self.portraitImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kHoriMargin, kVertMargin, kPortraitWidth, kPortraitHeight)];
+//        [self addSubview:self.portraitImageView];
+//
+//        /* Create name label. */
+//        self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(kPortraitWidth + kHoriMargin,
+//                                                                   kVertMargin,
+//                                                                   kWidth - kPortraitWidth - kHoriMargin,
+//                                                                   kHeight - 2 * kVertMargin)];
+//        self.nameLabel.backgroundColor  = [UIColor clearColor];
+//        self.nameLabel.textAlignment    = NSTextAlignmentCenter;
+//        self.nameLabel.textColor        = [UIColor whiteColor];
+//        self.nameLabel.font             = [UIFont systemFontOfSize:15.f];
+//        [self addSubview:self.nameLabel];
     }
     
     return self;

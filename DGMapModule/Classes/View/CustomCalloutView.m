@@ -8,9 +8,10 @@
 
 #import "CustomCalloutView.h"
 #import <QuartzCore/QuartzCore.h>
-
-#define kArrorHeight    10
-
+ 
+#import <MTCategoryComponent/MTCategoryComponentHeader.h>
+//#define kArrorHeight    10
+#define kArrorHeight    0 
 @implementation CustomCalloutView
 
 - (id)initWithFrame:(CGRect)frame
@@ -29,7 +30,7 @@
     
     [self drawInContext:UIGraphicsGetCurrentContext()];
     
-    self.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.layer.shadowColor = [[UIColor mt_colorWithHex:0x06121E] CGColor];
     self.layer.shadowOpacity = 1.0;
     self.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     
@@ -39,8 +40,8 @@
 {
     
     CGContextSetLineWidth(context, 2.0);
-    CGContextSetFillColorWithColor(context, [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.8].CGColor);
-    
+    CGContextSetFillColorWithColor(context, [UIColor mt_colorWithHex:0x06121E].CGColor);
+
     [self getDrawPath:context];
     CGContextFillPath(context);
     
@@ -49,11 +50,13 @@
 - (void)getDrawPath:(CGContextRef)context
 {
     CGRect rrect = self.bounds;
-    CGFloat radius = 6.0;
+    CGFloat radius = 10.0;
     CGFloat minx = CGRectGetMinX(rrect),
     midx = CGRectGetMidX(rrect),
     maxx = CGRectGetMaxX(rrect);
     CGFloat miny = CGRectGetMinY(rrect),
+   
+    
     maxy = CGRectGetMaxY(rrect)-kArrorHeight;
     
     CGContextMoveToPoint(context, midx+kArrorHeight, maxy);

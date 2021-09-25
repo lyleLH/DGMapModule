@@ -10,6 +10,7 @@
 #import "CustomCalloutView.h"
 
 #import "UIImage+BundleImage.h"
+#import <MTCategoryComponentHeader.h>
 #define kWidth  150.f
 #define kHeight 60.f
 
@@ -20,11 +21,11 @@
 #define kPortraitHeight 50.f
 
 #define kCalloutWidth   200.0
-#define kCalloutHeight  70.0
+//#define kCalloutHeight  70.0
+#define kCalloutHeight  44.0f
 
 @interface CustomAnnotationView ()
-
-@property (nonatomic, strong) UIImageView *portraitImageView;
+@property (nonatomic, strong) UIButton *addressButton;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) NSString *address;
 @end
@@ -32,8 +33,7 @@
 @implementation CustomAnnotationView
 
 @synthesize calloutView;
-@synthesize portraitImageView   = _portraitImageView;
-@synthesize nameLabel           = _nameLabel;
+ 
 
 #pragma mark - Handle Action
 
@@ -46,26 +46,8 @@
 
 #pragma mark - Override
 
-- (NSString *)name
-{
-    return self.nameLabel.text;
-}
-
-- (void)setName:(NSString *)name
-{
-    self.nameLabel.text = name;
-}
-
-- (UIImage *)portrait
-{
-    return self.portraitImageView.image;
-}
-
-- (void)setPortrait:(UIImage *)portrait
-{
-    self.portraitImageView.image = portrait;
-}
-
+ 
+ 
 - (void)setSelected:(BOOL)selected
 {
     [self setSelected:selected animated:NO];
@@ -83,12 +65,14 @@
         if (self.calloutView == nil)
         {
             /* Construct custom callout. */
-            self.calloutView = [[CustomCalloutView alloc] initWithFrame:CGRectMake(0, 0, kCalloutWidth, kCalloutHeight)];
+            self.calloutView = [[CustomCalloutView alloc] init];
             
+            [self.calloutView setFrame:CGRectMake(0, 0, kCalloutWidth, kCalloutHeight)];
             self.calloutView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2.f + self.calloutOffset.x,
                                                   -CGRectGetHeight(self.calloutView.bounds) / 2.f + self.calloutOffset.y);
             
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            self.addressButton = btn;
             btn.frame = CGRectMake(kCalloutWidth- 40-10, 0, 40, kCalloutHeight);
             [btn setImage:[UIImage mt_imageWithName:@"icon_button_more_white" inBundle:@"DGMapModule"] forState:UIControlStateNormal];
             [btn setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
@@ -97,7 +81,9 @@
             
             [self.calloutView addSubview:btn];
             
-            UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, kCalloutWidth -50 -10, kCalloutHeight - 20)];
+            UILabel *name = [[UILabel alloc] init];
+            [name setFrame :CGRectMake(10, 10, kCalloutWidth -50 -10, kCalloutHeight - 20)];
+            self.nameLabel = name;
             name.numberOfLines = 0;
             name.lineBreakMode = NSLineBreakByCharWrapping;
             name.backgroundColor = [UIColor clearColor];
@@ -105,6 +91,12 @@
             name.font = [UIFont systemFontOfSize:14];
             name.text = _address;
             [self.calloutView addSubview:name];
+           
+            CGFloat width =  [_address mt_widthByLimitHeight:35 font:[UIFont systemFontOfSize:15]];
+            width +=20;
+            width +=10;
+            width +=40;
+            [self updateUIWidth:width];
         }
         
         [self addSubview:self.calloutView];
@@ -121,6 +113,16 @@
     _address = content;
 }
 
+
+- (void)updateUIWidth:(CGFloat)width {
+//    NSLog(@"-----> [calloutView width] : %.2f",width);
+    [self.calloutView setFrame:CGRectMake(0, 0, width, kCalloutHeight)];
+    self.calloutView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2.f + self.calloutOffset.x,
+                                          -CGRectGetHeight(self.calloutView.bounds) / 2.f + self.calloutOffset.y);
+    self.addressButton.frame = CGRectMake(width- 40-10, 0, 40, kCalloutHeight);
+    [self.nameLabel setFrame :CGRectMake(10, 10, width -50 -10, kCalloutHeight - 20)];
+//    NSLog(@"-----> [calloutView frame] : %@",NSStringFromCGRect(self.calloutView.frame));
+}
 
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event

@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)userChoosePlaceAddress:(NSString *)address details:(NSDictionary *)details;
 
+- (void)userChoosenAddressClicked:(id)data;
+
 @end
 
 

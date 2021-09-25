@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol DGMapModuleServiceDelegate <NSObject>
 
 - (void)updateUserChooseAddress:(NSDictionary*)address details:(NSDictionary *)details;
-
+- (void)userDidSelectedAddressCalloutView:(id)data;
 @end
 
 

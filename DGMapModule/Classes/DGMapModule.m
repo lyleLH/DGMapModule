@@ -16,7 +16,8 @@
 
 @interface DGMapModule ()  <DGMapViewManagerDelegate>
 @property (nonatomic)MapManager *manager ;
-@property (nonatomic)DGMapViewManager *mapViewManager ;
+@property (nonatomic)DGMapViewManager * mapViewManager ;
+@property (nonatomic,weak)UIViewController * vc ;
 @end
 
 @implementation DGMapModule
@@ -31,6 +32,7 @@
 
 
 - (void)showMapAndLoactionInView:(UIViewController * )vc {
+    self.vc = vc;
     [self.mapViewManager showMapWithFrame:vc.view.frame inSuperView:vc.view];
 }
 
@@ -46,6 +48,10 @@
     [self.mapServiceDelegate updateUserChooseAddress:address details: details];
 }
  
+
+- (void)userChoosenAddressClicked:(id)data {
+    [self.mapServiceDelegate userDidSelectedAddressCalloutView:data];
+}
 
 
 

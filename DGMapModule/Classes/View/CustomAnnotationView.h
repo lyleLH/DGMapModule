@@ -13,6 +13,6 @@
 #import "MAMapKit.h"
 @interface CustomAnnotationView : MAAnnotationView
 @property (nonatomic, strong) UIView *calloutView;
-
+@property (nonatomic,copy)dispatch_block_t buttonAction;
 - (void)updateContent:(NSString * )content;
 @end

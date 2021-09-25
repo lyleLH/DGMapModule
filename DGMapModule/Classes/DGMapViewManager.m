@@ -150,6 +150,12 @@
         if (annotationView == nil)
         {
             annotationView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIndetifier];
+            annotationView.buttonAction = ^{
+                if([self.delegate respondsToSelector:@selector(userChoosenAddressClicked:)]){
+                    [self.delegate userChoosenAddressClicked:@""];
+                }
+            };
+           
             self.startAnnotationView = annotationView;
         }
         annotationView.image = [UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"];
@@ -170,8 +176,6 @@
 - (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
     
     if([view isKindOfClass:NSClassFromString(@"MAUserLocationView")]) {
-        
-        
         UIView * customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
         UILabel *label  = [[UILabel alloc] initWithFrame:customView.frame];
         label.textColor = [UIColor whiteColor];
@@ -182,8 +186,9 @@
         view.customCalloutView = [[MACustomCalloutView alloc] initWithCustomView:customView];
         
     }else  if([view isKindOfClass:NSClassFromString(@"CustomAnnotationView")]) {//自定义的大头针类
+        
 //        CustomAnnotationView * customAnnotationView  = (CustomAnnotationView*)view;
-       
+     
         
     }
     

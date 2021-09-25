@@ -42,6 +42,9 @@
     CLLocationCoordinate2D coorinate = [self.annotation coordinate];
     
     NSLog(@"coordinate = {%f, %f}", coorinate.latitude, coorinate.longitude);
+    if(self.buttonAction){
+        self.buttonAction();
+    }
 }
 
 #pragma mark - Override
@@ -90,6 +93,7 @@
             name.textColor = [UIColor whiteColor];
             name.font = [UIFont systemFontOfSize:14];
             name.text = _address;
+            name.textAlignment = 1;
             [self.calloutView addSubview:name];
            
             CGFloat width =  [_address mt_widthByLimitHeight:35 font:[UIFont systemFontOfSize:15]];

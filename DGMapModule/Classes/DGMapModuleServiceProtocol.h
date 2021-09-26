@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showMapAndLoactionInView:(UIViewController * )vc;
 
-- (void)getCurrentAroundPOIWithKeyWord:(NSString *)keyword;
+- (void)getCurrentAroundPOIWithCity:(NSString *)city andKeyWord:(NSString *)keyword;
 @end
 
 
@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateUserChooseAddress:(NSDictionary*)address details:(NSDictionary *)details;
 - (void)userDidSelectedAddressCalloutView:(id)data;
+
+- (void)getAddressSearchResult:(NSArray*)result;
 @end
 
 

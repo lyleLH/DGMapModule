@@ -72,6 +72,14 @@
 
 #pragma mark -- POI搜索结果
 - (void)coordinatePOISearchResult:(AMapPOISearchResponse *)response InRequest:(AMapPOISearchBaseRequest *)request  {
+    if([request.class isEqual:[AMapPOIAroundSearchRequest class]]){
+        AMapPOIAroundSearchRequest *  aroundSearch = (AMapPOIAroundSearchRequest*)request;
+        if(aroundSearch.city &&aroundSearch.city>0){
+            if([self.delegate respondsToSelector:@selector(userSearchCityAndKeyWordResult:)]){
+                [self.delegate userSearchCityAndKeyWordResult:response.pois];
+            }
+        }
+    }
     
  
  

@@ -15,10 +15,14 @@
 //高德导航类
 #import <AMapNaviKit/AMapNaviKit.h>
 
+#import "DGMapSearch.h"
+
 NS_ASSUME_NONNULL_BEGIN
 @protocol DGMapViewManagerDelegate <NSObject>
 
 - (void)userChoosePlaceAddress:(NSString *)address details:(NSDictionary *)details;
+
+- (void)userSearchCityAndKeyWordResult:(NSArray *)result ;
 
 - (void)userChoosenAddressClicked:(id)data;
 
@@ -30,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,weak) id <DGMapViewManagerDelegate> delegate;
 ///地图对象
 @property(nonatomic,strong)MAMapView *mapView;
+
+@property(nonatomic,strong,readonly) DGMapSearch * mapSearch;
+
 - (void)showMapWithFrame:(CGRect)frame inSuperView:(UIView *)superView ;
 
 @end

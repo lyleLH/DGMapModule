@@ -36,8 +36,10 @@
     [self.mapViewManager showMapWithFrame:vc.view.frame inSuperView:vc.view];
 }
 
-- (void)getCurrentAroundPOIWithKeyWord:(NSString *)keyword {
-
+- (void)getCurrentAroundPOIWithCity:(NSString *)city andKeyWord:(NSString *)keyword {
+    CLLocationCoordinate2D userlocation =
+    CLLocationCoordinate2DMake(self.mapViewManager.mapView.userLocation.location.coordinate.latitude, self.mapViewManager.mapView.userLocation.location.coordinate.longitude);
+    [self.mapViewManager.mapSearch searchAroundWithKeyWords:keyword InCity:city andCoordinate:userlocation];
     
 }
 
@@ -47,7 +49,10 @@
 - (void)userChoosePlaceAddress:(NSDictionary *)address details:(nonnull NSDictionary *)details{
     [self.mapServiceDelegate updateUserChooseAddress:address details: details];
 }
- 
+- (void)userSearchCityAndKeyWordResult:(NSArray *)result  {
+    [self.mapServiceDelegate getAddressSearchResult:result];
+}
+
 
 - (void)userChoosenAddressClicked:(id)data {
     [self.mapServiceDelegate userDidSelectedAddressCalloutView:data];

@@ -57,7 +57,7 @@
 
 
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
-    
+    NSLog(@"💥💥💥💥 %@",error);
 }
 
 
@@ -70,9 +70,10 @@
     [self.search AMapReGoecodeSearch:regeo];
 }
 
-- (void)searchAroundWithKeyWords:(NSString*)keywords  andCoordinate:(CLLocationCoordinate2D)coordinate{
+- (void)searchAroundWithKeyWords:(NSString*)keywords  InCity:(NSString*)city andCoordinate:(CLLocationCoordinate2D)coordinate {
     AMapPOIAroundSearchRequest  *request=[[AMapPOIAroundSearchRequest alloc] init];
     request.radius = 10000;
+    request.city = city;
     request.location=[AMapGeoPoint locationWithLatitude:coordinate.latitude longitude:coordinate.longitude];
     request.keywords = keywords;
     [self.search AMapPOIAroundSearch:request];

@@ -25,12 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DGMapSearch : NSObject
 ///一个search对象，用于地理位置逆编码
 @property(nonatomic,strong)AMapSearchAPI *search;
-
 @property(nonatomic,weak) id <DGMapSearchDelegate> searchDelegate;
 
 /* 根据中心点坐标来搜周边的POI. */
 - (void)searchPoiWithCenterCoordinate:(CLLocationCoordinate2D )coord  ;
 
+- (void)searchAroundWithKeyWords:(NSString*)keywords  InCity:(NSString*)city andCoordinate:(CLLocationCoordinate2D)coordinate ;
 @end
 
 NS_ASSUME_NONNULL_END

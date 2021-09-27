@@ -56,6 +56,26 @@
 //    [self updateStartCalloutContent:title];
 }
 
+
+- (void)updateEndAnnotation:(NSString  *)title andLocation:(CLLocationCoordinate2D)location{
+    
+    [self.mapView removeAnnotation:self.destinationAnnotation];
+    //创建大头针对象
+    MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
+    pointAnnotation.coordinate = location;
+    self.destinationAnnotation = pointAnnotation;
+    [self centerAnnotationAnimimate];
+    self.destinationAnnotation.title = title;
+    [self.mapView addAnnotation:self.destinationAnnotation];
+    [self.mapView setSelectedAnnotations:@[self.startAnnotation,self.destinationAnnotation]];
+    [self.centerAnnotationView removeFromSuperview];
+  
+//    [self updateStartCalloutContent:title];
+}
+
+
+
+
 - (void)showMapAndLoactionInView:(UIViewController * )vc {
     [self.mapView setFrame:vc.view.frame];
     [vc.view addSubview:self.mapView];

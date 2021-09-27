@@ -14,6 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showMapAndLoactionInView:(UIViewController * )vc;
 
 - (void)getCurrentAroundPOIWithCity:(NSString *)city andKeyWord:(NSString *)keyword;
+
+- (void)updateChoosedLocation:(id)data;
+
 @end
 
 

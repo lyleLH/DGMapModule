@@ -16,6 +16,7 @@
 
 
 @interface DGMapViewManager ()<MAMapViewDelegate,DGMapSearchDelegate>
+@property(nonatomic,strong)MAMapView *mapView;
 //当前定位
 @property(nonatomic,strong) CLLocation * currentStartLocation;
 @property (nonatomic, strong) UIImageView          *centerAnnotationView;
@@ -29,9 +30,44 @@
 
 @implementation DGMapViewManager
 
+
+
+#pragma mark -- DGMapModuleServiceInterface
+
+- (void)updateChoosedLocation:(NSDictionary *)addressData {
+    AMapPOI *model = [AMapPOI mj_objectWithKeyValues:addressData];
+    [self updateStartAnnotation:model.name andLocation:CLLocationCoordinate2DMake(model.location.latitude,model.location.longitude)];
+
+}
+
+- (void)updateStartAnnotation:(NSString  *)title andLocation:(CLLocationCoordinate2D)location{
+    
+    [self.mapView removeAnnotation:self.startAnnotation];
+    //创建大头针对象
+    MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
+    pointAnnotation.coordinate = location;
+    self.startAnnotation = pointAnnotation;
+    [self centerAnnotationAnimimate];
+    self.startAnnotation.title = title;
+    [self.mapView addAnnotation:self.startAnnotation];
+    [self.mapView setSelectedAnnotations:@[self.startAnnotation]];
+    [self.centerAnnotationView removeFromSuperview];
+  
+//    [self updateStartCalloutContent:title];
+}
+
+- (void)showMapAndLoactionInView:(UIViewController * )vc {
+    [self.mapView setFrame:vc.view.frame];
+    [vc.view addSubview:self.mapView];
+}
+
+
+#pragma mark -- DGMapModuleServiceInterface END
+
+
 - (instancetype)init{
     if(self == [super init]){
-        self.mapSearch = [[DGMapSearch alloc] init];
+        self.mapSearch = [[DGMapSearch alloc] initWithMapView:self.mapView];
         self.mapSearch.searchDelegate = self;
     }
     return self;
@@ -71,6 +107,7 @@
 }
 
 #pragma mark -- POI搜索结果
+
 - (void)coordinatePOISearchResult:(AMapPOISearchResponse *)response InRequest:(AMapPOISearchBaseRequest *)request  {
     if([request.class isEqual:[AMapPOIAroundSearchRequest class]]){
         AMapPOIAroundSearchRequest *  aroundSearch = (AMapPOIAroundSearchRequest*)request;
@@ -81,24 +118,20 @@
         }
     }
     
- 
- 
     if([self.delegate respondsToSelector:@selector(userChoosePlaceAddress:details:)]){
         [self.delegate userChoosePlaceAddress:[self getAddressName:response] details:[self getAddressDetails:response]];
     }
  
-    self.startAnnotation.title = [self getAddressName:response];
-    [self.mapView addAnnotation:self.startAnnotation];
-    [self.mapView setSelectedAnnotations:@[self.startAnnotation]];
+//    self.startAnnotation.title = [self getAddressName:response];
+//    [self.mapView addAnnotation:self.startAnnotation];
+//    [self.mapView setSelectedAnnotations:@[self.startAnnotation]];
+//
+    [self updateStartAnnotation:[self getAddressName:response] andLocation:self.startAnnotation.coordinate];
+    
     [self.centerAnnotationView removeFromSuperview];
 
 }
 
-
-- (void)showMapWithFrame:(CGRect)frame inSuperView:(UIView *)superView {
-    [self.mapView setFrame:frame];
-    [superView addSubview:self.mapView];
-}
 
 
 #pragma mark - MAMapViewDelegate
@@ -116,12 +149,7 @@
         self.currentStartLocation = [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
         
         [self.mapSearch searchPoiWithCenterCoordinate:self.mapView.centerCoordinate];
-        
-        //创建大头针对象
-        MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
-        pointAnnotation.coordinate = self.mapView.centerCoordinate;
-        self.startAnnotation = pointAnnotation;
-        [self centerAnnotationAnimimate];
+        [self updateStartAnnotation:@"正在获取位置信息..." andLocation:self.mapView.centerCoordinate];
         
         
     }

@@ -17,7 +17,6 @@
 @interface DGMapModule ()  <DGMapViewManagerDelegate>
 @property (nonatomic)MapManager *manager ;
 @property (nonatomic)DGMapViewManager * mapViewManager ;
-@property (nonatomic,weak)UIViewController * vc ;
 @end
 
 @implementation DGMapModule
@@ -31,15 +30,21 @@
 }
 
 
+#pragma mark -- DGMapModuleServiceInterface
+
+- (void)updateChoosedLocation:(id)data {
+    [self.mapViewManager updateChoosedLocation:data];
+}
+
+
+
+
 - (void)showMapAndLoactionInView:(UIViewController * )vc {
-    self.vc = vc;
-    [self.mapViewManager showMapWithFrame:vc.view.frame inSuperView:vc.view];
+    [self.mapViewManager showMapAndLoactionInView:vc];
 }
 
 - (void)getCurrentAroundPOIWithCity:(NSString *)city andKeyWord:(NSString *)keyword {
-    CLLocationCoordinate2D userlocation =
-    CLLocationCoordinate2DMake(self.mapViewManager.mapView.userLocation.location.coordinate.latitude, self.mapViewManager.mapView.userLocation.location.coordinate.longitude);
-    [self.mapViewManager.mapSearch searchAroundWithKeyWords:keyword InCity:city andCoordinate:userlocation];
+    [self.mapViewManager.mapSearch getCurrentAroundPOIWithCity:city andKeyWord:keyword];
     
 }
 

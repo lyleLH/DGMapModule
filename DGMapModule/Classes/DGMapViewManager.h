@@ -16,6 +16,7 @@
 #import <AMapNaviKit/AMapNaviKit.h>
 
 #import "DGMapSearch.h"
+#import "DGMapModuleServiceProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @protocol DGMapViewManagerDelegate <NSObject>
@@ -30,14 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface DGMapViewManager : NSObject
+@interface DGMapViewManager : NSObject<DGMapModuleServiceInterface>
 @property (nonatomic,weak) id <DGMapViewManagerDelegate> delegate;
 ///地图对象
-@property(nonatomic,strong)MAMapView *mapView;
+@property(nonatomic,strong,readonly)MAMapView *mapView;
 
 @property(nonatomic,strong,readonly) DGMapSearch * mapSearch;
-
-- (void)showMapWithFrame:(CGRect)frame inSuperView:(UIView *)superView ;
+ 
 
 @end
 

@@ -8,17 +8,31 @@
 #import "DGMapSearch.h"
 
 @interface DGMapSearch ()<AMapSearchDelegate>
+@property(nonatomic,strong)MAMapView *mapView;
 
 @end
 
 @implementation DGMapSearch
 
-- (AMapSearchAPI *)search {
-    if(!_search){
-        _search = [[AMapSearchAPI alloc] init];
-        _search.delegate = self;
+
+
+- (instancetype)initWithMapView:(MAMapView *)mapView {
+    if(self == [super init]){
+        _mapView = mapView;
     }
-    return _search;
+    return self;
+}
+
+
+
+
+#pragma mark -- DGMapModuleServiceInterface
+
+- (void)getCurrentAroundPOIWithCity:(NSString *)city andKeyWord:(NSString *)keyword {
+    CLLocationCoordinate2D userlocation =
+    CLLocationCoordinate2DMake(self.mapView.userLocation.location.coordinate.latitude, self.mapView.userLocation.location.coordinate.longitude);
+    [self searchAroundWithKeyWords:keyword InCity:city andCoordinate:userlocation];
+    
 }
 
  
@@ -79,6 +93,14 @@
     [self.search AMapPOIAroundSearch:request];
 }
 
+
+- (AMapSearchAPI *)search {
+    if(!_search){
+        _search = [[AMapSearchAPI alloc] init];
+        _search.delegate = self;
+    }
+    return _search;
+}
 
 
 

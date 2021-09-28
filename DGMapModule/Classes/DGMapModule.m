@@ -31,13 +31,14 @@
 
 
 #pragma mark -- DGMapModuleServiceInterface
-
-- (void)updateChoosedLocation:(id)data {
-    [self.mapViewManager updateChoosedLocation:data];
+- (void)updateChoosedStartLocation:(id)data {
+    [self.mapViewManager updateChoosedStartLocation:data];
+     
 }
 
-
-
+- (void)updateChoosedEndLocation:(id)data {
+    [self.mapViewManager updateChoosedEndLocation:data];
+}
 
 - (void)showMapAndLoactionInView:(UIViewController * )vc {
     [self.mapViewManager showMapAndLoactionInView:vc];
@@ -51,8 +52,8 @@
 
 #pragma mark DGMapViewManagerDelegate
 
-- (void)userChoosePlaceAddress:(NSDictionary *)address details:(nonnull NSDictionary *)details{
-    [self.mapServiceDelegate updateUserChooseAddress:address details: details];
+- (void)userChoosePlaceAddress:(NSDictionary *)address details:(nonnull NSDictionary *)details withType:(NSInteger)type{
+    [self.mapServiceDelegate updateUserChooseAddress:address details: details withType:type];
 }
 - (void)userSearchCityAndKeyWordResult:(NSArray *)result  {
     [self.mapServiceDelegate getAddressSearchResult:result];

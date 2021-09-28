@@ -20,10 +20,11 @@
 //当前定位
 @property(nonatomic,strong) CLLocation * currentStartLocation;
 @property (nonatomic, strong) UIImageView          *centerAnnotationView;
+@property (nonatomic, assign) NSInteger          currentChoosetype; //0 正在设置起点 1 正在设置终点
 @property (strong, nonatomic) MAPointAnnotation *startAnnotation;
 @property (strong, nonatomic) MAPointAnnotation *destinationAnnotation;
 @property (nonatomic, strong) CustomAnnotationView * startAnnotationView ;
-
+@property (nonatomic, strong) CustomAnnotationView * destinationAnnotationView ;
 @property(nonatomic,strong) DGMapSearch * mapSearch;
 
 @end
@@ -33,18 +34,26 @@
 
 
 #pragma mark -- DGMapModuleServiceInterface
-
-- (void)updateChoosedLocation:(NSDictionary *)addressData {
-    AMapPOI *model = [AMapPOI mj_objectWithKeyValues:addressData];
+- (void)updateChoosedStartLocation:(id)data {
+    _currentChoosetype = 0;
+    AMapPOI *model = [AMapPOI mj_objectWithKeyValues:data];
     [self updateStartAnnotation:model.name andLocation:CLLocationCoordinate2DMake(model.location.latitude,model.location.longitude)];
-
 }
+
+- (void)updateChoosedEndLocation:(id)data {
+    _currentChoosetype = 1;
+    AMapPOI *model = [AMapPOI mj_objectWithKeyValues:data];
+    [self updateEndAnnotation:model.name andLocation:CLLocationCoordinate2DMake(model.location.latitude,model.location.longitude)];
+}
+
+ 
 
 - (void)updateStartAnnotation:(NSString  *)title andLocation:(CLLocationCoordinate2D)location{
     
     [self.mapView removeAnnotation:self.startAnnotation];
     //创建大头针对象
     MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
+    pointAnnotation.title = @"起点";
     pointAnnotation.coordinate = location;
     self.startAnnotation = pointAnnotation;
     [self centerAnnotationAnimimate];
@@ -53,7 +62,7 @@
     [self.mapView setSelectedAnnotations:@[self.startAnnotation]];
     [self.centerAnnotationView removeFromSuperview];
   
-//    [self updateStartCalloutContent:title];
+ 
 }
 
 
@@ -62,15 +71,15 @@
     [self.mapView removeAnnotation:self.destinationAnnotation];
     //创建大头针对象
     MAPointAnnotation *pointAnnotation = [[MAPointAnnotation alloc] init];
+    pointAnnotation.title = @"终点";
     pointAnnotation.coordinate = location;
     self.destinationAnnotation = pointAnnotation;
     [self centerAnnotationAnimimate];
     self.destinationAnnotation.title = title;
     [self.mapView addAnnotation:self.destinationAnnotation];
-    [self.mapView setSelectedAnnotations:@[self.startAnnotation,self.destinationAnnotation]];
+    [self.mapView setSelectedAnnotations:@[self.destinationAnnotation]];
     [self.centerAnnotationView removeFromSuperview];
-  
-//    [self updateStartCalloutContent:title];
+ 
 }
 
 
@@ -94,9 +103,7 @@
 }
 
 
-- (void)updateStartCalloutContent:(NSString *)content {
-    [self.startAnnotationView updateContent:content];
-}
+ 
 
 
 - (NSString *)getAddressName:(AMapPOISearchResponse *)response {
@@ -138,15 +145,20 @@
         }
     }
     
-    if([self.delegate respondsToSelector:@selector(userChoosePlaceAddress:details:)]){
-        [self.delegate userChoosePlaceAddress:[self getAddressName:response] details:[self getAddressDetails:response]];
+    if([self.delegate respondsToSelector:@selector(userChoosePlaceAddress:details:withType:)]){
+        [self.delegate userChoosePlaceAddress:[self getAddressName:response] details:[self getAddressDetails:response] withType:_currentChoosetype];
     }
  
 //    self.startAnnotation.title = [self getAddressName:response];
 //    [self.mapView addAnnotation:self.startAnnotation];
 //    [self.mapView setSelectedAnnotations:@[self.startAnnotation]];
 //
-    [self updateStartAnnotation:[self getAddressName:response] andLocation:self.startAnnotation.coordinate];
+    if(_currentChoosetype ==0 ){
+        [self updateStartAnnotation:[self getAddressName:response] andLocation:self.startAnnotation.coordinate];
+    }else{
+        [self updateEndAnnotation:[self getAddressName:response] andLocation:self.destinationAnnotation.coordinate];
+    }
+    
     
     [self.centerAnnotationView removeFromSuperview];
 
@@ -157,8 +169,17 @@
 #pragma mark - MAMapViewDelegate
 
 - (void)mapView:(MAMapView *)mapView regionWillChangeAnimated:(BOOL)animated wasUserAction:(BOOL)wasUserAction {
-    [self.mapView addSubview:self.centerAnnotationView];
-    [self.mapView removeAnnotation:self.startAnnotation];
+    if(_currentChoosetype ==0){
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+        [self.mapView addSubview:self.centerAnnotationView];
+        [self.mapView removeAnnotation:self.startAnnotation];
+    }else{
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+        [self.mapView addSubview:self.centerAnnotationView];
+        [self.mapView removeAnnotation:self.destinationAnnotation];
+        
+    }
+    
 }
 
 #pragma mark -- 地图显示区域改变后 得到选点 经纬度 发起搜索
@@ -169,7 +190,12 @@
         self.currentStartLocation = [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
         
         [self.mapSearch searchPoiWithCenterCoordinate:self.mapView.centerCoordinate];
-        [self updateStartAnnotation:@"正在获取位置信息..." andLocation:self.mapView.centerCoordinate];
+        if(_currentChoosetype ==0){
+            [self updateStartAnnotation:@"正在获取位置信息..." andLocation:self.mapView.centerCoordinate];
+        }else{
+            [self updateEndAnnotation:@"正在获取位置信息..." andLocation:self.mapView.centerCoordinate];
+        }
+        
         
         
     }
@@ -200,7 +226,6 @@
     if ([annotation isKindOfClass:[MAUserLocation class]]) {
         return nil;
     }else if ([annotation isKindOfClass:[MAPointAnnotation class]]) {
-        
         static NSString *reuseIndetifier = @"CustomAnnotationView";
         CustomAnnotationView *annotationView = (CustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
         if (annotationView == nil)
@@ -212,16 +237,26 @@
                 }
             };
            
-            self.startAnnotationView = annotationView;
+           
         }
-        annotationView.image = [UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"];
+        
+        if([annotation isEqual:self.startAnnotation]) {
+            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+            self.startAnnotationView = annotationView;
+            [self.startAnnotationView updateContent:self.startAnnotation.title];
+        }else{
+            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+            self.destinationAnnotationView = annotationView;
+            [self.destinationAnnotationView updateContent:self.destinationAnnotation.title];
+        }
+
         // 设置为NO，用以调用自定义的calloutView
         annotationView.canShowCallout = NO;
         // 设置中心点偏移，使得标注底部中间点成为经纬度对应点
         annotationView.centerOffset = CGPointMake(0, -18);
 //        static NSString *reuseIndetifier = @"CustomAnnotationView";
 //        CustomAnnotationView *annotationView = (CustomAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
-        [self updateStartCalloutContent:self.startAnnotation.title];
+        
         return annotationView;
     }
     
@@ -289,8 +324,8 @@
         represent.locationDotFillColor = [UIColor colorWithRed:58.0/255.0 green:227.0/255.0 blue:170.0/255.0 alpha:1];
         //    represent.strokeColor = [UIColor lightGrayColor];;
         //    represent.lineWidth = 2.f;
-        //        UIImage * image = [UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"];
-        //        represent.image =  image;
+                UIImage * image = [UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"];
+                represent.image =  image;
         
         [_mapView updateUserLocationRepresentation:represent];
     }

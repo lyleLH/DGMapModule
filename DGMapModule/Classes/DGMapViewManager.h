@@ -21,7 +21,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @protocol DGMapViewManagerDelegate <NSObject>
 
-- (void)userChoosePlaceAddress:(NSString *)address details:(NSDictionary *)details;
+- (void)userChoosePlaceAddress:(NSString *)address details:(NSDictionary *)details withType:(NSInteger)type;
 
 - (void)userSearchCityAndKeyWordResult:(NSArray *)result ;
 

@@ -15,14 +15,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getCurrentAroundPOIWithCity:(NSString *)city andKeyWord:(NSString *)keyword;
 
-- (void)updateChoosedLocation:(id)data;
+//- (void)updateChoosedLocation:(id)data;
+
+- (void)updateChoosedStartLocation:(id)data;
+- (void)updateChoosedEndLocation:(id)data;
 
 @end
 
 
 @protocol DGMapModuleServiceDelegate <NSObject>
 
-- (void)updateUserChooseAddress:(NSDictionary*)address details:(NSDictionary *)details;
+- (void)updateUserChooseAddress:(NSDictionary*)address details:(NSDictionary *)details withType:(NSInteger)type;
 - (void)userDidSelectedAddressCalloutView:(id)data;
 
 - (void)getAddressSearchResult:(NSArray*)result;

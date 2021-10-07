@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)coordinatePOISearchResult:(AMapPOISearchResponse *)data InRequest:(AMapPOISearchBaseRequest *)request;
 
+- (void)pathSearchResult:(AMapRouteSearchResponse *)response InRequest:(AMapRouteSearchBaseRequest *)request;
+
 @end
 
 
@@ -35,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)searchPoiWithCenterCoordinate:(CLLocationCoordinate2D )coord  ;
 
 - (void)searchAroundWithKeyWords:(NSString*)keywords  InCity:(NSString*)city andCoordinate:(CLLocationCoordinate2D)coordinate ;
+
+- (void)routeSearchWithStart:(CLLocationCoordinate2D)start end:(CLLocationCoordinate2D)end ;
 @end
 
 NS_ASSUME_NONNULL_END

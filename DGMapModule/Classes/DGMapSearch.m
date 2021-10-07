@@ -39,7 +39,7 @@
 - (void)searchPoiWithCenterCoordinate:(CLLocationCoordinate2D )coord  {
     AMapPOIAroundSearchRequest*request = [[AMapPOIAroundSearchRequest alloc] init];
     request.location = [AMapGeoPoint locationWithLatitude:coord.latitude  longitude:coord.longitude];
-    request.radius   = 1000;
+    request.radius   = 50000;
     //    request.types = self.currentType;
     request.sortrule = 0;
     //    request.page     = self.searchPage;
@@ -75,6 +75,22 @@
 }
 
 
+- (void)routeSearchWithStart:(CLLocationCoordinate2D)start end:(CLLocationCoordinate2D)end {
+    AMapDrivingRouteSearchRequest *navi = [[AMapDrivingRouteSearchRequest alloc] init];
+    
+    navi.requireExtension = YES;
+//    navi.destinationId = @"BV10001595";
+//    navi.destinationtype = @"150500";
+    navi.strategy = 10;
+    /* 出发点. */
+    navi.origin = [AMapGeoPoint locationWithLatitude:start.latitude
+                                           longitude:start.longitude];
+    /* 目的地. */
+    navi.destination = [AMapGeoPoint locationWithLatitude:end.latitude
+                                                longitude:end.longitude];
+    
+    [self.search AMapDrivingRouteSearch:navi];
+}
 
 
 -(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate{
@@ -94,6 +110,21 @@
 }
 
 
+
+#pragma mark - AMapSearchDelegate
+ 
+
+/* 路径规划搜索回调. */
+- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
+    if (response.route == nil){
+        return;
+    }
+    [self.searchDelegate pathSearchResult:response InRequest:request];
+
+ 
+}
+
+
 - (AMapSearchAPI *)search {
     if(!_search){
         _search = [[AMapSearchAPI alloc] init];
@@ -101,6 +132,8 @@
     }
     return _search;
 }
+
+
 
 
 

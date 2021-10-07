@@ -8,8 +8,7 @@
 #ifndef DGMapModuleHeader_h
 #define DGMapModuleHeader_h
 
-#import "DGMapModule.h"
-#import "MapManager.h"
+#import "DGMapViewManager.h"
 #import "DGMapModuleServiceProtocol.h"
 
 #endif /* DGMapModuleHeader_h */

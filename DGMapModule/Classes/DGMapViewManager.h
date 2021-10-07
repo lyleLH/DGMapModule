@@ -19,20 +19,11 @@
 #import "DGMapModuleServiceProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@protocol DGMapViewManagerDelegate <NSObject>
-
-- (void)userChoosePlaceAddress:(NSString *)address details:(NSDictionary *)details withType:(NSInteger)type;
-
-- (void)userSearchCityAndKeyWordResult:(NSArray *)result ;
-
-- (void)userChoosenAddressClicked:(id)data;
-
-@end
-
 
 
 @interface DGMapViewManager : NSObject<DGMapModuleServiceInterface>
-@property (nonatomic,weak) id <DGMapViewManagerDelegate> delegate;
+@property(nonatomic,assign)BOOL canDragToChoosePoint;
+@property (nonatomic,weak) id <DGMapModuleServiceDelegate> delegate;
 ///地图对象
 @property(nonatomic,strong,readonly)MAMapView *mapView;
 

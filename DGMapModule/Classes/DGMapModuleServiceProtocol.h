@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateChoosedStartLocation:(id)data;
 
 - (void)updateChoosedEndLocation:(id)data;
-
+- (void)clearAllPath;
 @end
 
 
@@ -30,17 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)userDidSelectedAddressCalloutView:(id)data;
 
-- (void)getAddressSearchResult:(NSArray*)result;
-
+ 
 - (void)userChoosePlaceAddress:(NSString *)address details:(NSDictionary *)details withType:(NSInteger)type;
 
 - (void)userSearchCityAndKeyWordResult:(NSArray *)result ;
 
 - (void)userChoosenAddressClicked:(id)data;
-
-- (void)updateCurrentUserLocation:(id)data;
-
-
+ 
 @end
 
 

@@ -21,14 +21,25 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+typedef enum : NSUInteger {
+    DGMapServiceType_chooseStartPoint,
+    DGMapServiceType_chooseEndPoint,
+    DGMapServiceType_shouRoutePath,
+    DGMapServiceType_searchAddressList,
+} DGMapServiceType;
+
 @interface DGMapViewManager : NSObject<DGMapModuleServiceInterface>
+
 @property(nonatomic,assign)BOOL canDragToChoosePoint;
+
 @property (nonatomic,weak) id <DGMapModuleServiceDelegate> delegate;
 ///地图对象
 @property(nonatomic,strong,readonly)MAMapView *mapView;
 
 @property(nonatomic,strong,readonly) DGMapSearch * mapSearch;
- 
+
+@property(nonatomic,assign)DGMapServiceType serviceType;
+
 
 @end
 

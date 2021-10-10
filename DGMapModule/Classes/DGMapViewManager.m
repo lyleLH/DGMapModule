@@ -67,6 +67,10 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
 }
 
 #pragma mark -- DGMapModuleServiceInterface
+- (void)clearAllPath {
+    [self.naviRoute removeFromMapView];
+}
+
 
 - (void)planAnRoutePathWithPointStart:(NSDictionary*)start end:(NSDictionary*)end {
     /* 清空地图上已有的路线. */
@@ -108,10 +112,16 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
 }
 
 - (void)showMapAndLoactionInView:(UIViewController * )vc {
+    if(self.mapView.annotations){
+        [self.mapView removeAnnotations:self.mapView.annotations];
+    }
     [self.mapView setFrame:vc.view.frame];
     [vc.view addSubview:self.mapView];
     [vc.view insertSubview:self.mapView  atIndex:0];
     _currentChoosetype = 0;
+    if(self.currentStartLocation){
+        [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.currentStartLocation.coordinate.latitude, self.currentStartLocation.coordinate.longitude)];
+    }
 }
 
 - (void)getCurrentAroundPOIWithCity:(nonnull NSString *)city andKeyWord:(nonnull NSString *)keyword {

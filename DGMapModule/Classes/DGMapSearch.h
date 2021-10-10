@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @protocol DGMapSearchDelegate <NSObject>
-
+@optional
 - (void)coordinatePOISearchResult:(AMapPOISearchResponse *)data InRequest:(AMapPOISearchBaseRequest *)request;
 
 - (void)pathSearchResult:(AMapRouteSearchResponse *)response InRequest:(AMapRouteSearchBaseRequest *)request;

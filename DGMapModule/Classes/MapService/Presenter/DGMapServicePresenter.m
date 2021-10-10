@@ -14,4 +14,13 @@
 
 // implement module interface here
 
+- (void)mapviewGetUserCurrentLoaction:(CLLocation *)location {
+    [self.interactor confirmCityWithLocation:location];
+}
+
+- (void)requestToChooseStartPoint {
+    [self.userInterface updateMapViewActionType:DGMapViewActionType_PickStartLocation];
+}
+
+
 @end

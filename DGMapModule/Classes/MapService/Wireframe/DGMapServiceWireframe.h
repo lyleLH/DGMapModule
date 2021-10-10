@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RootWireframe.h"
+//#import "RootWireframe.h"
 #import "DGMapServicePresenter.h"
 
 @class DGMapServicePresenter;
@@ -18,7 +18,7 @@
  */
 @interface DGMapServiceWireframe : NSObject
 
-@property (nonatomic, strong) RootWireframe *rootWireframe;
+//@property (nonatomic, strong) RootWireframe *rootWireframe;
 @property (nonatomic, strong) DGMapServicePresenter *presenter;
 
 // initialization

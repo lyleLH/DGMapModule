@@ -8,8 +8,10 @@
 
 #import "MTViewController.h"
 #import <DGMapModule/DGMapModuleHeader.h>
-@interface MTViewController ()
+#import "DGMapServiceWireframe.h"
 
+@interface MTViewController () <DGMapServiceModuleDelegate>
+@property (nonatomic,strong)DGMapServiceWireframe * mapServiceWireframe;
 @end
 
 @implementation MTViewController
@@ -18,16 +20,37 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    DGMapViewManager *manager = [[DGMapViewManager alloc] init];
-    [self.view addSubview:manager.mapView];
-    [manager.mapView setFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height - 400)];
+    [self.mapServiceWireframe presentSelfFromViewController:self];
 }
  
 
+- (DGMapServiceWireframe *)mapServiceWireframe {
+    if(!_mapServiceWireframe){
+        _mapServiceWireframe = [[DGMapServiceWireframe alloc] init];
+        
+        DGMapServicePresenter * presenter = [[DGMapServicePresenter alloc] init];
+        _mapServiceWireframe.presenter = presenter;
+        presenter.wireframe = _mapServiceWireframe;
+        
+        presenter.delegate = self;
+        DGMapServiceInteractor * interactor = [[DGMapServiceInteractor alloc] init];
+        
+        presenter.interactor = interactor;
+        interactor.presenter = presenter;
+        
+        DGMapServiceDataManager * dataManager = [[DGMapServiceDataManager alloc] init];
+        interactor.dataManager = dataManager;
+    }
+    return _mapServiceWireframe;
+}
 
 
 
 
+- (void)mapServiceHasConfirmedUserCity:(NSString *)city {
+    NSLog(@"%@",city);
+    
+}
 
 
 

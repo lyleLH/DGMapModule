@@ -25,6 +25,8 @@
 @property (nonatomic, strong) DGMapServiceInteractor *interactor;
 @property (nonatomic, weak) DGMapServiceWireframe *wireframe;
 
-@property (nonatomic, weak) UIViewController<DGMapServiceViewInterface> *userInterface;
+@property (nonatomic, weak) UIView<DGMapServiceViewInterface> *userInterface;
+
+@property (nonatomic, weak) id<DGMapServiceModuleDelegate> delegate;
 
 @end

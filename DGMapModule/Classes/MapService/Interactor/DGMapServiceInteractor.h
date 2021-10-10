@@ -13,6 +13,8 @@
 
 @class DGMapServicePresenter;
 
+@class MAMapView;
+
 /**
  Business logic for the MapService module.
  */
@@ -20,5 +22,10 @@
 
 @property (nonatomic, weak) DGMapServicePresenter *presenter;
 @property (nonatomic, strong) DGMapServiceDataManager *dataManager;
+
+- (void)prepareSearchServiceWithMapView:(MAMapView *)mapView ;
+
+
+- (void)confirmCityWithLocation:(CLLocation *)location;
 
 @end

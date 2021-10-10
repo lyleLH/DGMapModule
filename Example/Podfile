@@ -7,7 +7,7 @@ platform :ios, '9.0'
 
 target 'DGMapModule_Example' do
   pod 'DGMapModule', :path => '../'
-
+  pod 'LookinServer', :configurations => ['Debug']
   target 'DGMapModule_Tests' do
     inherit! :search_paths
 

@@ -8,8 +8,7 @@
 
 #import "MANaviRoute.h"
 #import "CommonUtility.h"
-#import "UIImage+MTBottomPanelViewBundleImage.h"
-
+#import "UIImage+BundleImage.h"
 #define kMANaviRouteReplenishPolylineFilter     5
 
 @interface MANaviRoute()

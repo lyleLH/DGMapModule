@@ -41,6 +41,8 @@ TODO: Add long description of the pod here.
   # s.dependency 'AFNetworking', '~> 2.3'
   
   s.dependency 'AFNetworking'
+  s.dependency 'MJExtension'
+  
 #  pod 'AMap3DMap'
 
   s.dependency 'AMapSearch' #搜索服务SDK

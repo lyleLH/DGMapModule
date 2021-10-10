@@ -7,12 +7,19 @@
 //
 
 #import "MTAppDelegate.h"
+//基础定位类
+#import <AMapFoundationKit/AMapFoundationKit.h>
+ 
+#define APIKEY @"86692609042d3a101c778c360f4aef28"
+
 
 @implementation MTAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [AMapServices sharedServices].apiKey = APIKEY;
+    [AMapServices sharedServices].enableHTTPS = YES;
     return YES;
 }
 

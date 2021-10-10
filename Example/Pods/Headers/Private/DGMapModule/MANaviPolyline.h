@@ -1,0 +1,1 @@
+../../../../../DGMapModule/Classes/model/MANaviPolyline.h

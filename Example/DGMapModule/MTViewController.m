@@ -18,15 +18,18 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    MapManager *manager = [MapManager sharedManager];
-    manager.controller = self;
-    [manager initMapView];
+    DGMapViewManager *manager = [[DGMapViewManager alloc] init];
+    [self.view addSubview:manager.mapView];
+    [manager.mapView setFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height - 400)];
 }
+ 
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
+
+
+
+
+
+
 
 @end

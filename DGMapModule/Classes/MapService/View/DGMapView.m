@@ -7,6 +7,9 @@
 
 #import "DGMapView.h"
 #import "UIImage+BundleImage.h"
+#import "CustomAnnotationView.h"
+
+
 
 @interface DGMapView () <MAMapViewDelegate>
 
@@ -17,14 +20,90 @@
 
 @end
 
+@interface DGMapView ()
+
+@property (nonatomic, strong) UIImageView          *centerAnnotationView;
+
+@property (strong, nonatomic) MAPointAnnotation *startAnnotation;
+@property (strong, nonatomic) MAPointAnnotation *destinationAnnotation;
+@property (nonatomic, strong) CustomAnnotationView * startAnnotationView ;
+@property (nonatomic, strong) CustomAnnotationView * destinationAnnotationView ;
+
+
+@end
 
 @implementation DGMapView
 
 
 
 
+- (UIImageView *)centerAnnotationView {
+    if(!_centerAnnotationView){
+        _centerAnnotationView = [[UIImageView alloc] initWithImage:[UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"]];
+        _centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
+        _centerAnnotationView.contentMode = UIViewContentModeScaleAspectFit;
+     
+    }
+    return _centerAnnotationView;
+}
+
 
 #pragma mark -- DGMapServiceViewInterface
+
+- (void)addAnAnnotaionViewWithPOIData:(AMapPOI *)poi {
+    MAPointAnnotation *annotation = [[MAPointAnnotation alloc] init];
+    annotation.coordinate = CLLocationCoordinate2DMake(poi.location.latitude, poi.location.longitude);
+    annotation.title = poi.formattedDescription;
+    if(_mapViewActionType == DGMapViewActionType_PickStartLocation){
+       
+        [self setStartAnnotation:annotation];
+    }else if(_mapViewActionType == DGMapViewActionType_PickStartLocation) {
+        
+    }
+    
+}
+
+- (void)setStartAnnotation:(MAPointAnnotation *)startAnnotation {
+  
+    if(_startAnnotation &&[self.mapView.annotations containsObject:_startAnnotation]){
+        [self.mapView removeAnnotation:_startAnnotation];
+        _startAnnotation = nil;
+    }
+    _startAnnotation = startAnnotation;
+//    CustomAnnotationView *annotationView = [[CustomAnnotationView alloc] initWithAnnotation:startAnnotation reuseIdentifier:@"startAnnotation"];
+//    annotationView.buttonAction = ^{
+//
+//    };
+//    self.startAnnotationView = annotationView ;
+    
+    
+  
+    [self.mapView addAnnotation:_startAnnotation];
+    [self.mapView setSelectedAnnotations:@[_startAnnotation]];
+    [self.centerAnnotationView removeFromSuperview];
+    NSLog(@"起点annotation%@",self.mapView.annotations );
+}
+
+
+- (void)setDestinationAnnotation:(MAPointAnnotation *)destinationAnnotation {
+    if(_destinationAnnotation &&[self.mapView.annotations containsObject:_destinationAnnotation]){
+        [self.mapView removeAnnotation:_destinationAnnotation];
+        _destinationAnnotation = nil;
+    }
+    _destinationAnnotation = destinationAnnotation;
+//    CustomAnnotationView *annotationView = [[CustomAnnotationView alloc] initWithAnnotation:startAnnotation reuseIdentifier:@"startAnnotation"];
+//    annotationView.buttonAction = ^{
+//
+//    };
+//    self.startAnnotationView = annotationView ;
+    
+    
+  
+    [self.mapView addAnnotation:_destinationAnnotation];
+    [self.mapView setSelectedAnnotations:@[_destinationAnnotation]];
+    [self.centerAnnotationView removeFromSuperview];
+    NSLog(@"起点annotation%@",self.mapView.annotations );
+}
 
 
 - (void)setCenterWithLocation:( CLLocation *)loaction {
@@ -76,9 +155,71 @@
 
 #pragma mark - MAMapViewDelegate
 
-- (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+-(void)mapView:(MAMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+    if(_mapViewActionType ==DGMapViewActionType_PickStartLocation){
+        [self.mapView removeAnnotation:self.startAnnotation];
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+        [self.mapView addSubview:self.centerAnnotationView];
+    }else if(_mapViewActionType ==DGMapViewActionType_PickEndLocation){
+        [self.mapView removeAnnotation:self.destinationAnnotation];
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+        [self.mapView addSubview:self.centerAnnotationView];
+    }
     
 }
+
+- (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    if(_mapViewActionType !=DGMapViewActionType_UserLocation){
+        if (self.mapView.userTrackingMode == MAUserTrackingModeNone) {
+            CLLocation * newLocation =  [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
+            [self.eventHandler mapviewScrollToANewLoaction:newLocation withType:_mapViewActionType];
+        }
+    }
+}
+
+
+- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation {
+    if ([annotation isKindOfClass:[MAUserLocation class]]) {
+        return nil;
+    }else if ([annotation isKindOfClass:[MAPointAnnotation class]]) {
+        static NSString *reuseIndetifier = @"CustomAnnotationView";
+        CustomAnnotationView *annotationView = (CustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
+        if (annotationView == nil)
+        {
+            annotationView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIndetifier];
+            annotationView.buttonAction = ^{
+//                if([self.delegate respondsToSelector:@selector(userChoosenAddressClicked:)]){
+//                    [self.delegate userChoosenAddressClicked:@""];
+//                }
+            };
+           
+           
+        }
+        
+        if([annotation isEqual:self.startAnnotation]) {
+            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+            self.startAnnotationView = annotationView;
+            [self.startAnnotationView updateContent:self.startAnnotation.title];
+        }else{
+            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+            self.destinationAnnotationView = annotationView;
+            [self.destinationAnnotationView updateContent:self.destinationAnnotation.title];
+        }
+
+        // 设置为NO，用以调用自定义的calloutView
+        annotationView.canShowCallout = NO;
+        // 设置中心点偏移，使得标注底部中间点成为经纬度对应点
+        annotationView.centerOffset = CGPointMake(0, -18);
+//        static NSString *reuseIndetifier = @"CustomAnnotationView";
+//        CustomAnnotationView *annotationView = (CustomAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
+        
+        return annotationView;
+    }
+    
+    
+    return nil;
+}
+
 
 
 

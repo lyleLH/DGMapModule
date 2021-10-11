@@ -10,4 +10,10 @@
 
 @implementation DGMapServiceDataManager
 
+
+- (NSString *)userCurrentCity {
+    return self.userLocationPOI.city;
+}
+
+
 @end

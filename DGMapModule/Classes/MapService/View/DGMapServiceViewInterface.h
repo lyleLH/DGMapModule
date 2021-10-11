@@ -21,4 +21,5 @@
 
 - (void)updateMapViewActionType:( DGMapViewActionType )mapViewActionType;
 
+- (void)addAnAnnotaionViewWithPOIData:(AMapPOI *)poi;
 @end

@@ -19,8 +19,22 @@
 }
 
 - (void)requestToChooseStartPoint {
+    
     [self.userInterface updateMapViewActionType:DGMapViewActionType_PickStartLocation];
 }
 
+- (void)requestToChooseEndPoint {
+    
+    [self.userInterface updateMapViewActionType:DGMapViewActionType_PickEndLocation];
+}
+
+
+- (void)mapviewScrollToANewLoaction:(CLLocation *)location withType:(DGMapViewActionType)type {
+    [self.interactor searchLocationDataWithLocation:location andType:type];
+}
+
+- (void)updateStartPointWithData:(AMapPOI *)poi  {
+    [self.userInterface addAnAnnotaionViewWithPOIData:poi];
+}
 
 @end

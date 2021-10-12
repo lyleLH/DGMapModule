@@ -50,6 +50,11 @@
     [self.mapServiceWireframe.presenter requestToChooseEndPoint];
 }
 
+
+- (IBAction)rechooseEnd:(id)sender {
+    
+}
+
 - (void)mapServiceHasConfirmedUserCity:(NSString *)city {
     NSLog(@"%@",city);
     

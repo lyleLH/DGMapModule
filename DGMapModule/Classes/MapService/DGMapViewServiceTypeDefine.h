@@ -14,6 +14,7 @@ typedef NS_ENUM(NSUInteger, DGMapViewActionType) {
     DGMapViewActionType_UserLocation,
     DGMapViewActionType_PickStartLocation,
     DGMapViewActionType_PickEndLocation,
+    DGMapViewActionType_ConfirmTwoPoint,
 };
 
 

@@ -58,6 +58,7 @@
             }
             
             [self.presenter requestToChooseStartPoint];
+            [self.presenter updateStartPointWithData:poi];
         }
     }else{
         

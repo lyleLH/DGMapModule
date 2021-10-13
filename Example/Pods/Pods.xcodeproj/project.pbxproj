@@ -485,6 +485,10 @@
 		E1D856C65E53E5E693B3FCC74A0C7F35 /* UIViewController+LookinServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 421533C1E1EFA15575060435B6911499 /* UIViewController+LookinServer.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		E22844892715D51400606A12 /* MAMapView+ZoomLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = E22844872715D51400606A12 /* MAMapView+ZoomLevel.h */; };
 		E228448A2715D51400606A12 /* MAMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = E22844882715D51400606A12 /* MAMapView+ZoomLevel.m */; };
+		E228448F271724E700606A12 /* DDCustomCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = E228448B271724E600606A12 /* DDCustomCalloutView.m */; };
+		E2284490271724E700606A12 /* DDCustomCalloutView.h in Headers */ = {isa = PBXBuildFile; fileRef = E228448C271724E700606A12 /* DDCustomCalloutView.h */; };
+		E2284491271724E700606A12 /* DDCustomAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = E228448D271724E700606A12 /* DDCustomAnnotationView.m */; };
+		E2284492271724E700606A12 /* DDCustomAnnotationView.h in Headers */ = {isa = PBXBuildFile; fileRef = E228448E271724E700606A12 /* DDCustomAnnotationView.h */; };
 		E2D152B57B1DC676742BA763AE37C5F7 /* LookinIvarTrace.m in Sources */ = {isa = PBXBuildFile; fileRef = EBF1211B2FCFA1B81EC760C87E1E6A85 /* LookinIvarTrace.m */; };
 		E316B825E6757CB832BB2A370091CE9E /* UIColor+MTExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = E51072DA4307B9B005B68F9D07DE64B9 /* UIColor+MTExtension.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		E35AAAE16C5BA8E680CD41D2AE34AF6B /* NSArray+Lookin.m in Sources */ = {isa = PBXBuildFile; fileRef = AA069CA0D28088D28E3BD631F99DA957 /* NSArray+Lookin.m */; };
@@ -1421,6 +1425,10 @@
 		E21BAAE0BDFDBBB9B2D173BCCCD2966F /* NSObject+MJClass.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+MJClass.m"; path = "MJExtension/NSObject+MJClass.m"; sourceTree = "<group>"; };
 		E22844872715D51400606A12 /* MAMapView+ZoomLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MAMapView+ZoomLevel.h"; sourceTree = "<group>"; };
 		E22844882715D51400606A12 /* MAMapView+ZoomLevel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MAMapView+ZoomLevel.m"; sourceTree = "<group>"; };
+		E228448B271724E600606A12 /* DDCustomCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDCustomCalloutView.m; sourceTree = "<group>"; };
+		E228448C271724E700606A12 /* DDCustomCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDCustomCalloutView.h; sourceTree = "<group>"; };
+		E228448D271724E700606A12 /* DDCustomAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDCustomAnnotationView.m; sourceTree = "<group>"; };
+		E228448E271724E700606A12 /* DDCustomAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDCustomAnnotationView.h; sourceTree = "<group>"; };
 		E2D019AACA06AB715BC1B5CAF0109BBD /* MACircleRenderer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MACircleRenderer.h; path = AMapNaviKit.framework/Headers/MACircleRenderer.h; sourceTree = "<group>"; };
 		E2D5B9822835E4128BA4A98E8C3840F0 /* EXPBlockDefinedMatcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EXPBlockDefinedMatcher.m; path = Expecta/EXPBlockDefinedMatcher.m; sourceTree = "<group>"; };
 		E3431744BDDA93628C803A7C54E5150C /* NSArray+MASShorthandAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSArray+MASShorthandAdditions.h"; path = "Masonry/NSArray+MASShorthandAdditions.h"; sourceTree = "<group>"; };
@@ -2913,6 +2921,10 @@
 		F106D376AD16EAE932E55F8D0A243229 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E228448E271724E700606A12 /* DDCustomAnnotationView.h */,
+				E228448D271724E700606A12 /* DDCustomAnnotationView.m */,
+				E228448C271724E700606A12 /* DDCustomCalloutView.h */,
+				E228448B271724E600606A12 /* DDCustomCalloutView.m */,
 				F2183BF43704F0013DFB9ED6C9017266 /* DGMapServiceViewInterface.h */,
 				549E65B517C0A7031F2FED2E3F4757DC /* DGMapView.h */,
 				70C21676EAC3BD293B8DEA7D5C01F44B /* DGMapView.m */,
@@ -3030,6 +3042,7 @@
 				40A3FF490DA9D8F4A603A4A27866F9B3 /* CommonUtility.h in Headers */,
 				CD2E92F9D84966B2089C2DF7D4E867E9 /* CustomAnnotationView.h in Headers */,
 				7CED2635D3F6839F4075572A41E80613 /* CustomCalloutView.h in Headers */,
+				E2284490271724E700606A12 /* DDCustomCalloutView.h in Headers */,
 				060FCAEE05EAB011C02197DC325E1C1E /* CustomMAMultiPolyline.h in Headers */,
 				39B9ADB1AB4D4431E3EDB73CDA361D7A /* DGMapModuleHeader.h in Headers */,
 				9F0974442995D045D92B442594947FDC /* DGMapModuleServiceProtocol.h in Headers */,
@@ -3046,6 +3059,7 @@
 				0C5D254CD5D45F70E2FFE80024314B06 /* DGMapViewServiceTypeDefine.h in Headers */,
 				757195B58DC93FF5451BD46E742166F0 /* GeographyConfigModel.h in Headers */,
 				291630C8D1D85C31FE8A80CB2FD753B0 /* LineDashPolyline.h in Headers */,
+				E2284492271724E700606A12 /* DDCustomAnnotationView.h in Headers */,
 				A90F0BD7827A4E8CEB3E0C73DA2FFA3C /* MABusStopAnnotation.h in Headers */,
 				CDA1833B42429C97FF1690BDF3AF510D /* MANaviAnnotation.h in Headers */,
 				98B1E7DD0CD56887AC8EA3CF5D1E85E2 /* MANaviPolyline.h in Headers */,
@@ -4084,8 +4098,10 @@
 				B6AAD9CBC005FA1024C38454AC9D328E /* DGMapModule-dummy.m in Sources */,
 				03648DD523B81403ABA44A6510DDAB2D /* DGMapSearch.m in Sources */,
 				7C980C46ED54EDBFAE526C3061C1894C /* DGMapServiceDataManager.m in Sources */,
+				E228448F271724E700606A12 /* DDCustomCalloutView.m in Sources */,
 				24703014D2DC1593CD5E5D1C373EEA97 /* DGMapServiceInteractor.m in Sources */,
 				540FB37BA0E2F870C00CF0EEFB6894E0 /* DGMapServicePresenter.m in Sources */,
+				E2284491271724E700606A12 /* DDCustomAnnotationView.m in Sources */,
 				D8C807420038B913319B6706FF42620D /* DGMapServiceWireframe.m in Sources */,
 				0C5976CECA87446A960449F323B6BEC9 /* DGMapView.m in Sources */,
 				826CB5BAF30E60A5ACF83820C5F868C4 /* DGMapViewManager.m in Sources */,

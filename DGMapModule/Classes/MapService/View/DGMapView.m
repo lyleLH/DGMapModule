@@ -11,6 +11,8 @@
 #import "POIAnnotation.h"
 #import "MAMapView+ZoomLevel.h"
 
+#import "DDCustomAnnotationView.h"
+
 @interface DGMapView () <MAMapViewDelegate>
 
 @property (nonatomic, assign)  DGMapViewActionType mapViewActionType;;
@@ -26,8 +28,7 @@
 
 @property (strong, nonatomic) POIAnnotation *startAnnotation;
 @property (strong, nonatomic) POIAnnotation *destinationAnnotation;
-@property (nonatomic, strong) CustomAnnotationView * startAnnotationView ;
-@property (nonatomic, strong) CustomAnnotationView * destinationAnnotationView ;
+ 
 
 @end
 
@@ -55,7 +56,7 @@
         [self.mapView addAnnotation:self.startAnnotation];
         
         [self.mapView selectAnnotation:self.startAnnotation animated:YES];
-        
+ 
     }else if(_mapViewActionType == DGMapViewActionType_PickEndLocation) {
         if(poi ==nil){
             NSLog(@"请重新选择终点");
@@ -63,7 +64,7 @@
             [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.startAnnotation.coordinate.latitude, self.startAnnotation.coordinate.longitude)];
             return;
         }
-        
+        [self.mapView selectAnnotation:self.startAnnotation  animated:YES];
         [self.mapView removeAnnotation:self.destinationAnnotation ];
         POIAnnotation *annotation = [[POIAnnotation alloc] initWithPOI:poi];
         self.destinationAnnotation = annotation;
@@ -71,7 +72,7 @@
         [annotation setTag:@"终点"];
         [self.mapView addAnnotation:self.destinationAnnotation ];
         
-        [self.mapView selectAnnotation:self.startAnnotation  animated:YES];
+        
         [self.mapView selectAnnotation:self.destinationAnnotation  animated:YES];
         _mapViewActionType = DGMapViewActionType_ConfirmTwoPoint;
         [self caculateRegion];
@@ -166,45 +167,83 @@
 }
 
 
-- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation {
-    if ([annotation isKindOfClass:[MAUserLocation class]]) {
-        return nil;
-    }else if ([annotation isKindOfClass:[POIAnnotation class]]) {
-        static NSString *reuseIndetifier = @"kCustomAnnotationView";
-        CustomAnnotationView *annotationView = (CustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
-        if (annotationView == nil)
-        {
-            annotationView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIndetifier];
-            annotationView.buttonAction = ^{
-//                if([self.delegate respondsToSelector:@selector(userChoosenAddressClicked:)]){
-//                    [self.delegate userChoosenAddressClicked:@""];
-//                }
-            };
-            
-        }
-        annotationView.canShowCallout = NO;
-        POIAnnotation *poiAnno = (POIAnnotation *)annotation;
+- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
+    /*这里根据不同类型的大头针，生成不同的大头针视图
+     为了方便起见我们继承MAPointAnnotation创建了自己的DDAnnotation，用来扩展更多属性，给大头针视图提供更多数据等
+     */
+    if ([annotation isKindOfClass:[POIAnnotation class]])
+    {
+        static NSString *reusedID = @"DDPointAnnotation_reusedID";
+        DDCustomAnnotationView *annotationView = (DDCustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reusedID];
         
-        [annotationView updateContent:poiAnno.poi.name];
-        if([[poiAnno tag] isEqualToString:@"起点"]){
-            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
-        }else if([[poiAnno tag] isEqualToString:@"终点"]){
-            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+        if (!annotationView) {
+            annotationView = [[DDCustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reusedID];
+            annotationView.canShowCallout = NO;//设置此属性为NO，防止点击的时候高德自带的气泡弹出
         }
- 
-        annotationView.selected = YES;
-        // 设置为NO，用以调用自定义的calloutView
         
-        // 设置中心点偏移，使得标注底部中间点成为经纬度对应点
-        annotationView.centerOffset = CGPointMake(0, -18);
+        //给气泡赋值
+        POIAnnotation *ddAnnotation = (POIAnnotation *)annotation;
+//        NSLog(@"********* %@ %@",ddAnnotation.title,ddAnnotation.number);
+        annotationView.calloutView.textLabel.text = ddAnnotation.poi.name;
+        
+//        annotationView.calloutView.leftNumLabel.text = ddAnnotation.number;
+        
+//        annotationView.image = ddAnnotation.image;//设置大头针图片
+                if([[ddAnnotation tag] isEqualToString:@"起点"]){
+                    annotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+                }else if([[ddAnnotation tag] isEqualToString:@"终点"]){
+                    annotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+                }
+        
+        
+//        annotationView.centerOffset = CGPointMake(0, -0.5*ddAnnotation.image.size.height);
 
- 
         return annotationView;
     }
     
-    
     return nil;
 }
+
+
+//- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation {
+//    if ([annotation isKindOfClass:[MAUserLocation class]]) {
+//        return nil;
+//    }else if ([annotation isKindOfClass:[POIAnnotation class]]) {
+//        static NSString *reuseIndetifier = @"kCustomAnnotationView";
+//        CustomAnnotationView *annotationView = (CustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
+//        if (annotationView == nil)
+//        {
+//            annotationView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIndetifier];
+//            annotationView.buttonAction = ^{
+////                if([self.delegate respondsToSelector:@selector(userChoosenAddressClicked:)]){
+////                    [self.delegate userChoosenAddressClicked:@""];
+////                }
+//            };
+//
+//        }
+//        annotationView.canShowCallout = NO;
+//        POIAnnotation *poiAnno = (POIAnnotation *)annotation;
+//
+//        [annotationView updateContent:poiAnno.poi.name];
+//        if([[poiAnno tag] isEqualToString:@"起点"]){
+//            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+//        }else if([[poiAnno tag] isEqualToString:@"终点"]){
+//            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+//        }
+//
+////        annotationView.selected = YES;
+//        // 设置为NO，用以调用自定义的calloutView
+//
+//        // 设置中心点偏移，使得标注底部中间点成为经纬度对应点
+//        annotationView.centerOffset = CGPointMake(0, -18);
+//
+//
+//        return annotationView;
+//    }
+//
+//
+//    return nil;
+//}
 
 /* 移动窗口弹一下的动画 */
 - (void)centerAnnotationAnimimate {

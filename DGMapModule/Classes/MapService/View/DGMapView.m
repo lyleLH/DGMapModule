@@ -205,46 +205,6 @@
 }
 
 
-//- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation {
-//    if ([annotation isKindOfClass:[MAUserLocation class]]) {
-//        return nil;
-//    }else if ([annotation isKindOfClass:[POIAnnotation class]]) {
-//        static NSString *reuseIndetifier = @"kCustomAnnotationView";
-//        CustomAnnotationView *annotationView = (CustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
-//        if (annotationView == nil)
-//        {
-//            annotationView = [[CustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reuseIndetifier];
-//            annotationView.buttonAction = ^{
-////                if([self.delegate respondsToSelector:@selector(userChoosenAddressClicked:)]){
-////                    [self.delegate userChoosenAddressClicked:@""];
-////                }
-//            };
-//
-//        }
-//        annotationView.canShowCallout = NO;
-//        POIAnnotation *poiAnno = (POIAnnotation *)annotation;
-//
-//        [annotationView updateContent:poiAnno.poi.name];
-//        if([[poiAnno tag] isEqualToString:@"起点"]){
-//            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
-//        }else if([[poiAnno tag] isEqualToString:@"终点"]){
-//            annotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
-//        }
-//
-////        annotationView.selected = YES;
-//        // 设置为NO，用以调用自定义的calloutView
-//
-//        // 设置中心点偏移，使得标注底部中间点成为经纬度对应点
-//        annotationView.centerOffset = CGPointMake(0, -18);
-//
-//
-//        return annotationView;
-//    }
-//
-//
-//    return nil;
-//}
-
 /* 移动窗口弹一下的动画 */
 - (void)centerAnnotationAnimimate {
     [UIView animateWithDuration:0.5

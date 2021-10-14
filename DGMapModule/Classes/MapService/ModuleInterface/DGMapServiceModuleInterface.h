@@ -39,6 +39,7 @@
  Module delegate for the MapService module.
  */
 @protocol DGMapServiceModuleDelegate <NSObject>
+@optional
 //依据用户定位得到当前的城市信息
 - (void)mapServiceHasConfirmedUserCity:(NSString *)city;
 //依据选择的定位点 得到的搜索结果列表

@@ -22,4 +22,9 @@
 - (void)updateMapViewActionType:( DGMapViewActionType )mapViewActionType;
 
 - (void)addAnAnnotaionViewWithPOIData:(AMapPOI *)poi;
+
+- (void)showAroundPoiData:(NSArray<AMapPOI *>*)pois;
+
+- (void)showPointAOIData:(NSArray<AMapAOI *>*)aois;
+
 @end

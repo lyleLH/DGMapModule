@@ -65,7 +65,7 @@
 #pragma mark --地址编码回调逆地理编码
 
 - (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
-    
+    [self.searchDelegate coordinateGeocodeSearchResult:response InRequest:request];
 }
 
 
@@ -93,7 +93,7 @@
 }
 
 
--(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate{
+-(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate {
     AMapReGeocodeSearchRequest *regeo = [[AMapReGeocodeSearchRequest alloc] init];
     regeo.location = [AMapGeoPoint locationWithLatitude:coordinate.latitude longitude:coordinate.longitude];
     regeo.requireExtension = YES;

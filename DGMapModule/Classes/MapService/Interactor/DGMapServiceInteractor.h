@@ -29,4 +29,7 @@
 - (void)confirmCityWithLocation:(CLLocation *)location;
 
 - (void)searchLocationDataWithLocation:(CLLocation *)location andType:(DGMapViewActionType)type ;
+
+- (void)searchLocationDataReGeo:(CLLocation *)location andType:(DGMapViewActionType)type ;
+
 @end

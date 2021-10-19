@@ -12,6 +12,7 @@
 
 @class CLLocation;
 @class AMapPOI;
+@class AMapAOI;
 /**
  Module interface for the MapService module.
  */
@@ -31,6 +32,11 @@
 - (void)requestToChooseEndPoint;
 //依据搜索结果，更新起点的大头针信息
 - (void)updateStartPointWithData:(AMapPOI *)poi  ;
+
+//拖动选择的POI列表
+- (void)dragSearchPOIList:(NSArray <AMapPOI *> *)poi  ;
+//反地理编码的AOI列表 结果显示
+- (void)dragSearchedAOIResult:(NSArray <AMapAOI *> *)aoi  anPOIs:(NSArray <AMapPOI *> *)poi;
 
 @end
 

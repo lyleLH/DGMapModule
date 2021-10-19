@@ -31,7 +31,7 @@
     // *** present self with RootViewController
     [viewController.view addSubview:self.mapView];
     [self.mapView setFrame:CGRectMake(0, 200, viewController.view.bounds.size.width, viewController.view.bounds.size.height - 400)];
-    [self.presenter.interactor prepareSearchServiceWithMapView:self.mapView];
+//    [self.presenter.interactor prepareSearchServiceWithMapView:self.mapView];
 }
 
 @end

@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol DGMapSearchDelegate <NSObject>
 @optional
+
+- (void)coordinateGeocodeSearchResult:(AMapReGeocodeSearchResponse *)data InRequest:(AMapReGeocodeSearchRequest *)request ;
+
 - (void)coordinatePOISearchResult:(AMapPOISearchResponse *)data InRequest:(AMapPOISearchBaseRequest *)request;
 
 - (void)pathSearchResult:(AMapRouteSearchResponse *)response InRequest:(AMapRouteSearchBaseRequest *)request;
@@ -37,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)searchPoiWithCenterCoordinate:(CLLocationCoordinate2D )coord  ;
 
 - (void)searchAroundWithKeyWords:(NSString*)keywords  InCity:(NSString*)city andCoordinate:(CLLocationCoordinate2D)coordinate ;
+
+-(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate ;
 
 - (void)routeSearchWithStart:(CLLocationCoordinate2D)start end:(CLLocationCoordinate2D)end ;
 @end

@@ -10,112 +10,86 @@
 #import "CustomAnnotationView.h"
 #import "POIAnnotation.h"
 #import "MAMapView+ZoomLevel.h"
-
+#import "DGMapViewResultData.h"
 #import "DDCustomAnnotationView.h"
+#import <MJExtension/MJExtension.h>
 
 @interface DGMapView () <MAMapViewDelegate>
 
-@property (nonatomic, assign)  DGMapViewActionType mapViewActionType;;
-
+@property (nonatomic, assign)  DGMapViewActionType mapViewActionType;
 ///地图对象
 @property(nonatomic,strong)MAMapView *mapView;
+@property(nonatomic,strong)AMapSearchAPI *search;
+@property(nonatomic,assign)NSInteger searchType; //0 用户定位点搜索 1 拖动点搜索
+@property(nonatomic,assign)BOOL isUserLocationConfirmed;
+@end
+
+
+@interface DGMapView () <MAMapViewDelegate>
+
+
+@property(nonatomic,strong)DGMapViewResultData * dataModel;
+
 
 @end
+
+
 
 @interface DGMapView ()
 
-@property (nonatomic, strong) UIImageView          *centerAnnotationView;
-
-@property (strong, nonatomic) POIAnnotation *startAnnotation;
-@property (strong, nonatomic) POIAnnotation *destinationAnnotation;
+@property (nonatomic, strong) UIImageView *centerAnnotationView;
  
+@property (strong, nonatomic) POIAnnotation *choosedAnnotaion;
+
+@property (assign, nonatomic) CLLocationCoordinate2D choosedCoordinate;
+
+@property (strong, nonatomic) NSMutableArray <POIAnnotation *> *poiAnnotations;
 
 @end
 
+
 @implementation DGMapView
-
-
-#pragma mark -- DGMapServiceViewInterface
-
-- (void)addAnAnnotaionViewWithPOIData:(AMapPOI *)poi {
- 
-    if(_mapViewActionType == DGMapViewActionType_PickStartLocation){
-        if(poi ==nil){
-            NSLog(@"请重新选择起点");
-            [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.mapView.userLocation.coordinate.latitude, self.mapView.userLocation.coordinate.longitude)];
-            return;
-            
-        }
-        
-        
-        [self.mapView removeAnnotation:self.startAnnotation];
-        POIAnnotation *annotation = [[POIAnnotation alloc] initWithPOI:poi];
-        self.startAnnotation = annotation;
-        [annotation setTag:@"起点"];
-
-        [self.mapView addAnnotation:self.startAnnotation];
-        
-        [self.mapView selectAnnotation:self.startAnnotation animated:YES];
- 
-    }else if(_mapViewActionType == DGMapViewActionType_PickEndLocation) {
-        if(poi ==nil){
-            NSLog(@"请重新选择终点");
-            
-            [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.startAnnotation.coordinate.latitude, self.startAnnotation.coordinate.longitude)];
-            return;
-        }
-        [self.mapView selectAnnotation:self.startAnnotation  animated:YES];
-        [self.mapView removeAnnotation:self.destinationAnnotation ];
-        POIAnnotation *annotation = [[POIAnnotation alloc] initWithPOI:poi];
-        self.destinationAnnotation = annotation;
-
-        [annotation setTag:@"终点"];
-        [self.mapView addAnnotation:self.destinationAnnotation ];
-        
-        
-        [self.mapView selectAnnotation:self.destinationAnnotation  animated:YES];
-        _mapViewActionType = DGMapViewActionType_ConfirmTwoPoint;
-        [self caculateRegion];
-    }
-    [self centerAnnotationAnimimate];
-    [self.centerAnnotationView removeFromSuperview];
-    
-    
-}
-
-- (void)caculateRegion {
-    [self.mapView zoomToFitMapAnnotationsWithFactor:1.8];
-}
-
-
-
-
-- (void)setCenterWithLocation:( CLLocation *)loaction {
-    self.mapView.centerCoordinate = loaction.coordinate;
-    
-}
-
-- (void)updateMapViewActionType:(DGMapViewActionType)mapViewActionType {
-    _mapViewActionType = mapViewActionType;
-    self.mapView.scrollEnabled = YES;
-}
-
-
-
 
 - (instancetype)init {
     if(self ==[super init]){
         [self addSubview:self.mapView];
+        _isUserLocationConfirmed = NO;
     }
     return self;
 }
 
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    [self.mapView setFrame:self.bounds];
+
+
+
+-(void)mapView:(MAMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+    
+    [self.mapView addSubview:self.centerAnnotationView];
+    
+    if(_mapViewActionType ==DGMapViewActionType_PickStartLocation){
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+    }else if(_mapViewActionType ==DGMapViewActionType_PickEndLocation){
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+    }
+    
 }
 
+- (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    
+    CLLocationCoordinate2D choosedCoordinate = CLLocationCoordinate2DMake(mapView.centerCoordinate.latitude,mapView.centerCoordinate.longitude);
+    
+    [self centerAnnotationAnimimate];
+    if (self.mapView.userTrackingMode == MAUserTrackingModeNone) {
+        CLLocation * newLocation =  [[CLLocation alloc] initWithLatitude:choosedCoordinate.latitude longitude:choosedCoordinate.longitude];
+        if(_isUserLocationConfirmed){
+            self.choosedCoordinate = choosedCoordinate;
+            NSLog(@"🍉🍉🍉拖选点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(choosedCoordinate.latitude, choosedCoordinate.longitude)));
+            self.searchType = 1;
+            [self searchReGeocodeWithCoordinate:choosedCoordinate];
+        }
+
+    }
+}
 
 #pragma mark 定位更新回调
 
@@ -130,79 +104,47 @@
         if (self.mapView.userTrackingMode == MAUserTrackingModeFollow) {
             [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
             self.mapView.userTrackingMode = MAUserTrackingModeNone;
-            
-            [self.eventHandler mapviewGetUserCurrentLoaction:[userLocation.location copy]];
+            _mapView.scrollEnabled = YES;
+            NSLog(@"🏃‍♀️🏃‍♀️🏃‍♀️定位点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)));
+            self.searchType = 0;
+            [self searchReGeocodeWithCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
+            _isUserLocationConfirmed = YES;
+//            [self.eventHandler mapviewGetUserCurrentLoaction:[userLocation.location copy]];
         }
     }
     
 }
 
+#pragma mark -- 搜索回调
+#pragma mark -- 地址编码回调逆地理编码
 
-#pragma mark - MAMapViewDelegate
-
--(void)mapView:(MAMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
-    
-    
-    if(_mapViewActionType ==DGMapViewActionType_PickStartLocation){
-        [self.mapView addSubview:self.centerAnnotationView];
-        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
-    }else if(_mapViewActionType ==DGMapViewActionType_PickEndLocation){
-        [self.mapView addSubview:self.centerAnnotationView];
-        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
-    }
-    
+- (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
+    NSLog(@"💥💥💥💥 %@",error);
 }
 
-- (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    
-    if(_mapViewActionType != DGMapViewActionType_UserLocation){
-        if (self.mapView.userTrackingMode == MAUserTrackingModeNone) {
-            CLLocation * newLocation =  [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
-            if(_mapViewActionType != DGMapViewActionType_ConfirmTwoPoint){
-                [self.eventHandler mapviewScrollToANewLoaction:newLocation withType:_mapViewActionType];
-            }
-
-        }
+- (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
+    if(self.searchType ==0){
+        self.dataModel.userCurrentLocationRegeoResponse = response;
+    }else if(self.searchType ==1){
+        self.dataModel.choosedLocationRegeoResponse = response;
     }
+    
+    
+//    NSLog(@"%@",[response mj_keyValues]);
 }
 
 
-- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
-    /*这里根据不同类型的大头针，生成不同的大头针视图
-     为了方便起见我们继承MAPointAnnotation创建了自己的DDAnnotation，用来扩展更多属性，给大头针视图提供更多数据等
-     */
-    if ([annotation isKindOfClass:[POIAnnotation class]])
-    {
-        static NSString *reusedID = @"DDPointAnnotation_reusedID";
-        DDCustomAnnotationView *annotationView = (DDCustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reusedID];
-        
-        if (!annotationView) {
-            annotationView = [[DDCustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reusedID];
-            annotationView.canShowCallout = NO;//设置此属性为NO，防止点击的时候高德自带的气泡弹出
-        }
-        
-        //给气泡赋值
-        POIAnnotation *ddAnnotation = (POIAnnotation *)annotation;
-//        NSLog(@"********* %@ %@",ddAnnotation.title,ddAnnotation.number);
-        annotationView.calloutView.textLabel.text = ddAnnotation.poi.name;
-        
-//        annotationView.calloutView.leftNumLabel.text = ddAnnotation.number;
-        
-//        annotationView.image = ddAnnotation.image;//设置大头针图片
-                if([[ddAnnotation tag] isEqualToString:@"起点"]){
-                    annotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
-                }else if([[ddAnnotation tag] isEqualToString:@"终点"]){
-                    annotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
-                }
-        
-        
-//        annotationView.centerOffset = CGPointMake(0, -0.5*ddAnnotation.image.size.height);
 
-        return annotationView;
-    }
-    
-    return nil;
+#pragma mark -- private
+
+-(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate {
+    AMapReGeocodeSearchRequest *regeo = [[AMapReGeocodeSearchRequest alloc] init];
+    regeo.location = [AMapGeoPoint locationWithLatitude:coordinate.latitude longitude:coordinate.longitude];
+    regeo.requireExtension = YES;
+    regeo.radius = 200;
+    [self.search AMapReGoecodeSearch:regeo];
 }
+
 
 
 /* 移动窗口弹一下的动画 */
@@ -229,6 +171,19 @@
         
     }
                      completion:nil];
+}
+
+
+#pragma mark -- properties
+
+- (UIImageView *)centerAnnotationView {
+    if(!_centerAnnotationView){
+        _centerAnnotationView = [[UIImageView alloc] initWithImage: [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"]];
+        _centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
+        _centerAnnotationView.contentMode = UIViewContentModeScaleAspectFit;
+     
+    }
+    return _centerAnnotationView;
 }
 
 
@@ -265,17 +220,29 @@
     return _mapView;
 }
 
-- (UIImageView *)centerAnnotationView {
-    if(!_centerAnnotationView){
-        _centerAnnotationView = [[UIImageView alloc] initWithImage:[UIImage mt_imageWithName:@"icon_current_location" inBundle:@"DGMapModule"]];
-        _centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
-        _centerAnnotationView.contentMode = UIViewContentModeScaleAspectFit;
-     
+
+
+- (AMapSearchAPI *)search {
+    if(!_search){
+        _search = [[AMapSearchAPI alloc] init];
+        _search.delegate = self;
     }
-    return _centerAnnotationView;
+    return _search;
+}
+
+- (DGMapViewResultData *)dataModel {
+    if(!_dataModel){
+        _dataModel = [DGMapViewResultData new];
+    }
+    return _dataModel;
 }
 
 
- 
+
+
+- (void)setSearchType:(NSInteger)searchType {
+    _searchType = searchType;
+    NSLog(@"🔍🔍🔍 searchType----- %ld",searchType);
+}
 
 @end

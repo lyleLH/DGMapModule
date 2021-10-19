@@ -12,6 +12,10 @@
 
 @property (nonatomic, readwrite, strong) AMapPOI *poi;
 @property (nonatomic, readwrite, copy) NSString *tag;
+
+@property (nonatomic, readwrite, strong) NSString *initialTitle;
+@property (nonatomic, readwrite, copy) NSString *address;
+
 @end
 
 @implementation POIAnnotation
@@ -20,13 +24,18 @@
 @synthesize tag = _tag;
 #pragma mark - MAAnnotation Protocol
 
+
+
 - (NSString *)title
 {
+    
+    if(self.initialTitle) return self.initialTitle;
     return self.poi.name;
 }
 
 - (NSString *)subtitle
 {
+    if(self.address) return self.address;
     return self.poi.address;
 }
 
@@ -46,6 +55,21 @@
     
     return self;
 }
+
+
+- (id)initWithTitle:(NSString *)title andAddress:(NSString*)address {
+    if (self = [super init])
+    {
+        _initialTitle = title;
+        _address = address;
+        
+    }
+    
+    return self;
+}
+
+
+
 
 - (void)setTag:(NSString *)tag {
     _tag = tag;

@@ -22,7 +22,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DGMapView : UIView <DGMapServiceViewInterface>
+@interface DGMapView : UIView <DGMapServiceViewInterface,AMapSearchDelegate>
 @property (nonatomic, strong) id<DGMapServiceModuleInterface> eventHandler;
 
 @property (nonatomic, assign,readonly)  DGMapViewActionType mapViewActionType;;

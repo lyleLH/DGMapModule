@@ -21,14 +21,17 @@
 - (void)prepareSearchServiceWithMapView:(MAMapView *)mapView {
     
     self.searchService = [[DGMapSearch alloc] initWithMapView:mapView];
-    self.searchService.searchDelegate = self;
+    self.searchService.searchDelegate = self.presenter.userInterface;
     
 }
 
 
 - (void)confirmCityWithLocation:(CLLocation *)location {
     [self saveUserCurrentLocation:location];
-    [self.searchService searchPoiWithCenterCoordinate:CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)];
+    [self.searchService searchReGeocodeWithCoordinate:CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)];
+
+//    [self.searchService searchPoiWithCenterCoordinate:CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)];
+    
     
 }
 
@@ -36,9 +39,10 @@
 - (void)searchLocationDataWithLocation:(CLLocation *)location andType:(DGMapViewActionType)type {
     self.dataManager.currentType = type;
     [self.searchService searchAroundWithKeyWords:@"" InCity:[self.dataManager userCurrentCity] andCoordinate:CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)];
+
 }
 
-
+ 
 - (void)saveUserCurrentLocation:(CLLocation *)location {
     self.dataManager.userLocation = location;
 }
@@ -65,7 +69,7 @@
         if([self.presenter.delegate respondsToSelector:@selector(mapServiceLocationPOIResultList:)]){
             [self.presenter.delegate mapServiceLocationPOIResultList:data.pois];
         }
-        
+        [self.presenter dragSearchPOIList:data.pois];
         AMapPOI * poi = [data.pois firstObject];
         [self.presenter updateStartPointWithData:poi];
         
@@ -74,8 +78,12 @@
     
     
 }
+ 
 
-
+- (void)coordinateGeocodeSearchResult:(AMapReGeocodeSearchResponse *)data InRequest:(AMapReGeocodeSearchRequest *)request {
+    [self.presenter requestToChooseStartPoint];
+    [self.presenter dragSearchedAOIResult:data.regeocode.aois anPOIs:data.regeocode.pois];
+}
 
 
 

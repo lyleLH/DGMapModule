@@ -21,6 +21,8 @@
 
 - (id)initWithPOI:(AMapPOI *)poi;
 
+- (id)initWithTitle:(NSString *)title andAddress:(NSString*)address;
+
 @property (nonatomic, copy,readonly) NSString *tag;
 
 @property (nonatomic, readonly, strong) AMapPOI *poi;

@@ -15,6 +15,10 @@
 //#define kCalloutHeight  70.0
 #define kCalloutHeight  44.0f
 
+@interface DDCustomAnnotationView ()
+
+@end
+
 @implementation DDCustomAnnotationView
 
 //复写父类init方法
@@ -47,8 +51,15 @@
 - (void)setUpClloutView {
     if (self.calloutView == nil)
     {
+      
         self.calloutView = [[DDCustomCalloutView alloc] initWithFrame:CGRectMake(0, 0, kCalloutWidth, kCalloutHeight)];
         [self addSubview:self.calloutView];
+        self.addressLabel = [[UILabel alloc] init];
+        self.addressLabel.textColor = [UIColor mt_colorWithHex:0x4370F1];
+        self.addressLabel.font = [UIFont boldSystemFontOfSize:12];
+        self.addressLabel.textAlignment = 0;
+        [self addSubview:self.addressLabel];
+        
     }
 }
 
@@ -57,10 +68,10 @@
     /*坐标不合适再此设置即可*/
     //Code ...
 //    CGFloat width =  [ self.calloutView.textLabel.text mt_widthByLimitHeight:35 font:[UIFont systemFontOfSize:15]];
-    
+    self.addressLabel.hidden = !self.calloutView.hidden;
     CGSize size = [self.calloutView.textLabel.text sizeWithAttributes:@{NSFontAttributeName:self.calloutView.textLabel.font}];
-
-  
+    [self.addressLabel setFrame:CGRectMake(CGRectGetMaxY(self.imageView.frame)+3, 0, size.width, size.height)];
+    self.addressLabel.text = self.calloutView.textLabel.text;
     [self updateUIWidth:size.width];
     
 }

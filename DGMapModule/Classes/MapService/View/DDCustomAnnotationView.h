@@ -20,7 +20,7 @@
 #import "DDCustomCalloutView.h"
 
 @interface DDCustomAnnotationView : MAAnnotationView
-
+@property (nonatomic,strong)UILabel * addressLabel;
 @property (nonatomic, strong) DDCustomCalloutView *calloutView;
 
 @end

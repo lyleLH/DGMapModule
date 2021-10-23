@@ -7,7 +7,7 @@
 
 #import "DGMapView.h"
 #import "UIImage+BundleImage.h"
-#import "CustomAnnotationView.h"
+ 
 #import "POIAnnotation.h"
 #import "MAMapView+ZoomLevel.h"
 #import "DGMapViewResultData.h"
@@ -59,6 +59,14 @@
     return self;
 }
 
+#pragma mark -- DGMapServiceViewInterface
+
+ 
+- (void)showReGeoSearchResult:(AMapReGeocodeSearchResponse *)response {
+    self.dataModel.userCurrentLocationRegeoResponse = response;
+    [self updateChoosedAnnotaionsViewWithResponse:response];
+}
+ 
 
 
 - (void)mapView:(MAMapView *)mapView didAddAnnotationViews:(NSArray *)views
@@ -100,12 +108,16 @@
             self.mapView.userTrackingMode = MAUserTrackingModeNone;
             _mapView.scrollEnabled = YES;
             NSLog(@"🏃‍♀️🏃‍♀️🏃‍♀️定位点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)));
-            self.searchType = 0;
+//            self.searchType = 0;
 #pragma mark -- 调用 逆地理搜索
             
-            [self searchReGeocodeWithCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
+            if([self.eventHandler respondsToSelector:@selector(confirmedUserLocationCoordinate:)]) {
+                [self.eventHandler confirmedUserLocationCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
+            }
+            
+//            [self searchReGeocodeWithCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
             _isUserLocationConfirmed = YES;
-//            [self.eventHandler mapviewGetUserCurrentLoaction:[userLocation.location copy]];
+            
         }
     }
     
@@ -137,36 +149,18 @@
             if(_isUserLocationConfirmed){
                 
                 NSLog(@"🍉🍉🍉拖选点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(choosedCoordinate.latitude, choosedCoordinate.longitude)));
-                self.searchType = 1;
+//                self.searchType = 1;
 #pragma mark -- 调用 逆地理搜索
-                [self searchReGeocodeWithCoordinate:choosedCoordinate];
+                if([self.eventHandler respondsToSelector:@selector(userDargToNewLocationCoordinate:)]) {
+                    [self.eventHandler userDargToNewLocationCoordinate:choosedCoordinate];
+                }
+                
+//                [self searchReGeocodeWithCoordinate:choosedCoordinate];
             }
 
         }
     }
 
-}
-
-
-
-#pragma mark -- 搜索回调
-#pragma mark -- 地址编码回调逆地理编码
-
-- (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
-    NSLog(@"💥💥💥💥 %@",error);
-}
-
-- (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
-    if(self.searchType ==0){
-        self.dataModel.userCurrentLocationRegeoResponse = response;
-        [self updateChoosedAnnotaionsViewWithResponse:response];
-    }else if(self.searchType ==1){
-        self.dataModel.choosedLocationRegeoResponse = response;
-        [self updateChoosedAnnotaionsViewWithResponse:response];
-    }
-    
-    
-//    NSLog(@"%@",[response mj_keyValues]);
 }
  
 - (NSString *) shortAddressWithResponse:(AMapReGeocodeSearchResponse *)response {
@@ -182,11 +176,11 @@
         road = roadObj.name;
     }
     
-    NSString * building = @"";
+    NSString * aoiName = @"";
     
     if(response.regeocode.aois.count>0){
         AMapAOI * aoi =response.regeocode.aois[0];
-        building = aoi.name;
+        aoiName = aoi.name;
     }
     
     string = [NSString stringWithFormat:@"%@%@%@%@%@%@",
@@ -195,7 +189,7 @@
               response.regeocode.addressComponent.township,
               street,
               road,
-              building];
+              aoiName];
     return string;
 }
  

@@ -7,11 +7,10 @@
 //
 
 #import "MTViewController.h"
-#import <DGMapModule/DGMapModuleHeader.h>
-#import "DGMapServiceWireframe.h"
 
+#import "DGMapModule.h"
 @interface MTViewController () <DGMapServiceModuleDelegate>
-@property (nonatomic,strong)DGMapServiceWireframe * mapServiceWireframe;
+@property (nonatomic,strong)DGMapModule * mapService ;
 @end
 
 @implementation MTViewController
@@ -24,13 +23,13 @@
 }
  
 
-- (DGMapServiceWireframe *)mapServiceWireframe {
-    if(!_mapServiceWireframe){
-        _mapServiceWireframe = [[DGMapServiceWireframe alloc] init];
+- (DGMapModule *)mapServiceWireframe {
+    if(!_mapService){
+        _mapService = [[DGMapModule alloc] init];
         
         DGMapServicePresenter * presenter = [[DGMapServicePresenter alloc] init];
-        _mapServiceWireframe.presenter = presenter;
-        presenter.wireframe = _mapServiceWireframe;
+        _mapService.presenter = presenter;
+        presenter.mapModule = _mapService;
         
         presenter.delegate = self;
         DGMapServiceInteractor * interactor = [[DGMapServiceInteractor alloc] init];
@@ -41,13 +40,13 @@
         DGMapServiceDataManager * dataManager = [[DGMapServiceDataManager alloc] init];
         interactor.dataManager = dataManager;
     }
-    return _mapServiceWireframe;
+    return _mapService;
 }
 
 
 
 - (IBAction)chooseEnd:(id)sender {
-    [self.mapServiceWireframe.presenter requestToChooseEndPoint];
+//    [self.mapServiceWireframe.presenter requestToChooseEndPoint];
 }
 
 

@@ -1,1 +1,1 @@
-../../../../../DGMapModule/Classes/MapService/ModuleInterface/DGMapServiceModuleInterface.h
+../../../../../DGMapModule/Classes/MapService/DGMapServiceModuleInterface.h

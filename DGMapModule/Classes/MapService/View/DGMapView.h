@@ -19,7 +19,7 @@
 #import "DGMapServiceModuleInterface.h"
 #import "DGMapServiceViewInterface.h"
 
-
+#import "DGMapViewServiceTypeDefine.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DGMapView : UIView <DGMapServiceViewInterface,AMapSearchDelegate>

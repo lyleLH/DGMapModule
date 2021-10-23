@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "DGMapViewServiceTypeDefine.h"
-
+ 
+//搜索基础类
+#import <AMapSearchKit/AMapSearchKit.h>
 /**
  View interface for the MapService module.
  */
@@ -17,14 +18,8 @@
 
 @optional
 
-- (void)setCenterWithLocation:( CLLocation *)loaction;
-
-- (void)updateMapViewActionType:( DGMapViewActionType )mapViewActionType;
-
-- (void)addAnAnnotaionViewWithPOIData:(AMapPOI *)poi;
-
-- (void)showAroundPoiData:(NSArray<AMapPOI *>*)pois;
-
-- (void)showPointAOIData:(NSArray<AMapAOI *>*)aois;
+//显示用户自身位置的搜索结果、显示用户拖动选点的搜索结果
+ 
+- (void)showReGeoSearchResult:(AMapReGeocodeSearchResponse *)response;
 
 @end

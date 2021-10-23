@@ -1,1 +1,0 @@
-../../../../../DGMapModule/Classes/Manager/Tool/SpeechSynthesizer/SpeechSynthesizer.h

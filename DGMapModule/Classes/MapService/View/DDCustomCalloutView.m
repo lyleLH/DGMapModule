@@ -113,6 +113,7 @@
     self.textLabel.textAlignment = 0;
     self.textLabel.font = [UIFont systemFontOfSize:15.0];
     self.textLabel.textColor = [UIColor whiteColor];
+    self.textLabel.numberOfLines = 0;
     [self addSubview:self.textLabel];
     
     self.rightArrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -125,7 +126,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.rightArrowButton.frame = CGRectMake(self.frame.size.width- 25, 0, 25, self.frame.size.height- kArrorHeight);
-    [self.textLabel setFrame:CGRectMake(10, 0, self.frame.size.width-25-10, self.frame.size.height-kArrorHeight)];
+    [self.textLabel setFrame:CGRectMake(10, 0, self.frame.size.width-25-10, self.frame.size.height   -kArrorHeight)];
 }
 
 

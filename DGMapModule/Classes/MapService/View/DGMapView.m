@@ -101,6 +101,8 @@
             _mapView.scrollEnabled = YES;
             NSLog(@"🏃‍♀️🏃‍♀️🏃‍♀️定位点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)));
             self.searchType = 0;
+#pragma mark -- 调用 逆地理搜索
+            
             [self searchReGeocodeWithCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)];
             _isUserLocationConfirmed = YES;
 //            [self.eventHandler mapviewGetUserCurrentLoaction:[userLocation.location copy]];
@@ -136,6 +138,7 @@
                 
                 NSLog(@"🍉🍉🍉拖选点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(choosedCoordinate.latitude, choosedCoordinate.longitude)));
                 self.searchType = 1;
+#pragma mark -- 调用 逆地理搜索
                 [self searchReGeocodeWithCoordinate:choosedCoordinate];
             }
 
@@ -166,63 +169,102 @@
 //    NSLog(@"%@",[response mj_keyValues]);
 }
  
-
+- (NSString *) shortAddressWithResponse:(AMapReGeocodeSearchResponse *)response {
+    NSString * string =@"";
+    NSString * street = @"";
+   
+    street = [NSString stringWithFormat:@"%@%@", response.regeocode.addressComponent.streetNumber.street,
+              response.regeocode.addressComponent.streetNumber.number];
+    
+    NSString * road = @"";
+    if(street.length==0 && response.regeocode.roads.count>0) {
+        AMapRoad * roadObj = response.regeocode.roads[0];
+        road = roadObj.name;
+    }
+    
+    NSString * building = @"";
+    
+    if(response.regeocode.aois.count>0){
+        AMapAOI * aoi =response.regeocode.aois[0];
+        building = aoi.name;
+    }
+    
+    string = [NSString stringWithFormat:@"%@%@%@%@%@%@",
+              response.regeocode.addressComponent.city,
+              response.regeocode.addressComponent.district,
+              response.regeocode.addressComponent.township,
+              street,
+              road,
+              building];
+    return string;
+}
  
 
 - (void)updateChoosedAnnotaionsViewWithResponse:(AMapReGeocodeSearchResponse *)response{
     [self.mapView removeAnnotation:  self.choosedPointAnnotation];
     [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
+    
     [self.centerAnnotationView removeFromSuperview];
+    
+    NSString * addres =response.regeocode.formattedAddress;
+//    NSString * addres = [self shortAddressWithResponse:response];
+    PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:addres andLocation:self.choosedCoordinate];
+    self.choosedPointAnnotation = point;
+    [self.mapView addAnnotation:point];
+    
+    
     //用户定位点数据含有的POI数组，将POI展示在地图上
     if(response.regeocode.pois.count>0){
         NSInteger maxCount =3;
-        
+
         if(response.regeocode.pois.count< maxCount){
             maxCount = response.regeocode.pois.count;
         }
-        
+
         if(response.regeocode.pois.count>=maxCount){
-            NSInteger minIndex = [self compareDistanceWithPois:[response.regeocode.pois subarrayWithRange:NSMakeRange(0, maxCount)]];
-            
+//            NSInteger minIndex = [self compareDistanceWithPois:[response.regeocode.pois subarrayWithRange:NSMakeRange(0, maxCount)]];
+
             [self.mapView removeAnnotations:self.aroundPoiAnnotations];
             [self.aroundPoiAnnotations removeAllObjects];
-            
+
              [response.regeocode.pois enumerateObjectsUsingBlock:^(AMapPOI * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                  if(idx>=maxCount) return;
-                 if(idx == minIndex){
-                     self.choosedCoordinate = CLLocationCoordinate2DMake(obj.location.latitude, obj.location.longitude);
-                     self.choosedPOIAnnotaion  = [[POIAnnotation alloc] initWithPOI:obj];
-                     [self.choosedPOIAnnotaion setTag:@"起点"];
-                     [self.mapView addAnnotation:self.choosedPOIAnnotaion];
-                     [self.centerAnnotationView removeFromSuperview];
-                    
-                     [self.mapView setCenterCoordinate:self.choosedCoordinate animated:YES];
-                 }else{
-                     POIAnnotation * annotation = [[POIAnnotation alloc] initWithPOI:obj];
-                     [self.aroundPoiAnnotations addObject:annotation];
-                 }
+//                 if(idx == minIndex){
+//                     self.choosedCoordinate = CLLocationCoordinate2DMake(obj.location.latitude, obj.location.longitude);
+//                     self.choosedPOIAnnotaion  = [[POIAnnotation alloc] initWithPOI:obj];
+//                     [self.choosedPOIAnnotaion setTag:@"起点"];
+//                     [self.mapView addAnnotation:self.choosedPOIAnnotaion];
+//                     [self.centerAnnotationView removeFromSuperview];
+//
+//                     [self.mapView setCenterCoordinate:self.choosedCoordinate animated:YES];
+//                 }else{
+//                     POIAnnotation * annotation = [[POIAnnotation alloc] initWithPOI:obj];
+//                     [self.aroundPoiAnnotations addObject:annotation];
+//                 }
+                 POIAnnotation * annotation = [[POIAnnotation alloc] initWithPOI:obj];
+                 [self.aroundPoiAnnotations addObject:annotation];
                  
              }];
              [self.mapView addAnnotations:self.aroundPoiAnnotations];
         }
-       
+
     }else{
-        if([response.regeocode.addressComponent.country isEqualToString:@"中国"] &&response.regeocode.addressComponent.city.length >0 ){
-            
+//        if([response.regeocode.addressComponent.country isEqualToString:@"中国"] &&response.regeocode.addressComponent.city.length >0 ){
+//
 //            self.choosedAnnotaion  = [[POIAnnotation alloc] initWithTitle:response.regeocode.formattedAddress andAddress:response.regeocode.formattedAddress];
 //            [self.choosedAnnotaion setTag:@"起点"];
 //            [self.mapView addAnnotation:self.choosedAnnotaion];
-            
-            PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:response.regeocode.formattedAddress andLocation:self.choosedCoordinate ];
-            self.choosedPointAnnotation = point;
-            [self.mapView addAnnotation:point];
-            
-            
-            [self.centerAnnotationView removeFromSuperview];
-        }else{
-            [self.mapView setCenterCoordinate:self.choosedCoordinate animated:YES];
-        }
-     
+//
+//            PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:response.regeocode.formattedAddress andLocation:self.choosedCoordinate ];
+//            self.choosedPointAnnotation = point;
+//            [self.mapView addAnnotation:point];
+//
+//
+//            [self.centerAnnotationView removeFromSuperview];
+//        }else{
+//            [self.mapView setCenterCoordinate:self.choosedCoordinate animated:YES];
+//        }
+
     }
 }
 
@@ -329,7 +371,8 @@
 }
 
 
-#pragma mark -- private
+
+#pragma mark -- 逆地理搜索
 
 -(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate {
     AMapReGeocodeSearchRequest *regeo = [[AMapReGeocodeSearchRequest alloc] init];

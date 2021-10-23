@@ -24,6 +24,11 @@
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		90988AA6980B23E43F4DC309 /* libPods-DGMapModule_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06D7E3163F3DB8AC96230109 /* libPods-DGMapModule_Tests.a */; };
 		D13707030BFE87BC60E192C7 /* libPods-DGMapModule_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C5FD3A678B0BBC37CA5086 /* libPods-DGMapModule_Example.a */; };
+		E27323B02721B4C000403337 /* NSArray+Unicode.m in Sources */ = {isa = PBXBuildFile; fileRef = E27323A82721B4C000403337 /* NSArray+Unicode.m */; };
+		E27323B12721B4C000403337 /* NSString+Unicode.m in Sources */ = {isa = PBXBuildFile; fileRef = E27323A92721B4C000403337 /* NSString+Unicode.m */; };
+		E27323B22721B4C000403337 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E27323AB2721B4C000403337 /* README.md */; };
+		E27323B32721B4C000403337 /* NSDictionary+Unicode.m in Sources */ = {isa = PBXBuildFile; fileRef = E27323AC2721B4C000403337 /* NSDictionary+Unicode.m */; };
+		E27323B42721B4C000403337 /* NSObject+SafeSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = E27323AE2721B4C000403337 /* NSObject+SafeSwizzle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +71,15 @@
 		97E6FBA2DCE3CDAF3CCD5118 /* Pods-DGMapModule_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DGMapModule_Tests.debug.xcconfig"; path = "Target Support Files/Pods-DGMapModule_Tests/Pods-DGMapModule_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		9B170591632741B94ABAA797 /* Pods-DGMapModule_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DGMapModule_Example.release.xcconfig"; path = "Target Support Files/Pods-DGMapModule_Example/Pods-DGMapModule_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C6C5FD3A678B0BBC37CA5086 /* libPods-DGMapModule_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DGMapModule_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E27323A72721B4C000403337 /* NSDictionary+Unicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Unicode.h"; sourceTree = "<group>"; };
+		E27323A82721B4C000403337 /* NSArray+Unicode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Unicode.m"; sourceTree = "<group>"; };
+		E27323A92721B4C000403337 /* NSString+Unicode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Unicode.m"; sourceTree = "<group>"; };
+		E27323AA2721B4C000403337 /* NSObject+SafeSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SafeSwizzle.h"; sourceTree = "<group>"; };
+		E27323AB2721B4C000403337 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E27323AC2721B4C000403337 /* NSDictionary+Unicode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Unicode.m"; sourceTree = "<group>"; };
+		E27323AD2721B4C000403337 /* NSArray+Unicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Unicode.h"; sourceTree = "<group>"; };
+		E27323AE2721B4C000403337 /* NSObject+SafeSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SafeSwizzle.m"; sourceTree = "<group>"; };
+		E27323AF2721B4C000403337 /* NSString+Unicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Unicode.h"; sourceTree = "<group>"; };
 		F76C9534BAE3D1D53FB8B1CE /* DGMapModule.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = DGMapModule.podspec; path = ../DGMapModule.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
@@ -132,6 +146,7 @@
 		6003F593195388D20070C39A /* Example for DGMapModule */ = {
 			isa = PBXGroup;
 			children = (
+				E27323A62721B4C000403337 /* XcodeUnicode-master */,
 				6003F59C195388D20070C39A /* MTAppDelegate.h */,
 				6003F59D195388D20070C39A /* MTAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -196,6 +211,22 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		E27323A62721B4C000403337 /* XcodeUnicode-master */ = {
+			isa = PBXGroup;
+			children = (
+				E27323A72721B4C000403337 /* NSDictionary+Unicode.h */,
+				E27323A82721B4C000403337 /* NSArray+Unicode.m */,
+				E27323A92721B4C000403337 /* NSString+Unicode.m */,
+				E27323AA2721B4C000403337 /* NSObject+SafeSwizzle.h */,
+				E27323AB2721B4C000403337 /* README.md */,
+				E27323AC2721B4C000403337 /* NSDictionary+Unicode.m */,
+				E27323AD2721B4C000403337 /* NSArray+Unicode.h */,
+				E27323AE2721B4C000403337 /* NSObject+SafeSwizzle.m */,
+				E27323AF2721B4C000403337 /* NSString+Unicode.h */,
+			);
+			path = "XcodeUnicode-master";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -248,7 +279,7 @@
 				ORGANIZATIONNAME = Tom.Liu;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = 9YAL9X38J8;
+						DevelopmentTeam = 4W54762864;
 						ProvisioningStyle = Automatic;
 					};
 					6003F5AD195388D20070C39A = {
@@ -283,6 +314,7 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
+				E27323B22721B4C000403337 /* README.md in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
@@ -372,8 +404,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E27323B12721B4C000403337 /* NSString+Unicode.m in Sources */,
 				6003F59E195388D20070C39A /* MTAppDelegate.m in Sources */,
+				E27323B32721B4C000403337 /* NSDictionary+Unicode.m in Sources */,
+				E27323B42721B4C000403337 /* NSObject+SafeSwizzle.m in Sources */,
 				6003F5A7195388D20070C39A /* MTViewController.m in Sources */,
+				E27323B02721B4C000403337 /* NSArray+Unicode.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,6 +478,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -482,6 +519,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -504,12 +542,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9YAL9X38J8;
+				DEVELOPMENT_TEAM = 4W54762864;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DGMapModule/DGMapModule-Prefix.pch";
 				INFOPLIST_FILE = "DGMapModule/DGMapModule-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lylelh.DGPassenger;
+				PRODUCT_BUNDLE_IDENTIFIER = com.surmountcn.travel.passenger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -524,12 +563,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9YAL9X38J8;
+				DEVELOPMENT_TEAM = 4W54762864;
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DGMapModule/DGMapModule-Prefix.pch";
 				INFOPLIST_FILE = "DGMapModule/DGMapModule-Info.plist";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lylelh.DGPassenger;
+				PRODUCT_BUNDLE_IDENTIFIER = com.surmountcn.travel.passenger;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

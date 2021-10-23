@@ -11,9 +11,9 @@
 //#define kCalloutWidth       120.0
 //#define kCalloutHeight      45.0
 
-#define kCalloutWidth   200.0
-//#define kCalloutHeight  70.0
-#define kCalloutHeight  44.0f
+#define kCalloutWidth   150
+#define kCalloutHeight  70.0
+//#define kCalloutHeight  44.0f
 
 @interface DDCustomAnnotationView ()
 
@@ -52,12 +52,15 @@
     if (self.calloutView == nil)
     {
       
-        self.calloutView = [[DDCustomCalloutView alloc] initWithFrame:CGRectMake(0, 0, kCalloutWidth, kCalloutHeight)];
+        self.calloutView = [[DDCustomCalloutView alloc] init];
         [self addSubview:self.calloutView];
         self.addressLabel = [[UILabel alloc] init];
         self.addressLabel.textColor = [UIColor mt_colorWithHex:0x4370F1];
         self.addressLabel.font = [UIFont boldSystemFontOfSize:12];
+        self.addressLabel.lineBreakMode = NSLineBreakByCharWrapping;
         self.addressLabel.textAlignment = 0;
+        self.addressLabel.numberOfLines = 2;
+        
         [self addSubview:self.addressLabel];
         
     }
@@ -72,14 +75,23 @@
     CGSize size = [self.calloutView.textLabel.text sizeWithAttributes:@{NSFontAttributeName:self.calloutView.textLabel.font}];
     [self.addressLabel setFrame:CGRectMake(CGRectGetMaxY(self.imageView.frame)+3, 0, size.width, size.height)];
     self.addressLabel.text = self.calloutView.textLabel.text;
-    [self updateUIWidth:size.width];
+    [self updateUIWithText];
     
 }
 
 
-- (void)updateUIWidth:(CGFloat)width {
+- (void)updateUIWithText{
 //    NSLog(@"-----> [calloutView width] : %.2f",width);
-    [self.calloutView setFrame:CGRectMake(0, 0, width + 20+25, kCalloutHeight)];
+    CGSize size = [self.calloutView.textLabel.text boundingRectWithSize:CGSizeMake(kCalloutWidth, MAXFLOAT)
+                                              options:NSStringDrawingUsesLineFragmentOrigin
+                                           attributes:@{NSFontAttributeName:self.calloutView.textLabel.font}
+                                              context:nil].size;
+    CGFloat height = size.height;
+    if(size.height>kCalloutHeight){
+        height = kCalloutHeight;
+    }
+ 
+    [self.calloutView setFrame:CGRectMake(0, 0, 10 + size.width  + 25, height+20 +10)];
     
     self.calloutView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2.f + self.calloutOffset.x,
                                           -CGRectGetHeight(self.calloutView.bounds) / 2.f + self.calloutOffset.y);

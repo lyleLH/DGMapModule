@@ -10,8 +10,9 @@
 //基础定位类
 #import <AMapFoundationKit/AMapFoundationKit.h>
  
-#define APIKEY @"86692609042d3a101c778c360f4aef28"
+#define APIKEY @"c5dbe418a12777e5010ac33d2a1d9581"
 
+//86692609042d3a101c778c360f4aef28
 //c5dbe418a12777e5010ac33d2a1d9581
 
 @implementation MTAppDelegate

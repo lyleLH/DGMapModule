@@ -7,22 +7,38 @@
 //
 
 #import "DGMapServicePresenter.h"
-
+#import <MJExtension/MJExtension.h>
 @implementation DGMapServicePresenter
 
 #pragma mark - DGMapServiceModuleInterface methods
 
- 
+- (void)setMapViewCanBeDrag:(BOOL)canBeDrag {
+    [self.userInterface setMapViewCanBeDrag:canBeDrag];
+}
 
 // implement module interface here
+- (void)userSelectAPOIPointToShowInMap:(NSDictionary*)poi {
+    [self.userInterface showAnPoiPoint:[AMapPOI mj_objectWithKeyValues:poi]];
+}
+
+
+- (void)searchRouterWithStartLocation:(CLLocationCoordinate2D)start endLocation:(CLLocationCoordinate2D)end {
+    [self.interactor routeSearchWithStart:start end:end];
+}
 
 //得到用户当前位置
 - (void)confirmedUserLocationCoordinate:(CLLocationCoordinate2D)coordinate  {
+    if([self.delegate respondsToSelector:@selector(userCurrentLoction:)]){
+        [self.delegate userCurrentLoction:coordinate];
+    }
     [self.interactor searchReGeocodeWithCoordinate:coordinate isUserLocation:YES];
 }
 
 //拖动到新的位置
 - (void)userDargToNewLocationCoordinate:(CLLocationCoordinate2D)coordinate  {
+    if([self.delegate respondsToSelector:@selector(userChoosedLoction:)]){
+        [self.delegate userChoosedLoction:coordinate];
+    }
     [self.interactor searchReGeocodeWithCoordinate:coordinate isUserLocation:NO];
     
 }
@@ -40,7 +56,7 @@
 
 #pragma mark -- AMapSearchDelegate
 - (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
-    NSLog(@"💥💥💥💥 %@",error);
+  
 }
 
 - (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
@@ -64,36 +80,9 @@
 
 }
 
+- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
+    [self.userInterface showRouterSearchResult:response];
+}
 
-//- (void)requestToChooseStartPoint {
-//
-//    [self.userInterface updateMapViewActionType:DGMapViewActionType_PickStartLocation];
-//}
-//
-//- (void)requestToChooseEndPoint {
-//
-//    [self.userInterface updateMapViewActionType:DGMapViewActionType_PickEndLocation];
-//}
-//
-////滑动地图到新的位置
-//- (void)mapviewScrollToANewLoaction:(CLLocation *)location withType:(DGMapViewActionType)type {
-//    [self.interactor searchLocationDataWithLocation:location andType:type];
-//}
-//
-//
-////在POI点显示起点大头针
-//- (void)updateStartPointWithData:(AMapPOI *)poi  {
-//    [self.userInterface addAnAnnotaionViewWithPOIData:poi];
-//}
-//
-////拖动后搜索的POI结果 显示
-//- (void)dragSearchPOIList:(NSArray <AMapPOI *> *)pois   {
-//    [self.userInterface showAroundPoiData:pois];
-//}
-//
-////拖动后搜索的AOI结果 显示
-//- (void)dragSearchedAOIResult:(NSArray <AMapAOI *> *)aoi anPOIs:(NSArray<AMapPOI *> *)poi   {
-//    [self.userInterface showPointAOIData:aoi];
-//}
 
 @end

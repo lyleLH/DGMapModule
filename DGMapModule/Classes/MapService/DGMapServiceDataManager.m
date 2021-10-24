@@ -26,4 +26,15 @@
     _choosedLocationCoordinate = coordinate;
 }
 
+
+- (void)saveUserLocationSearchResult:(AMapReGeocodeSearchResponse *)response  {
+    
+}
+
+
+- (void)saveChoosedLocationSearchResult:(AMapReGeocodeSearchResponse *)response {
+    
+}
+
+
 @end

@@ -14,6 +14,9 @@
 #import "DDCustomAnnotationView.h"
 #import <MJExtension/MJExtension.h>
 #import "PointAnnotation.h"
+
+#import "MANaviRoute.h"
+#import "CommonUtility.h"
 @interface DGMapView () <MAMapViewDelegate>
 
 @property (nonatomic, assign)  DGMapViewActionType mapViewActionType;
@@ -30,6 +33,11 @@
 
 @property(nonatomic,strong)DGMapViewResultData * dataModel;
 
+/* 用于显示当前路线方案. */
+@property (nonatomic) MANaviRoute * naviRoute;
+@property (nonatomic, strong) AMapRoute *route;
+/* 当前路线方案索引值. */
+@property (nonatomic) NSInteger currentCourse;
 
 @end
 
@@ -45,8 +53,14 @@
 @property (assign, nonatomic) CLLocationCoordinate2D choosedCoordinate;
 
 @property (strong, nonatomic) NSMutableArray <POIAnnotation *> *aroundPoiAnnotations;
-
+@property (assign, nonatomic) BOOL canCragToChoose;
 @end
+
+
+static const NSString *RoutePlanningViewControllerStartTitle       = @"起点";
+static const NSString *RoutePlanningViewControllerDestinationTitle = @"终点";
+static const NSInteger RoutePlanningPaddingEdge                    = 20;
+
 
 
 @implementation DGMapView
@@ -55,18 +69,48 @@
     if(self ==[super init]){
         [self addSubview:self.mapView];
         _isUserLocationConfirmed = NO;
+        _canCragToChoose = YES;
     }
     return self;
 }
 
 #pragma mark -- DGMapServiceViewInterface
 
- 
+- (void)setMapViewCanBeDrag:(BOOL)canBeDrag  {
+    _canCragToChoose = canBeDrag;
+}
+
+
+
+- (void)showAnPoiPoint:(AMapPOI *)poi {
+    [self.mapView removeAnnotation:self.choosedPointAnnotation];
+    [self.mapView removeAnnotations:self.aroundPoiAnnotations];
+    
+    POIAnnotation * annotation = [[POIAnnotation alloc] initWithPOI:poi];
+    [annotation setTag:@"起点"];
+    [self.aroundPoiAnnotations addObject:annotation];
+    [self.mapView addAnnotation:annotation];
+}
+  
 - (void)showReGeoSearchResult:(AMapReGeocodeSearchResponse *)response {
     self.dataModel.userCurrentLocationRegeoResponse = response;
     [self updateChoosedAnnotaionsViewWithResponse:response];
 }
  
+- (void)showRouterSearchResult:(AMapRouteSearchResponse *)response {
+    
+    [self.mapView removeAnnotation:self.choosedPointAnnotation];
+    [self.mapView removeAnnotations:self.aroundPoiAnnotations];
+    
+    self.route = response.route;
+    self.currentCourse = 0;
+    if (response.count > 0){
+        [self presentCurrentCourseWith:CLLocationCoordinate2DMake(response.route.origin.latitude, response.route.origin.longitude)
+                                andEnd:CLLocationCoordinate2DMake(response.route.destination.latitude, response.route.destination.longitude)
+        ];
+    }
+}
+
 
 
 - (void)mapView:(MAMapView *)mapView didAddAnnotationViews:(NSArray *)views
@@ -106,7 +150,7 @@
             self.choosedCoordinate = CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
             [self.mapView setCenterCoordinate:self.choosedCoordinate];
             self.mapView.userTrackingMode = MAUserTrackingModeNone;
-            _mapView.scrollEnabled = YES;
+//            _mapView.scrollEnabled = YES;
             NSLog(@"🏃‍♀️🏃‍♀️🏃‍♀️定位点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude)));
 //            self.searchType = 0;
 #pragma mark -- 调用 逆地理搜索
@@ -124,7 +168,8 @@
 }
 
 -(void)mapView:(MAMapView *)mapView regionWillChangeAnimated:(BOOL)animated wasUserAction:(BOOL)wasUserAction {
-    if(wasUserAction) {
+    if(wasUserAction && _canCragToChoose) {
+        
         [self.mapView removeAnnotation:  self.choosedPointAnnotation];
         [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
         [self.mapView addSubview:self.centerAnnotationView];
@@ -138,7 +183,7 @@
 }
 
 - (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated wasUserAction:(BOOL)wasUserAction {
-    
+    if(!_canCragToChoose) return;
     CLLocationCoordinate2D choosedCoordinate = CLLocationCoordinate2DMake(mapView.centerCoordinate.latitude,mapView.centerCoordinate.longitude);
     self.choosedCoordinate = choosedCoordinate;
     if(wasUserAction){
@@ -405,6 +450,80 @@
 }
 
 
+ 
+/* 展示当前路线方案. */
+- (void)presentCurrentCourseWith:(CLLocationCoordinate2D)start andEnd:(CLLocationCoordinate2D)end
+{
+    MANaviAnnotationType type = MANaviAnnotationTypeDrive;
+    self.naviRoute = [MANaviRoute naviRouteForPath:self.route.paths[self.currentCourse]
+                                      withNaviType:type
+                                       showTraffic:YES
+                                        startPoint:
+                      [AMapGeoPoint locationWithLatitude:start.latitude
+                                               longitude:start.longitude]
+                                          endPoint:
+                      [AMapGeoPoint locationWithLatitude:end.latitude
+                                               longitude:end.longitude]
+    ];
+    
+    [self.naviRoute addToMapView:self.mapView];
+    
+    /* 缩放地图使其适应polylines的展示. */
+    [self.mapView setVisibleMapRect:[CommonUtility mapRectForOverlays:self.naviRoute.routePolylines]
+                        edgePadding:UIEdgeInsetsMake(RoutePlanningPaddingEdge, RoutePlanningPaddingEdge, RoutePlanningPaddingEdge, RoutePlanningPaddingEdge)
+                           animated:YES];
+}
+
+#pragma mark - MAMapViewDelegate
+
+- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[LineDashPolyline class]])
+    {
+        MAPolylineRenderer *polylineRenderer = [[MAPolylineRenderer alloc] initWithPolyline:((LineDashPolyline *)overlay).polyline];
+        polylineRenderer.lineWidth   = 8;
+        polylineRenderer.lineDashType = kMALineDashTypeSquare;
+        polylineRenderer.strokeColor = [UIColor redColor];
+        
+        return polylineRenderer;
+    }
+    if ([overlay isKindOfClass:[MANaviPolyline class]])
+    {
+        MANaviPolyline *naviPolyline = (MANaviPolyline *)overlay;
+        MAPolylineRenderer *polylineRenderer = [[MAPolylineRenderer alloc] initWithPolyline:naviPolyline.polyline];
+        
+        polylineRenderer.lineWidth = 8;
+        
+        if (naviPolyline.type == MANaviAnnotationTypeWalking)
+        {
+            polylineRenderer.strokeColor = self.naviRoute.walkingColor;
+        }
+        else if (naviPolyline.type == MANaviAnnotationTypeRailway)
+        {
+            polylineRenderer.strokeColor = self.naviRoute.railwayColor;
+        }
+        else
+        {
+            polylineRenderer.strokeColor = self.naviRoute.routeColor;
+        }
+        
+        return polylineRenderer;
+    }
+    if ([overlay isKindOfClass:[MAMultiPolyline class]])
+    {
+        MAMultiColoredPolylineRenderer * polylineRenderer = [[MAMultiColoredPolylineRenderer alloc] initWithMultiPolyline:overlay];
+        
+        polylineRenderer.lineWidth = 10;
+        polylineRenderer.strokeColors = [self.naviRoute.multiPolylineColors copy];
+        
+        return polylineRenderer;
+    }
+    
+    return nil;
+}
+
+
+
 #pragma mark -- properties
 
 - (UIImageView *)centerAnnotationView {
@@ -423,7 +542,7 @@
     if(!_mapView){
         _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
         _mapViewActionType = DGMapViewActionType_UserLocation;
-        _mapView.scrollEnabled = NO;
+//        _mapView.scrollEnabled = NO;
         _mapView.mapType = MAMapTypeBus;
         ///下面两行代码 进入地图就显示定位小蓝点
         _mapView.showsUserLocation = YES;

@@ -36,6 +36,11 @@
 
 - (void)userDargToNewLocationCoordinate:(CLLocationCoordinate2D)coordinate  ;
 
+- (void)searchRouterWithStartLocation:(CLLocationCoordinate2D)start endLocation:(CLLocationCoordinate2D)end;
+
+- (void)userSelectAPOIPointToShowInMap:(NSDictionary*)poi;
+
+- (void)setMapViewCanBeDrag:(BOOL)canBeDrag ;
 
 @end
 
@@ -46,8 +51,12 @@
 @protocol DGMapServiceModuleDelegate <NSObject>
 @optional
 
+- (void)userCurrentLoction:(CLLocationCoordinate2D)location;
 - (void)userCurrentLoctionData:(AMapReGeocodeSearchResponse *)data;
+
+- (void)userChoosedLoction:(CLLocationCoordinate2D)location;
 - (void)userChoosedLoctionData:(AMapReGeocodeSearchResponse *)data;
+
 - (void)userSearchKeyWordsResponse:(AMapPOISearchResponse *)data;
 
 @end

@@ -30,13 +30,6 @@
 
 - (void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate isUserLocation:(BOOL)isUseLocation;
 
-//- (void)prepareSearchServiceWithMapView:(MAMapView *)mapView ;
-//
-//
-//- (void)confirmCityWithLocation:(CLLocation *)location;
-//
-//- (void)searchLocationDataWithLocation:(CLLocation *)location andType:(DGMapViewActionType)type ;
-//
-//- (void)searchLocationDataReGeo:(CLLocation *)location andType:(DGMapViewActionType)type ;
-
+- (void)routeSearchWithStart:(CLLocationCoordinate2D)start end:(CLLocationCoordinate2D)end ;
+ 
 @end

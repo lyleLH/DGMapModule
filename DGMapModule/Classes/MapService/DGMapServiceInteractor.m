@@ -30,17 +30,38 @@
     return self;
 }
 
+#pragma mark -- 路径搜索
+- (void)routeSearchWithStart:(CLLocationCoordinate2D)start end:(CLLocationCoordinate2D)end {
+    AMapDrivingRouteSearchRequest *navi = [[AMapDrivingRouteSearchRequest alloc] init];
+    
+    navi.requireExtension = YES;
+//    navi.destinationId = @"BV10001595";
+//    navi.destinationtype = @"150500";
+    navi.strategy = 10;
+    /* 出发点. */
+    navi.origin = [AMapGeoPoint locationWithLatitude:start.latitude
+                                           longitude:start.longitude];
+    /* 目的地. */
+    navi.destination = [AMapGeoPoint locationWithLatitude:end.latitude
+                                                longitude:end.longitude];
+    
+    [self.search AMapDrivingRouteSearch:navi];
+}
+
 
 #pragma mark -- 兴趣点POI搜索
 
 - (void)searchAroundWithKeyWords:(NSString*)keywords  InCity:(NSString*)city andCoordinate:(CLLocationCoordinate2D)coordinate {
     
     AMapPOIAroundSearchRequest  *request=[[AMapPOIAroundSearchRequest alloc] init];
+//    AMapPOIKeywordsSearchRequest  *request= [[AMapPOIKeywordsSearchRequest alloc] init];
+    
     request.radius = 10000;
     request.city = city;
     request.location=[AMapGeoPoint locationWithLatitude:coordinate.latitude longitude:coordinate.longitude];
     request.keywords = keywords;
     [self.search AMapPOIAroundSearch:request];
+//    [self.search AMapPOIKeywordsSearch:request];
 }
 
 
@@ -69,12 +90,12 @@
 
 - (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
     
-    if(self.dataManager.isGettingUserLocationSearchResult){
-        [self.dataManager saveUserLocationSearchResult:response];
-        self.dataManager.isGettingUserLocationSearchResult = NO;
-    }else{
-        [self.dataManager saveChoosedLocationSearchResult:response];
-    }
+//    if(self.dataManager.isGettingUserLocationSearchResult){
+//        [self.dataManager saveUserLocationSearchResult:response];
+//        self.dataManager.isGettingUserLocationSearchResult = NO;
+//    }else{
+//        [self.dataManager saveChoosedLocationSearchResult:response];
+//    }
     [self.presenter onReGeocodeSearchDone:request response:response];
 }
 
@@ -85,7 +106,9 @@
     [self.presenter onPOISearchDone:request response:response];
 }
 
-
+- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
+    [self.presenter onRouteSearchDone:request response:response];
+}
  
 
 //- (void)prepareSearchServiceWithMapView:(MAMapView *)mapView {
@@ -159,7 +182,7 @@
 - (AMapSearchAPI *)search {
     if(!_search){
         _search = [[AMapSearchAPI alloc] init];
-        _search.delegate = self.presenter;
+        _search.delegate = self;
     }
     return _search;
 }

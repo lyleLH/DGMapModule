@@ -12,5 +12,5 @@
 #import "DGMapModule.h"
 #import "DGMapViewServiceTypeDefine.h"
 #import "DGMapServiceModuleInterface.h"
-
+#import "DGMapLocationModel.h"
 #endif /* DGMapModuleHeader_h */

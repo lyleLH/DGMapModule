@@ -22,4 +22,10 @@
  
 - (void)showReGeoSearchResult:(AMapReGeocodeSearchResponse *)response;
 
+- (void)showAnPoiPoint:(AMapPOI *)poi;
+
+- (void)showRouterSearchResult:(AMapRouteSearchResponse *)response;
+
+- (void)setMapViewCanBeDrag:(BOOL)canBeDrag ;
+
 @end

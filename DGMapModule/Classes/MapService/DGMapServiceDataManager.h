@@ -11,7 +11,7 @@
 //搜索基础类
 #import <AMapSearchKit/AMapSearchKit.h>
  #import <AMapNaviKit/AMapNaviKit.h>
- 
+#import "DGMapLocationModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -20,22 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DGMapServiceDataManager : NSObject
 
 @property(nonatomic,assign) BOOL isGettingUserLocationSearchResult;
-@property (nonatomic,assign)CLLocationCoordinate2D userLocationCoordinate;
-@property (nonatomic,assign)CLLocationCoordinate2D choosedLocationCoordinate;
+@property (nonatomic,strong)DGMapLocationModel * userLocationData;
 
- 
-
-@property (nonatomic,strong)AMapPOI * userLocationPOI;
-@property (nonatomic,strong)AMapPOI * startLocationPOI;
-@property (nonatomic,strong)AMapPOI * endLocationPOI;
-
-- (NSString *)userCurrentCity;
-
-- (void)saveUserLocation:(CLLocationCoordinate2D)coordinate;
-- (void)updateChooseLocation:(CLLocationCoordinate2D)coordinate;
-
-- (void)saveUserLocationSearchResult:(AMapReGeocodeSearchResponse *)response ;
-- (void)saveChoosedLocationSearchResult:(AMapReGeocodeSearchResponse *)response ;
+@property (nonatomic,strong)DGMapLocationModel * choosedLocationData;
 
 @end
 

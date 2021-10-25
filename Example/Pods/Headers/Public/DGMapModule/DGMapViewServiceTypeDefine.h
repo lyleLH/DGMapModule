@@ -1,1 +1,1 @@
-../../../../../DGMapModule/Classes/MapService/DGMapViewServiceTypeDefine.h
+../../../../../DGMapModule/Classes/DGMapViewServiceTypeDefine.h

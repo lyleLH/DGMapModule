@@ -8,7 +8,7 @@
 #ifndef DGMapViewServiceTypeDefine_h
 #define DGMapViewServiceTypeDefine_h
 
-
+#import "DGMapLocationModel.h"
 
 typedef NS_ENUM(NSUInteger, DGMapViewActionType) {
     DGMapViewActionType_UserLocation,
@@ -17,6 +17,12 @@ typedef NS_ENUM(NSUInteger, DGMapViewActionType) {
     DGMapViewActionType_ConfirmTwoPoint,
 };
 
+typedef NS_ENUM(NSUInteger, DGMapLocationChooseType) {
+    DGMapLocationChooseType_UpdatingUserLocation,
+    DGMapLocationChooseType_Start,
+    DGMapLocationChooseType_End,
+//    DGMapLocationType_poiAroundPoint,
+};
 
 
 

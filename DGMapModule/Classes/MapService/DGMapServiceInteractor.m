@@ -16,7 +16,7 @@
 
 @interface DGMapServiceInteractor () <AMapSearchDelegate>
 
-@property(nonatomic,strong)AMapSearchAPI *search;
+
 @end
 
 @implementation DGMapServiceInteractor
@@ -68,13 +68,7 @@
 #pragma mark -- 逆地理搜索
 
 -(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate isUserLocation:(BOOL)isUseLocation {
-    if(isUseLocation){
-        [self.dataManager saveUserLocation:coordinate];
-        self.dataManager.isGettingUserLocationSearchResult = YES;
-    }else{
-        [self.dataManager updateChooseLocation:coordinate];
-    }
-    
+   
     AMapReGeocodeSearchRequest *regeo = [[AMapReGeocodeSearchRequest alloc] init];
     regeo.location = [AMapGeoPoint locationWithLatitude:coordinate.latitude longitude:coordinate.longitude];
     regeo.requireExtension = YES;

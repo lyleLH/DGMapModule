@@ -1,1 +1,1 @@
-../../../../../DGMapModule/Classes/MapService/View/POIAnnotation.h
+../../../../../DGMapModule/Classes/MapService/View/Annotations/POIAnnotation.h

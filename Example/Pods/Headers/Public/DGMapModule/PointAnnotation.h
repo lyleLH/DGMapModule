@@ -1,1 +1,1 @@
-../../../../../DGMapModule/Classes/MapService/View/PointAnnotation.h
+../../../../../DGMapModule/Classes/MapService/View/Annotations/PointAnnotation.h

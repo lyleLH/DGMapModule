@@ -11,30 +11,6 @@
 @implementation DGMapServiceDataManager
 
 
-- (NSString *)userCurrentCity {
-    return self.userLocationPOI.city;
-}
-
-
-
-- (void)saveUserLocation:(CLLocationCoordinate2D)coordinate {
-    _userLocationCoordinate = coordinate;
-}
-
-
-- (void)updateChooseLocation:(CLLocationCoordinate2D)coordinate {
-    _choosedLocationCoordinate = coordinate;
-}
-
-
-- (void)saveUserLocationSearchResult:(AMapReGeocodeSearchResponse *)response  {
-    
-}
-
-
-- (void)saveChoosedLocationSearchResult:(AMapReGeocodeSearchResponse *)response {
-    
-}
-
+ 
 
 @end

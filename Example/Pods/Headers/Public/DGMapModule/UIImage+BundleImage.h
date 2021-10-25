@@ -1,1 +1,1 @@
-../../../../../DGMapModule/Classes/MapService/UIImage+BundleImage.h
+../../../../../DGMapModule/Classes/common/UIImage+BundleImage.h

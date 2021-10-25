@@ -7,7 +7,7 @@
 //
 
 #import "MTViewController.h"
-
+#import "MTPathViewController.h"
 #import "DGMapModule.h"
 @interface MTViewController () <DGMapServiceModuleDelegate>
 @property (nonatomic,strong)DGMapModule * mapService ;
@@ -19,26 +19,29 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [self.mapServiceWireframe presentSelfFromViewController:self];
-}
  
 
-- (DGMapModule *)mapServiceWireframe {
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    UIView * mapView =  [self.mapService.presenter papredMapViewWithType:DGMapViewActionType_UserLocation];
+    [self.view addSubview:mapView];
+    [mapView setFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height-300 )];
+}
+
+
+- (IBAction)pathRouter:(id)sender {
+    MTPathViewController * pathVc = [[MTPathViewController alloc] initWithMapService:self.mapService];
+    [self.navigationController pushViewController:pathVc animated:YES];
+    
+}
+
+
+- (DGMapModule *)mapService {
     if(!_mapService){
         _mapService = [[DGMapModule alloc] init];
-        
-        DGMapServicePresenter * presenter = [[DGMapServicePresenter alloc] init];
-        _mapService.presenter = presenter;
-        presenter.mapModule = _mapService;
-        
-        presenter.delegate = self;
-        DGMapServiceInteractor * interactor = [[DGMapServiceInteractor alloc] init];
-        
-        presenter.interactor = interactor;
-        interactor.presenter = presenter;
-        
-        DGMapServiceDataManager * dataManager = [[DGMapServiceDataManager alloc] init];
-        interactor.dataManager = dataManager;
+        _mapService.presenter.delegate = self;
     }
     return _mapService;
 }

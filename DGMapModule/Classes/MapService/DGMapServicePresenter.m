@@ -10,7 +10,28 @@
 #import <MJExtension/MJExtension.h>
 @implementation DGMapServicePresenter
 
+
+#pragma mark - DGLocationChooseMapViewDelegate methods
+
+- (void)mapViewConfirmedUserLocationData:(DGMapLocationModel *)model {
+    self.interactor.dataManager.userLocationData = model;
+}
+
+
+- (void)mapViewConfirmedAnChoosedLocationData:(DGMapLocationModel *)model {
+    self.interactor.dataManager.choosedLocationData = model;
+}
+
 #pragma mark - DGMapServiceModuleInterface methods
+
+
+- (UIView *) papredMapViewWithType:(DGMapViewActionType )type {
+    [self.userInterface setMapViewType:type];
+    if(type == DGMapViewActionType_ConfirmTwoPoint){
+        [self searchRouterWithStartLocation:self.interactor.dataManager.userLocationData.location endLocation:self.interactor.dataManager.choosedLocationData.location];
+    }
+    return  self.userInterface;
+}
 
 - (void)setMapViewCanBeDrag:(BOOL)canBeDrag {
     [self.userInterface setMapViewCanBeDrag:canBeDrag];
@@ -81,7 +102,7 @@
 }
 
 - (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
-    [self.userInterface showRouterSearchResult:response];
+    [self.userInterface showRouterSearchResult:response withStart:self.interactor.dataManager.userLocationData andEnd:self.interactor.dataManager.choosedLocationData];
 }
 
 

@@ -18,6 +18,7 @@
 //高德导航类
 #import <AMapNaviKit/AMapNaviKit.h>
 
+#import "DGMapViewServiceTypeDefine.h"
 
 @class CLLocation;
 @class AMapPOI;
@@ -29,6 +30,8 @@
 
 @optional
  
+- (UIView *) papredMapViewWithType:(DGMapViewActionType  )type;
+
 - (void)userSearchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate ;
 
 - (void)confirmedUserLocationCoordinate:(CLLocationCoordinate2D)coordinate ;

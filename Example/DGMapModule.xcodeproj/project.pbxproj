@@ -29,6 +29,7 @@
 		E27323B22721B4C000403337 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E27323AB2721B4C000403337 /* README.md */; };
 		E27323B32721B4C000403337 /* NSDictionary+Unicode.m in Sources */ = {isa = PBXBuildFile; fileRef = E27323AC2721B4C000403337 /* NSDictionary+Unicode.m */; };
 		E27323B42721B4C000403337 /* NSObject+SafeSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = E27323AE2721B4C000403337 /* NSObject+SafeSwizzle.m */; };
+		E2B3EB2A2726F9C800F92BE7 /* MTPathViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B3EB292726F9C800F92BE7 /* MTPathViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,8 @@
 		E27323AD2721B4C000403337 /* NSArray+Unicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Unicode.h"; sourceTree = "<group>"; };
 		E27323AE2721B4C000403337 /* NSObject+SafeSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SafeSwizzle.m"; sourceTree = "<group>"; };
 		E27323AF2721B4C000403337 /* NSString+Unicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Unicode.h"; sourceTree = "<group>"; };
+		E2B3EB282726F9C800F92BE7 /* MTPathViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTPathViewController.h; sourceTree = "<group>"; };
+		E2B3EB292726F9C800F92BE7 /* MTPathViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTPathViewController.m; sourceTree = "<group>"; };
 		F76C9534BAE3D1D53FB8B1CE /* DGMapModule.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = DGMapModule.podspec; path = ../DGMapModule.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
@@ -152,6 +155,8 @@
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* MTViewController.h */,
 				6003F5A6195388D20070C39A /* MTViewController.m */,
+				E2B3EB282726F9C800F92BE7 /* MTPathViewController.h */,
+				E2B3EB292726F9C800F92BE7 /* MTPathViewController.m */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
@@ -410,6 +415,7 @@
 				E27323B42721B4C000403337 /* NSObject+SafeSwizzle.m in Sources */,
 				6003F5A7195388D20070C39A /* MTViewController.m in Sources */,
 				E27323B02721B4C000403337 /* NSArray+Unicode.m in Sources */,
+				E2B3EB2A2726F9C800F92BE7 /* MTPathViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

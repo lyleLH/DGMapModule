@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "DGMapViewServiceTypeDefine.h"
  
 //搜索基础类
 #import <AMapSearchKit/AMapSearchKit.h>
@@ -18,13 +18,13 @@
 
 @optional
 
-//显示用户自身位置的搜索结果、显示用户拖动选点的搜索结果
- 
+- (void)setMapViewType:(DGMapViewActionType) type;
+
 - (void)showReGeoSearchResult:(AMapReGeocodeSearchResponse *)response;
 
 - (void)showAnPoiPoint:(AMapPOI *)poi;
 
-- (void)showRouterSearchResult:(AMapRouteSearchResponse *)response;
+- (void)showRouterSearchResult:(AMapRouteSearchResponse *)response withStart:(DGMapLocationModel *)start andEnd:(DGMapLocationModel*)end;
 
 - (void)setMapViewCanBeDrag:(BOOL)canBeDrag ;
 

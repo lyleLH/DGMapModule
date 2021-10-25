@@ -18,20 +18,30 @@
 
 @implementation DGMapModule
 
-- (void)presentSelfFromViewController:(UIViewController *)viewController
-{
-    // save reference
-    self.mapView = [[DGMapView alloc] init];
 
-    // view <-> presenter
-    self.presenter.userInterface = self.mapView;
-    self.mapView.eventHandler = self.presenter;
+- (instancetype)init {
+    if(self ==[super init]){
+        DGMapServicePresenter * presenter = [[DGMapServicePresenter alloc] init];
+        self.presenter = presenter;
+        presenter.mapModule = self;
+        
+        DGMapServiceInteractor * interactor = [[DGMapServiceInteractor alloc] init];
+        
+        presenter.interactor = interactor;
+        interactor.presenter = presenter;
+        
+        DGMapServiceDataManager * dataManager = [[DGMapServiceDataManager alloc] init];
+        interactor.dataManager = dataManager;
+        self.mapView = [[DGMapView alloc] init];
 
-    // present controller
-    // *** present self with RootViewController
-    [viewController.view addSubview:self.mapView];
-    [self.mapView setFrame:CGRectMake(0, 0, viewController.view.bounds.size.width, viewController.view.bounds.size.height )];
-//    [self.presenter.interactor prepareSearchServiceWithMapView:self.mapView];
+        // view <-> presenter
+        self.presenter.userInterface = self.mapView;
+        self.mapView.eventHandler = self.presenter;
+        
+    }
+    return self;
 }
+
+ 
 
 @end

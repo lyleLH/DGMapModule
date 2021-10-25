@@ -1,1 +1,1 @@
-../../../../../DGMapModule/Classes/MapService/View/MAMapView+ZoomLevel.h
+../../../../../DGMapModule/Classes/common/MAMapView+ZoomLevel.h

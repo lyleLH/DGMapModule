@@ -24,7 +24,7 @@
 
 @property (nonatomic, weak) DGMapServicePresenter <DGMapServiceInteractorDelegate>*presenter;
 @property (nonatomic, strong) DGMapServiceDataManager *dataManager;
-
+@property(nonatomic,strong)AMapSearchAPI *search;
 
 - (void)searchAroundWithKeyWords:(NSString*)keywords  InCity:(NSString*)city andCoordinate:(CLLocationCoordinate2D)coordinate ;
 

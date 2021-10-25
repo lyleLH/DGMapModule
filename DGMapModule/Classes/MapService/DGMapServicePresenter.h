@@ -14,13 +14,15 @@
  
 #import "DGMapServiceViewInterface.h"
 
+#import "DGLocationChooseMapView.h"
+
 @class DGMapServiceWireframe;
 @class DGMapServiceInteractor;
 @class DGMapModule;
 /**
  Display logic for the MapService module.
  */
-@interface DGMapServicePresenter : NSObject <DGMapServiceModuleInterface,AMapSearchDelegate>
+@interface DGMapServicePresenter : NSObject <DGMapServiceModuleInterface,AMapSearchDelegate,DGLocationChooseMapViewDelegate>
 
 @property (nonatomic, strong) DGMapServiceInteractor *interactor;
 @property (nonatomic, weak) DGMapModule * mapModule;

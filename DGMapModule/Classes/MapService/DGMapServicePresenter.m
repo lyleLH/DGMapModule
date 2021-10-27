@@ -13,28 +13,18 @@
 
 #pragma mark - DGLocationChooseMapViewDelegate methods
 
-- (void)mapViewConfirmedUserLocationData:(DGMapLocationModel *)model {
-    self.interactor.dataManager.userLocationData = model;
-}
-
-
-- (void)mapViewConfirmedAnChoosedLocationData:(DGMapLocationModel *)model {
-    self.interactor.dataManager.choosedLocationData = model;
-}
+ 
 
 #pragma mark - DGMapServiceModuleInterface methods
 
 
 - (UIView *) papredMapViewWithType:(DGMapViewActionType )type {
     [self.userInterface setMapViewType:type];
+    self.interactor.dataManager.intialType = type;
     if(type == DGMapViewActionType_ConfirmTwoPoint){
-        [self searchRouterWithStartLocation:self.interactor.dataManager.userLocationData.location endLocation:self.interactor.dataManager.choosedLocationData.location];
+        [self searchRouterWithStartLocation:self.interactor.dataManager.startLocationData.location endLocation:self.interactor.dataManager.endLocationData.location];
     }
     return  self.userInterface;
-}
-
-- (void)setMapViewCanBeDrag:(BOOL)canBeDrag {
-    [self.userInterface setMapViewCanBeDrag:canBeDrag];
 }
 
 // implement module interface here
@@ -47,31 +37,26 @@
     [self.interactor routeSearchWithStart:start end:end];
 }
 
-//得到用户当前位置
-- (void)confirmedUserLocationCoordinate:(CLLocationCoordinate2D)coordinate  {
-    if([self.delegate respondsToSelector:@selector(userCurrentLoction:)]){
-        [self.delegate userCurrentLoction:coordinate];
+- (void)confirmedUserLocationCoordinate:(CLLocationCoordinate2D)location withType:(DGMapViewActionType)type {
+    self.interactor.dataManager.currentType = type;
+    if (type== DGMapViewActionType_UserLocation  ) {
+        self.interactor.dataManager.userLocationData = [[DGMapLocationModel alloc] initWithLocation:location];
+        [self.interactor searchReGeocodeWithCoordinate:location isUserLocation:YES];
+        self.interactor.dataManager.isGettingUserLocationSearchResult = YES;
+    }else if(type== DGMapViewActionType_PickStartLocation){
+        self.interactor.dataManager.startLocationData = [[DGMapLocationModel alloc] initWithLocation:location];
+        [self.interactor searchReGeocodeWithCoordinate:location isUserLocation:NO];
+    }else if(type== DGMapViewActionType_PickEndLocation){
+        self.interactor.dataManager.endLocationData = [[DGMapLocationModel alloc] initWithLocation:location];
+        [self.interactor searchReGeocodeWithCoordinate:location isUserLocation:NO];
     }
-    [self.interactor searchReGeocodeWithCoordinate:coordinate isUserLocation:YES];
 }
 
-//拖动到新的位置
-- (void)userDargToNewLocationCoordinate:(CLLocationCoordinate2D)coordinate  {
-    if([self.delegate respondsToSelector:@selector(userChoosedLoction:)]){
-        [self.delegate userChoosedLoction:coordinate];
-    }
-    [self.interactor searchReGeocodeWithCoordinate:coordinate isUserLocation:NO];
-    
-}
+ 
 
 
 - (void)userSearchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate  {
     [self.interactor searchAroundWithKeyWords:keyword InCity:city andCoordinate:coordinate];
-}
-
-
-- (void)updaMapViewWithSearchResult:(AMapReGeocodeSearchResponse *)response {
-    [self.userInterface showReGeoSearchResult:response];
 }
 
 
@@ -82,16 +67,29 @@
 
 - (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
     if(self.interactor.dataManager.isGettingUserLocationSearchResult){
-        if([self.delegate respondsToSelector:@selector(userCurrentLoctionData:)]){
-            [self.delegate userCurrentLoctionData:response];
+      
+        [self.interactor.dataManager.userLocationData  fillWtihRegeoResponse:response];
+        if([self.delegate respondsToSelector:@selector(currentUserLocationData:)]){
+            [self.delegate currentUserLocationData:self.interactor.dataManager.userLocationData ];
         }
+        [self.userInterface showReGeoSearchResult:self.interactor.dataManager.userLocationData];
+        self.interactor.dataManager.isGettingUserLocationSearchResult = NO;
+        self.interactor.dataManager.currentType = self.interactor.dataManager.intialType;
     }else{
-        if([self.delegate respondsToSelector:@selector(userChoosedLoctionData:)]){
-            [self.delegate userChoosedLoctionData:response];
+        if(self.interactor.dataManager.currentType == DGMapViewActionType_PickStartLocation){
+            [self.interactor.dataManager.startLocationData  fillWtihRegeoResponse:response];
+            if([self.delegate respondsToSelector:@selector(currentChoosedLocationData:)]){
+                [self.delegate currentChoosedLocationData:self.interactor.dataManager.startLocationData];
+            }
+            [self.userInterface showReGeoSearchResult:self.interactor.dataManager.startLocationData];
+        }else if(self.interactor.dataManager.currentType == DGMapViewActionType_PickEndLocation){
+            [self.interactor.dataManager.endLocationData  fillWtihRegeoResponse:response];
+            if([self.delegate respondsToSelector:@selector(currentChoosedLocationData:)]){
+                [self.delegate currentChoosedLocationData:self.interactor.dataManager.endLocationData];
+            }
+            [self.userInterface showReGeoSearchResult:self.interactor.dataManager.endLocationData];
         }
     }
-    
-    [self.userInterface showReGeoSearchResult:response];
 }
 
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
@@ -102,7 +100,7 @@
 }
 
 - (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
-    [self.userInterface showRouterSearchResult:response withStart:self.interactor.dataManager.userLocationData andEnd:self.interactor.dataManager.choosedLocationData];
+    [self.userInterface showRouterSearchResult:response withStart:self.interactor.dataManager.startLocationData andEnd:self.interactor.dataManager.endLocationData];
 }
 
 

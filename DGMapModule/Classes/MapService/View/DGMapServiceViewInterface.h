@@ -20,7 +20,7 @@
 
 - (void)setMapViewType:(DGMapViewActionType) type;
 
-- (void)showReGeoSearchResult:(AMapReGeocodeSearchResponse *)response;
+- (void)showReGeoSearchResult:(DGMapLocationModel *)model;
 
 - (void)showAnPoiPoint:(AMapPOI *)poi;
 

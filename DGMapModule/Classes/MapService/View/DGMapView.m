@@ -25,7 +25,7 @@
 
 @implementation DGMapView
 
-- (void)showReGeoSearchResult:(AMapReGeocodeSearchResponse *)response {
+- (void)showReGeoSearchResult:(DGMapLocationModel *)response {
     [self.mapChooseView showReGeoSearchResult:response];
 }
 
@@ -37,13 +37,13 @@
 
 - (void)setMapViewType:(DGMapViewActionType) type {
     _mapViewActionType = type;
-    if(type == DGMapViewActionType_UserLocation)
-    {
-        [self.pathRouteView removeFromSuperview];
-        [self addSubview:self.mapChooseView];
-    }else if(type ==DGMapViewActionType_ConfirmTwoPoint){
+   if(type ==DGMapViewActionType_ConfirmTwoPoint){
         [self.mapChooseView removeFromSuperview];
         [self addSubview:self.pathRouteView];
+    }else {
+        [self.pathRouteView removeFromSuperview];
+        [self addSubview:self.mapChooseView];
+        [self.mapChooseView setMapViewType:type];
     }
 }
 
@@ -52,7 +52,7 @@
     [super layoutSubviews];
     if(_mapViewActionType  == DGMapViewActionType_ConfirmTwoPoint){
         [self.pathRouteView setFrame:self.bounds];
-    } else if(_mapViewActionType  == DGMapViewActionType_UserLocation){
+    } else{
         [self.mapChooseView setFrame:self.bounds];
     }
 }

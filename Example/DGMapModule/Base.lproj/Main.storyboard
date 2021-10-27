@@ -36,9 +36,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cs0-Kv-LcD">
-                                <rect key="frame" x="257" y="74" width="82" height="31"/>
+                                <rect key="frame" x="219" y="74" width="120" height="31"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="82" id="0n5-J9-8sD"/>
+                                    <constraint firstAttribute="width" constant="120" id="0n5-J9-8sD"/>
                                     <constraint firstAttribute="height" constant="31" id="F1R-o8-lOh"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
@@ -47,11 +47,24 @@
                                     <action selector="pathRouter:" destination="whP-gf-Uak" eventType="touchUpInside" id="Ivt-fF-eai"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8cX-Oe-s3h">
+                                <rect key="frame" x="109" y="74" width="80" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="Xd1-ga-UBv"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="选终点"/>
+                                <connections>
+                                    <action selector="chooseEnd:" destination="whP-gf-Uak" eventType="touchUpInside" id="bH2-iO-whC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="cs0-Kv-LcD" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" constant="30" id="Hsl-Mj-rhT"/>
+                            <constraint firstItem="cs0-Kv-LcD" firstAttribute="leading" secondItem="8cX-Oe-s3h" secondAttribute="trailing" constant="30" id="VjL-k1-Vmg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cs0-Kv-LcD" secondAttribute="trailing" constant="20" id="bht-8w-3sj"/>
+                            <constraint firstItem="cs0-Kv-LcD" firstAttribute="centerY" secondItem="8cX-Oe-s3h" secondAttribute="centerY" id="c9p-Pw-SmN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="jep-gG-qDX"/>

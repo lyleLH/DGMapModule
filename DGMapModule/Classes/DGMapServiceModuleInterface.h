@@ -19,6 +19,7 @@
 #import <AMapNaviKit/AMapNaviKit.h>
 
 #import "DGMapViewServiceTypeDefine.h"
+#import "DGMapLocationModel.h"
 
 @class CLLocation;
 @class AMapPOI;
@@ -30,20 +31,10 @@
 
 @optional
  
-- (UIView *) papredMapViewWithType:(DGMapViewActionType  )type;
+- (UIView*)papredMapViewWithType:(DGMapViewActionType)type;
 
-- (void)userSearchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate ;
+- (void)searchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate ;
 
-- (void)confirmedUserLocationCoordinate:(CLLocationCoordinate2D)coordinate ;
-
-
-- (void)userDargToNewLocationCoordinate:(CLLocationCoordinate2D)coordinate  ;
-
-- (void)searchRouterWithStartLocation:(CLLocationCoordinate2D)start endLocation:(CLLocationCoordinate2D)end;
-
-- (void)userSelectAPOIPointToShowInMap:(NSDictionary*)poi;
-
-- (void)setMapViewCanBeDrag:(BOOL)canBeDrag ;
 
 @end
 
@@ -54,11 +45,9 @@
 @protocol DGMapServiceModuleDelegate <NSObject>
 @optional
 
-- (void)userCurrentLoction:(CLLocationCoordinate2D)location;
-- (void)userCurrentLoctionData:(AMapReGeocodeSearchResponse *)data;
+- (void)currentUserLocationData:(DGMapLocationModel*)data;
 
-- (void)userChoosedLoction:(CLLocationCoordinate2D)location;
-- (void)userChoosedLoctionData:(AMapReGeocodeSearchResponse *)data;
+- (void)currentChoosedLocationData:(DGMapLocationModel*)data;
 
 - (void)userSearchKeyWordsResponse:(AMapPOISearchResponse *)data;
 

@@ -9,8 +9,10 @@
 #import "MTViewController.h"
 #import "MTPathViewController.h"
 #import "DGMapModule.h"
+#import <MJExtension.h>
 @interface MTViewController () <DGMapServiceModuleDelegate>
 @property (nonatomic,strong)DGMapModule * mapService ;
+@property (nonatomic,strong)UIView * mapView;
 @end
 
 @implementation MTViewController
@@ -25,9 +27,9 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    UIView * mapView =  [self.mapService.presenter papredMapViewWithType:DGMapViewActionType_UserLocation];
-    [self.view addSubview:mapView];
-    [mapView setFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height-300 )];
+    self.mapView =  [self.mapService.presenter papredMapViewWithType:DGMapViewActionType_PickStartLocation];
+    [self.view addSubview:self.mapView ];
+    [self.mapView  setFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height-300 )];
 }
 
 
@@ -49,7 +51,7 @@
 
 
 - (IBAction)chooseEnd:(id)sender {
-//    [self.mapServiceWireframe.presenter requestToChooseEndPoint];
+    self.mapView =  [self.mapService.presenter papredMapViewWithType:DGMapViewActionType_PickEndLocation];
 }
 
 
@@ -62,6 +64,14 @@
     
 }
 
+
+- (void)currentUserLocationData:(DGMapLocationModel *)data {
+    NSLog(@"%@",[data mj_keyValues]);
+}
+
+- (void)currentChoosedLocationData:(DGMapLocationModel *)data {
+    NSLog(@"%@",[data mj_keyValues]);
+}
 
 
 

@@ -81,6 +81,16 @@
 #pragma mark -- DGMapServiceViewInterface
  
 - (void)showAnAnnotationWithData:(DGMapLocationModel *)model {
+    CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(model.poi.location.latitude, model.poi.location.longitude);
+    [self centerAnnotationAnimimate];
+    
+    dispatch_after(1.0, dispatch_get_main_queue(), ^{
+        [self.mapView setCenterCoordinate:location animated:YES];
+    });
+    
+    
+    
+    [self.centerAnnotationView removeFromSuperview];
     
     [self.mapView removeAnnotation:  self.choosedPointAnnotation];
     [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
@@ -127,13 +137,35 @@
 
 
 - (void)showAnPoiPoint:(AMapPOI *)poi {
-    [self.mapView removeAnnotation:self.choosedPointAnnotation];
-    [self.mapView removeAnnotations:self.aroundPoiAnnotations];
+    CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(poi.location.latitude, poi.location.longitude);
     
-    POIAnnotation * annotation = [[POIAnnotation alloc] initWithPOI:poi];
-    [annotation setTag:@"起点"];
-    [self.aroundPoiAnnotations addObject:annotation];
-    [self.mapView addAnnotation:annotation];
+    if([self.eventHandler respondsToSelector:@selector(confirmedUserLocationCoordinate:withType:)]) {
+        [self.eventHandler confirmedUserLocationCoordinate:location withType:_chooseType];
+        
+    }
+//
+//    [self.mapView removeAnnotation:self.choosedPointAnnotation];
+//    [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
+//    if(self.aroundPoiAnnotations.count>0){
+//       __block NSInteger poiIndex = 0;
+//        [self.aroundPoiAnnotations enumerateObjectsUsingBlock:^(POIAnnotation * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            if([poi isEqual:obj.poi]){
+//                poiIndex = idx;
+//            }
+//        }];
+//        [self.mapView removeAnnotation:self.aroundPoiAnnotations[poiIndex]];
+//        [self.aroundPoiAnnotations removeObjectAtIndex:poiIndex];
+//    }else{
+//        [self.mapView removeAnnotations:self.aroundPoiAnnotations];
+//    }
+//
+//
+//
+//    POIAnnotation * annotation = [[POIAnnotation alloc] initWithPOI:poi];
+//    [annotation setTag:@"起点"];
+////    [self.aroundPoiAnnotations addObject:annotation];
+//    self.choosedPOIAnnotaion = annotation;
+//    [self.mapView addAnnotation:annotation];
 }
   
 - (void)showReGeoSearchResult:(DGMapLocationModel *)response {
@@ -222,12 +254,11 @@
                 
                 NSLog(@"🍉🍉🍉拖选点经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(choosedCoordinate.latitude, choosedCoordinate.longitude)));
 
-#pragma mark -- 调用 逆地理搜索
+#pragma mark -- 拖选点经纬度  调用 逆地理搜索
                 if([self.eventHandler respondsToSelector:@selector(confirmedUserLocationCoordinate:withType:)]) {
                     [self.eventHandler confirmedUserLocationCoordinate:choosedCoordinate withType:_chooseType];
                     
                 }
-                 [self searchReGeocodeWithCoordinate:choosedCoordinate];
             }
 
         }
@@ -336,8 +367,9 @@
          
         }else{
             annotationView.calloutView.hidden = YES;
+            [annotationView.imageView setFrame:CGRectMake(0, 0, 44, 44)];
         }
-        
+      
         
         annotationView.image = image;
         return annotationView;
@@ -346,17 +378,18 @@
     return nil;
 }
 
+- (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
+    id annotation = view.annotation;
+    if([[annotation class] isEqual:[POIAnnotation class]]){
+        POIAnnotation * poiAnnotation  = (POIAnnotation*)annotation;
+        NSLog(@"🍉🍉🍉点击poi得到经纬度 --- ： %@",NSStringFromCGPoint(CGPointMake(poiAnnotation.poi.location.latitude, poiAnnotation.poi.location.longitude)));
 
-
-#pragma mark -- 逆地理搜索
-
--(void)searchReGeocodeWithCoordinate:(CLLocationCoordinate2D)coordinate {
-    AMapReGeocodeSearchRequest *regeo = [[AMapReGeocodeSearchRequest alloc] init];
-    regeo.location = [AMapGeoPoint locationWithLatitude:coordinate.latitude longitude:coordinate.longitude];
-    regeo.requireExtension = YES;
-    regeo.radius = 200;
-//    [self.search AMapReGoecodeSearch:regeo];
+        [self showAnPoiPoint:poiAnnotation.poi];
+    }
+    
 }
+
+
 
 
 

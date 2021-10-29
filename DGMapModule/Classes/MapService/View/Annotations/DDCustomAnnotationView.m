@@ -71,10 +71,7 @@
     /*坐标不合适再此设置即可*/
     //Code ...
 //    CGFloat width =  [ self.calloutView.textLabel.text mt_widthByLimitHeight:35 font:[UIFont systemFontOfSize:15]];
-    self.addressLabel.hidden = !self.calloutView.hidden;
-    CGSize size = [self.calloutView.textLabel.text sizeWithAttributes:@{NSFontAttributeName:self.calloutView.textLabel.font}];
-    [self.addressLabel setFrame:CGRectMake(CGRectGetMaxY(self.imageView.frame)+3, 0, size.width, size.height)];
-    self.addressLabel.text = self.calloutView.textLabel.text;
+
     [self updateUIWithText];
     
 }
@@ -82,21 +79,36 @@
 
 - (void)updateUIWithText{
 //    NSLog(@"-----> [calloutView width] : %.2f",width);
-    CGSize size = [self.calloutView.textLabel.text boundingRectWithSize:CGSizeMake(kCalloutWidth, MAXFLOAT)
-                                              options:NSStringDrawingUsesLineFragmentOrigin
-                                           attributes:@{NSFontAttributeName:self.calloutView.textLabel.font}
-                                              context:nil].size;
-    CGFloat height = size.height;
-    if(size.height>kCalloutHeight){
-        height = kCalloutHeight;
+    if(!self.calloutView.hidden){
+        CGSize size = [self.calloutView.textLabel.text boundingRectWithSize:CGSizeMake(kCalloutWidth, MAXFLOAT)
+                                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                               attributes:@{NSFontAttributeName:self.calloutView.textLabel.font}
+                                                  context:nil].size;
+        CGFloat height = size.height;
+        if(size.height>kCalloutHeight){
+            height = kCalloutHeight;
+        }
+     
+        [self.calloutView setFrame:CGRectMake(0, 0, 10 + size.width  + 25, height+20 +10)];
+        
+        self.calloutView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2.f + self.calloutOffset.x,
+                                              -CGRectGetHeight(self.calloutView.bounds) / 2.f + self.calloutOffset.y);
+     
+    }else{
+       
+        [self setFrame:CGRectMake(self.frame.origin.x, self.frame.origin.y, 44, 44)];
+        UIImage * image = self.imageView.image;
+        CGSize imageSize = image.size;
+        [self.imageView setFrame:CGRectMake((44-imageSize.width)*0.5, (44-imageSize.height)*0.5, imageSize.width, imageSize.height)];
+        
+        self.addressLabel.hidden = !self.calloutView.hidden;
+        CGSize size = [self.calloutView.textLabel.text sizeWithAttributes:@{NSFontAttributeName:self.calloutView.textLabel.font}];
+        [self.addressLabel setFrame:CGRectMake(CGRectGetMaxY(self.imageView.frame)+3, CGRectGetMidY(self.imageView.frame), size.width, size.height)];
+        self.addressLabel.text = self.calloutView.textLabel.text;
+        
+        
     }
  
-    [self.calloutView setFrame:CGRectMake(0, 0, 10 + size.width  + 25, height+20 +10)];
-    
-    self.calloutView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2.f + self.calloutOffset.x,
-                                          -CGRectGetHeight(self.calloutView.bounds) / 2.f + self.calloutOffset.y);
- 
-//    NSLog(@"-----> [calloutView frame] : %@",NSStringFromCGRect(self.calloutView.frame));
 }
 
 @end

@@ -103,7 +103,7 @@
         
         self.addressLabel.hidden = !self.calloutView.hidden;
         CGSize size = [self.calloutView.textLabel.text sizeWithAttributes:@{NSFontAttributeName:self.calloutView.textLabel.font}];
-        [self.addressLabel setFrame:CGRectMake(CGRectGetMaxY(self.imageView.frame)+3, CGRectGetMidY(self.imageView.frame), size.width, size.height)];
+        [self.addressLabel setFrame:CGRectMake(CGRectGetMaxY(self.imageView.frame)+3, (44-size.height)*0.5, size.width, size.height)];
         self.addressLabel.text = self.calloutView.textLabel.text;
         
         

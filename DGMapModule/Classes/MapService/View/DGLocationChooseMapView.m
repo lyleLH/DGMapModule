@@ -65,11 +65,18 @@
   
     _chooseType = type;
     
+    if(_chooseType == DGMapViewActionType_PickStartLocation){
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+    }else if(_chooseType == DGMapViewActionType_PickEndLocation){
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+    }
    
     if(type == DGMapViewActionType_PickEndLocation){
         [self.mapView removeAnnotations:self.mapView.annotations];
         self.mapView.showsUserLocation = NO;
         self.mapView.userTrackingMode = MAUserTrackingModeNone;
+        [self.mapView addSubview:self.centerAnnotationView];
+        self.centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
     }else{
         ///下面两行代码 进入地图就显示定位小蓝点
         self.mapView.showsUserLocation = YES;
@@ -81,7 +88,7 @@
 #pragma mark -- DGMapServiceViewInterface
  
 - (void)showAnAnnotationWithData:(DGMapLocationModel *)model {
-    CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(model.poi.location.latitude, model.poi.location.longitude);
+    CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(model.location.latitude, model.location.longitude);
     [self centerAnnotationAnimimate];
     
     dispatch_after(1.0, dispatch_get_main_queue(), ^{
@@ -228,16 +235,12 @@
 
 -(void)mapView:(MAMapView *)mapView regionWillChangeAnimated:(BOOL)animated wasUserAction:(BOOL)wasUserAction {
     if(wasUserAction) {
-        
+        [self.mapView addSubview:self.centerAnnotationView];
+        self.centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
+        [self.mapView removeAnnotation:  self.choosedPointAnnotation];
         [self.mapView removeAnnotation:  self.choosedPointAnnotation];
         [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
-        [self.mapView addSubview:self.centerAnnotationView];
-        
-        if(_chooseType == DGMapViewActionType_PickStartLocation){
-            self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
-        }else if(_chooseType == DGMapViewActionType_PickEndLocation){
-            self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
-        }
+       
     }
 }
 

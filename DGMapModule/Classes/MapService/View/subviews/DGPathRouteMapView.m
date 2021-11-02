@@ -30,7 +30,9 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
 
 @interface DGPathRouteMapView ()
 
-@property(nonatomic,strong)MAMapView *mapView;
+
+@property(nonatomic,strong)PointAnnotation * startPoint;
+@property(nonatomic,strong)PointAnnotation * endPoint;
 
 /* 用于显示当前路线方案. */
 @property (nonatomic) MANaviRoute * naviRoute;
@@ -43,9 +45,35 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
 
 @implementation DGPathRouteMapView
 
+- (void)dealloc {
+    NSLog(@"dealloc -- DGPathRouteMapView -- 🍉");
+}
+
+- (void)setMapViewType:(DGMapViewActionType) type {
+   
+    if(type == DGMapViewActionType_ConfirmTwoPoint){
+        
+    }else if(type == DGMapViewActionType_WaittingCar){
+        
+    }else if(type == DGMapViewActionType_Scheduled){
+        
+    }
+    
+}
+
+- (void)setMapView:(MAMapView *)mapView {
+    _mapView = mapView;
+    _mapView.scrollEnabled = YES;
+    [self addSubview:_mapView];
+//    [mapView removeAnnotations:mapView.annotations];
+//    [mapView removeOverlays:mapView.overlays];
+}
+
+
+
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self addSubview:self.mapView];
+ 
     [self.mapView setFrame:self.bounds];
 }
 
@@ -55,11 +83,11 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
     [self.mapView removeAnnotations:self.mapView.annotations];
     
     PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:start.poi.name.length>0?start.poi.name:@"当前位置" andLocation:start.location];
-   
+    self.startPoint = point;
     [self.mapView addAnnotation:point];
 
     PointAnnotation * point2  = [[PointAnnotation  alloc] initWithAddress:end.poi.name.length>0?end.poi.name:@"当前位置" andLocation:end.location];
-   
+    self.endPoint = point2;
     [self.mapView addAnnotation:point2];
     
     
@@ -162,38 +190,16 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
         PointAnnotation *point = (PointAnnotation *)annotation;
         annotationView.calloutView.textLabel.text = point.title;
         annotationView.calloutView.hidden = NO;
-        annotationView.image = [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];;
-        return annotationView;
-    }
-    if ([annotation isKindOfClass:[POIAnnotation class]])
-    {
-        static NSString *reusedID = @"DDPointAnnotation_reusedID";
-        DDCustomAnnotationView *annotationView = (DDCustomAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reusedID];
-        
-        if (!annotationView) {
-            annotationView = [[DDCustomAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:reusedID];
-            annotationView.canShowCallout = NO;//设置此属性为NO，防止点击的时候高德自带的气泡弹出
-        }
-        
-        //给气泡赋值
-        POIAnnotation *ddAnnotation = (POIAnnotation *)annotation;
-//        NSLog(@"********* %@ %@",ddAnnotation.title,ddAnnotation.number);
-        annotationView.calloutView.textLabel.text = ddAnnotation.poi.name;
-//        annotationView.calloutView.hidden = YES;
-        UIImage * image = [UIImage mt_imageWithName:@"map_local_oil1" inBundle:@"DGMapModule"];
-        
-        if([[ddAnnotation tag] isEqualToString:@"起点"]){
-            image = [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
-            annotationView.calloutView.hidden = NO;
-         
+        UIImage * image = [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
+        if([point isEqual:self.endPoint]){
+            image = [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
         }else{
-            annotationView.calloutView.hidden = YES;
+            
         }
-        
-        
         annotationView.image = image;
         return annotationView;
     }
+
     
     return nil;
 }
@@ -201,25 +207,25 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
 
 
 
-- (MAMapView *)mapView {
-    if(!_mapView){
-        _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
-        _mapView.scrollEnabled = YES;
-        _mapView.mapType = MAMapTypeBus;
-        _mapView.showsUserLocation = NO;
- 
-        //设置地图缩放比例，即显示区域
-        [_mapView setZoomLevel:17 animated:YES];
-        
-        _mapView.delegate = self;
-        //设置定位精度
-        _mapView.desiredAccuracy = kCLLocationAccuracyBest;
-        //设置定位距离
-        _mapView.distanceFilter = 5.0f;
-        
-    }
-    return _mapView;
-}
+//- (MAMapView *)mapView {
+//    if(!_mapView){
+//        _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
+//        _mapView.scrollEnabled = YES;
+//        _mapView.mapType = MAMapTypeBus;
+//        _mapView.showsUserLocation = NO;
+//
+//        //设置地图缩放比例，即显示区域
+//        [_mapView setZoomLevel:17 animated:YES];
+//
+//        _mapView.delegate = self;
+//        //设置定位精度
+//        _mapView.desiredAccuracy = kCLLocationAccuracyBest;
+//        //设置定位距离
+//        _mapView.distanceFilter = 5.0f;
+//
+//    }
+//    return _mapView;
+//}
 
 
 @end

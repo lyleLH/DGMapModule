@@ -1,8 +1,8 @@
 //
-//  DGPathRouteMapView.h
+//  DPRealTimePathView.h
 //  DGMapModule
 //
-//  Created by Tom on 2021/10/25.
+//  Created by mttgcc on 11/2/21.
 //
 
 #import <UIKit/UIKit.h>
@@ -17,9 +17,8 @@
 #import "DGMapServiceViewInterface.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DGPathRouteMapView : UIView <DGMapServiceViewInterface>
-
-
+@interface DPRealTimePathView : UIView<DGMapServiceViewInterface>
+@property(nonatomic,weak)MAMapView *mapView;
 @end
 
 NS_ASSUME_NONNULL_END

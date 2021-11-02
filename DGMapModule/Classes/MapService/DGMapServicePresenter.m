@@ -19,11 +19,14 @@
 
 
 - (UIView *) papredMapViewWithType:(DGMapViewActionType )type {
-    [self.userInterface setMapViewType:type];
-    self.interactor.dataManager.intialType = type;
+  
     if(type == DGMapViewActionType_ConfirmTwoPoint){
         [self searchRouterWithStartLocation:self.interactor.dataManager.startLocationData.location endLocation:self.interactor.dataManager.endLocationData.location];
+    }else if(type == DGMapViewActionType_WaittingCar){
+        
     }
+    [self.userInterface setMapViewType:type];
+    self.interactor.dataManager.intialType = type;
     return  self.userInterface;
 }
 

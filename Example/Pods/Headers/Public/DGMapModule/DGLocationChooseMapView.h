@@ -1,1 +1,1 @@
-../../../../../DGMapModule/Classes/MapService/View/DGLocationChooseMapView.h
+../../../../../DGMapModule/Classes/MapService/View/Subviews/DGLocationChooseMapView.h

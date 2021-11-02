@@ -21,7 +21,4 @@
 //@property (nonatomic, strong) RootWireframe *rootWireframe;
 @property (nonatomic, strong) DGMapServicePresenter *presenter;
 
-// initialization
-- (void)presentSelfFromViewController:(UIViewController *)viewController;
-
 @end

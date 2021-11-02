@@ -20,6 +20,7 @@
 
 
 - (void)fillWtihRegeoResponse:(AMapReGeocodeSearchResponse *)response {
+    self.regeocode = response.regeocode;
     if(response.regeocode.pois.count>0){
         NSInteger minIndex = [self compareDistanceWithPois:response.regeocode.pois];
         self.poi = response.regeocode.pois[minIndex];

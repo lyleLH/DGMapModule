@@ -34,8 +34,7 @@
 
 @property (nonatomic, strong)  MAAnnotationView * userLocationAnnotationView;
 
-///地图对象
-@property(nonatomic,strong)MAMapView *mapView;
+
 
 
 //@property(nonatomic,strong)AMapSearchAPI *search;
@@ -48,16 +47,19 @@
 
 @implementation DGLocationChooseMapView
 
-- (instancetype)init {
-    if(self ==[super init]){
-        [self addSubview:self.mapView];
-     
-    }
-    return self;
+- (void)dealloc {
+    NSLog(@"dealloc -- DGLocationChooseMapView -- 🍉");
 }
+ 
+- (void)setMapView:(MAMapView *)mapView {
+    _mapView = mapView;
+    _mapView.delegate = self;
+}
+
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    [self addSubview:self.mapView];
     [self.mapView setFrame:self.bounds];
 }
 
@@ -442,27 +444,27 @@
 
 
 
-- (MAMapView *)mapView {
-    if(!_mapView){
-        _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
-
-//        _mapView.scrollEnabled = NO;
-        _mapView.mapType = MAMapTypeBus;
-        ///下面两行代码 进入地图就显示定位小蓝点
-        _mapView.showsUserLocation = YES;
-        _mapView.userTrackingMode = MAUserTrackingModeFollow;
-        //设置地图缩放比例，即显示区域
-        [_mapView setZoomLevel:17 animated:YES];
-        
-        _mapView.delegate = self;
-        //设置定位精度
-        _mapView.desiredAccuracy = kCLLocationAccuracyBest;
-        //设置定位距离
-        _mapView.distanceFilter = 5.0f;
-        
-    }
-    return _mapView;
-}
+//- (MAMapView *)mapView {
+//    if(!_mapView){
+//        _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
+//
+////        _mapView.scrollEnabled = NO;
+//        _mapView.mapType = MAMapTypeBus;
+//        ///下面两行代码 进入地图就显示定位小蓝点
+//        _mapView.showsUserLocation = YES;
+//        _mapView.userTrackingMode = MAUserTrackingModeFollow;
+//        //设置地图缩放比例，即显示区域
+//        [_mapView setZoomLevel:17 animated:YES];
+//        
+//        _mapView.delegate = self;
+//        //设置定位精度
+//        _mapView.desiredAccuracy = kCLLocationAccuracyBest;
+//        //设置定位距离
+//        _mapView.distanceFilter = 5.0f;
+//        
+//    }
+//    return _mapView;
+//}
 
 
 

@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol DGLocationChooseMapViewDelegate <NSObject>
 
+
+
 - (void)confirmedUserLocationCoordinate :(CLLocationCoordinate2D)location withType:(DGMapViewActionType)type;
 
 
@@ -33,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface DGLocationChooseMapView : UIView <DGMapServiceViewInterface>
+///地图对象
+@property(nonatomic,weak)MAMapView *mapView;
 @property (nonatomic, assign) DGMapViewActionType chooseType;
 @property (nonatomic, strong) id<DGMapServiceModuleInterface,DGLocationChooseMapViewDelegate> eventHandler;
 

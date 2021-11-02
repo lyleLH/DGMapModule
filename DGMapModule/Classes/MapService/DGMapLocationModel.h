@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign)CLLocationCoordinate2D location;
 @property(nonatomic,strong)AMapPOI *poi;
 @property(nonatomic,strong)NSArray <AMapPOI *>* aroundPois;
+@property (nonatomic, strong) AMapReGeocode *regeocode; 
 
 - (instancetype)initWithLocation:(CLLocationCoordinate2D )location;
 

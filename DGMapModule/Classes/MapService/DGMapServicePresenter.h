@@ -22,7 +22,7 @@
 /**
  Display logic for the MapService module.
  */
-@interface DGMapServicePresenter : NSObject <DGMapServiceModuleInterface,AMapSearchDelegate,DGLocationChooseMapViewDelegate>
+@interface DGMapServicePresenter : NSObject <DGMapServiceModuleInterface,DGLocationChooseMapViewDelegate>
 
 @property (nonatomic, strong) DGMapServiceInteractor *interactor;
 @property (nonatomic, weak) DGMapModule * mapModule;

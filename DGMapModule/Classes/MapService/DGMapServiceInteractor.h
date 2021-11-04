@@ -7,6 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+//搜索基础类
+#import <AMapSearchKit/AMapSearchKit.h>
+
+ 
+#import <AMapNaviKit/AMapNaviKit.h>
+
 
 #import "DGMapServicePresenter.h"
 #import "DGMapServiceDataManager.h"

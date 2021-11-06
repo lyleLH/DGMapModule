@@ -16,9 +16,14 @@
 #import <AMapNaviKit/AMapNaviKit.h>
 #import "DGMapServiceViewInterface.h"
 NS_ASSUME_NONNULL_BEGIN
+@protocol DGPathRouteMapViewProtocol
+- (void)cancleCurrentRoutePath;
+@end
 
 @interface DGPathRouteMapView : UIView <DGMapServiceViewInterface>
 @property(nonatomic,weak)MAMapView *mapView;
+@property (nonatomic, strong) id<DGPathRouteMapViewProtocol> eventHandler;
+
 @end
 
 NS_ASSUME_NONNULL_END

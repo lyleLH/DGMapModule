@@ -35,7 +35,7 @@
 
 - (void)searchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate ;
 
-- (void)updateCarLocationInMap:(NSObject*)carData;
+- (void)updateCarLocationInMap:(DGMapLocationModel*)carData;
 
 @end
 

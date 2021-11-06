@@ -52,21 +52,18 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
 - (void)setMapViewType:(DGMapViewActionType) type {
    
     if(type == DGMapViewActionType_ConfirmTwoPoint){
-        
-    }else if(type == DGMapViewActionType_WaittingCar){
-        
-    }else if(type == DGMapViewActionType_Scheduled){
-        
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self.mapView removeOverlays:self.mapView.overlays];
     }
     
 }
 
 - (void)setMapView:(MAMapView *)mapView {
     _mapView = mapView;
+    _mapView.delegate = self;
     _mapView.scrollEnabled = YES;
     [self addSubview:_mapView];
-//    [mapView removeAnnotations:mapView.annotations];
-//    [mapView removeOverlays:mapView.overlays];
+
 }
 
 

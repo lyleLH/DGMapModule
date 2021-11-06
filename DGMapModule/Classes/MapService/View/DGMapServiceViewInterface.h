@@ -26,6 +26,5 @@
 
 - (void)showRouterSearchResult:(AMapRouteSearchResponse *)response withStart:(DGMapLocationModel *)start andEnd:(DGMapLocationModel*)end;
 
-- (void)setMapViewCanBeDrag:(BOOL)canBeDrag ;
-
+- (void)updateCarsLocation:(DGMapLocationModel*)model withFixPoint:(DGMapLocationModel*)point;
 @end

@@ -19,11 +19,11 @@
 
 
 - (UIView *) papredMapViewWithType:(DGMapViewActionType )type {
-  
+
     if(type == DGMapViewActionType_ConfirmTwoPoint){
         [self searchRouterWithStartLocation:self.interactor.dataManager.startLocationData.location endLocation:self.interactor.dataManager.endLocationData.location];
     }else if(type == DGMapViewActionType_WaittingCar){
-        
+
     }
     [self.userInterface setMapViewType:type];
     self.interactor.dataManager.intialType = type;
@@ -36,8 +36,8 @@
 }
 
 
-- (void)updateCarLocationInMap:(NSObject*)carData {
-   
+- (void)updateCarLocationInMap:(DGMapLocationModel*)carData {
+    [self.userInterface updateCarsLocation:carData withFixPoint:self.interactor.dataManager.endLocationData];
 }
 
 

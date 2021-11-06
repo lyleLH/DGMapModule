@@ -7,7 +7,7 @@
 //
 
 #import "MTPathViewController.h"
-
+#import "MTWaitingCarViewController.h"
 @interface MTPathViewController ()
 @property (nonatomic,strong)DGMapModule * mapService ;
 @end
@@ -23,15 +23,18 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    UIView * mapView =  [self.mapService.presenter papredMapViewWithType:DGMapViewActionType_ConfirmTwoPoint];
+    [self.view addSubview:mapView];
+    [mapView setFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height-300 )];
 
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    UIView * mapView =  [self.mapService.presenter papredMapViewWithType:DGMapViewActionType_ConfirmTwoPoint];
-    [self.view addSubview:mapView];
-    [mapView setFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height-300 )];
-    
+
     UIButton * wattingButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 100, 50, 44)];
     [wattingButton setTitle:@"等车" forState:UIControlStateNormal];
     [wattingButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
@@ -41,7 +44,9 @@
 
 
 - (void)waittingCar {
-    [self.mapService.presenter papredMapViewWithType:DGMapViewActionType_WaittingCar];
+    MTWaitingCarViewController * vc = [[MTWaitingCarViewController alloc] init];
+    vc.mapService = self.mapService;
+    [self.navigationController pushViewController:vc animated:YES];
 }
  
 

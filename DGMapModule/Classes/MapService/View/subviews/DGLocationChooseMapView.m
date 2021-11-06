@@ -54,6 +54,8 @@
 - (void)setMapView:(MAMapView *)mapView {
     _mapView = mapView;
     _mapView.delegate = self;
+
+
 }
 
 
@@ -66,25 +68,25 @@
 - (void)setMapViewType:(DGMapViewActionType) type {
   
     _chooseType = type;
-    
+
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView removeOverlays:self.mapView.overlays];
+
     if(_chooseType == DGMapViewActionType_PickStartLocation){
+        _mapView.showsUserLocation = YES;
+        _mapView.userTrackingMode = MAUserTrackingModeFollow;
+
         self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
     }else if(_chooseType == DGMapViewActionType_PickEndLocation){
-        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
-    }
-   
-    if(type == DGMapViewActionType_PickEndLocation){
         [self.mapView removeAnnotations:self.mapView.annotations];
         self.mapView.showsUserLocation = NO;
         self.mapView.userTrackingMode = MAUserTrackingModeNone;
-        [self.mapView addSubview:self.centerAnnotationView];
+
         self.centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
-    }else{
-        ///下面两行代码 进入地图就显示定位小蓝点
-        self.mapView.showsUserLocation = YES;
-        self.mapView.userTrackingMode = MAUserTrackingModeFollow;
+        self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
+
     }
-    
+    [self.mapView addSubview:self.centerAnnotationView];
 }
 
 #pragma mark -- DGMapServiceViewInterface
@@ -152,29 +154,7 @@
         [self.eventHandler confirmedUserLocationCoordinate:location withType:_chooseType];
         
     }
-//
-//    [self.mapView removeAnnotation:self.choosedPointAnnotation];
-//    [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
-//    if(self.aroundPoiAnnotations.count>0){
-//       __block NSInteger poiIndex = 0;
-//        [self.aroundPoiAnnotations enumerateObjectsUsingBlock:^(POIAnnotation * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//            if([poi isEqual:obj.poi]){
-//                poiIndex = idx;
-//            }
-//        }];
-//        [self.mapView removeAnnotation:self.aroundPoiAnnotations[poiIndex]];
-//        [self.aroundPoiAnnotations removeObjectAtIndex:poiIndex];
-//    }else{
-//        [self.mapView removeAnnotations:self.aroundPoiAnnotations];
-//    }
-//
-//
-//
-//    POIAnnotation * annotation = [[POIAnnotation alloc] initWithPOI:poi];
-//    [annotation setTag:@"起点"];
-////    [self.aroundPoiAnnotations addObject:annotation];
-//    self.choosedPOIAnnotaion = annotation;
-//    [self.mapView addAnnotation:annotation];
+
 }
   
 - (void)showReGeoSearchResult:(DGMapLocationModel *)response {
@@ -307,20 +287,13 @@
 - (void)updateChoosedAnnotaionsViewWithResponse:(DGMapLocationModel *)model{
     [self.mapView setCenterCoordinate:model.location];
     if(_chooseType ==  DGMapViewActionType_UserLocation){
-//        [self.userLocationData fillWtihRegeoResponse:response];
         _chooseType =  DGMapViewActionType_PickStartLocation;
         [self showAnAnnotationWithData:model];
-//        if([self.eventHandler respondsToSelector:@selector(mapViewConfirmedUserLocationData:)]){
-//            [self.eventHandler mapViewConfirmedUserLocationData:self.userLocationData];
-//        }
-//
     }else{
         
         
         [self showAnAnnotationWithData:model];
-//        if([self.eventHandler respondsToSelector:@selector(mapViewConfirmedAnChoosedLocationData:)]){
-//            [self.eventHandler mapViewConfirmedAnChoosedLocationData:self.choosedLocationData];
-//        }
+
     }
 }
 
@@ -443,39 +416,6 @@
 }
 
 
-
-//- (MAMapView *)mapView {
-//    if(!_mapView){
-//        _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
-//
-////        _mapView.scrollEnabled = NO;
-//        _mapView.mapType = MAMapTypeBus;
-//        ///下面两行代码 进入地图就显示定位小蓝点
-//        _mapView.showsUserLocation = YES;
-//        _mapView.userTrackingMode = MAUserTrackingModeFollow;
-//        //设置地图缩放比例，即显示区域
-//        [_mapView setZoomLevel:17 animated:YES];
-//        
-//        _mapView.delegate = self;
-//        //设置定位精度
-//        _mapView.desiredAccuracy = kCLLocationAccuracyBest;
-//        //设置定位距离
-//        _mapView.distanceFilter = 5.0f;
-//        
-//    }
-//    return _mapView;
-//}
-
-
-
-//- (AMapSearchAPI *)search {
-//    if(!_search){
-//        _search = [[AMapSearchAPI alloc] init];
-//        _search.delegate = self;
-//    }
-//    return _search;
-//}
-//
 - (NSMutableArray<POIAnnotation *> *)aroundPoiAnnotations {
     if(!_aroundPoiAnnotations){
         _aroundPoiAnnotations = [NSMutableArray new];

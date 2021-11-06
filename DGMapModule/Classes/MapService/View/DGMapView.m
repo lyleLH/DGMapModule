@@ -41,12 +41,18 @@
 
 }
 
+- (void)updateCarsLocation:(DGMapLocationModel *)model withFixPoint:(DGMapLocationModel *)point {
+    [self.realTimeMapView updateCarsLocation:model withFixPoint:point];
+}
+
+
 
 - (void)setMapViewType:(DGMapViewActionType) type {
     _mapViewActionType = type;
     [self.mapContainerView removeFromSuperview];
     self.mapContainerView = nil;
    if(type == DGMapViewActionType_PickStartLocation){
+       [self reConfigMapView];
        self.mapChooseView.mapView = self.mapView;
         self.mapContainerView = self.mapChooseView;
         
@@ -56,14 +62,12 @@
         
     }else if(type ==DGMapViewActionType_ConfirmTwoPoint){
         [self.pathRouteView setMapView:self.mapView];
-        self.mapView.delegate = self.pathRouteView;
+
         self.mapContainerView = self.pathRouteView;
   
      }else  if(type ==DGMapViewActionType_WaittingCar){
          
          self.realTimeMapView = [[DPRealTimePathView alloc] init];
-         self.mapView.delegate  = self.realTimeMapView;
-         
          self.realTimeMapView.mapView = self.mapView;
          self.mapContainerView = self.realTimeMapView;
          
@@ -97,25 +101,22 @@
     return _mapChooseView;
 }
 
-- (MAMapView *)mapView {
-    if(!_mapView){
-        _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
+- (void)reConfigMapView {
+    _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
 
 //        _mapView.scrollEnabled = NO;
-        _mapView.mapType = MAMapTypeBus;
-        ///下面两行代码 进入地图就显示定位小蓝点
-        _mapView.showsUserLocation = YES;
-        _mapView.userTrackingMode = MAUserTrackingModeFollow;
-        //设置地图缩放比例，即显示区域
-        [_mapView setZoomLevel:17 animated:YES];
-        //设置定位精度
-        _mapView.desiredAccuracy = kCLLocationAccuracyBest;
-        //设置定位距离
-        _mapView.distanceFilter = 5.0f;
-        
-    }
-    return _mapView;
+    _mapView.mapType = MAMapTypeBus;
+    ///下面两行代码 进入地图就显示定位小蓝点
+    _mapView.showsUserLocation = YES;
+    _mapView.userTrackingMode = MAUserTrackingModeFollow;
+    //设置地图缩放比例，即显示区域
+    [_mapView setZoomLevel:17 animated:YES];
+    //设置定位精度
+    _mapView.desiredAccuracy = kCLLocationAccuracyBest;
+    //设置定位距离
+    _mapView.distanceFilter = 5.0f;
 }
+
 
 
 @end

@@ -18,6 +18,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DPRealTimePathView : UIView<DGMapServiceViewInterface>
+@property (nonatomic, assign) DGMapViewActionType chooseType;
 @property(nonatomic,weak)MAMapView *mapView;
 @end
 

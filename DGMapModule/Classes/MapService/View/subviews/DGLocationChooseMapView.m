@@ -22,9 +22,6 @@
 
  
 @property (nonatomic, strong) UIImageView *centerAnnotationView;
- 
-@property (strong, nonatomic) POIAnnotation *choosedPOIAnnotaion;
-@property (strong, nonatomic) PointAnnotation *choosedPointAnnotation;
 
 @property (strong, nonatomic) NSMutableArray <POIAnnotation *> *aroundPoiAnnotations;
 
@@ -54,6 +51,8 @@
 - (void)setMapView:(MAMapView *)mapView {
     _mapView = mapView;
     _mapView.delegate = self;
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView removeOverlays:self.mapView.overlays];
 
 
 }
@@ -68,9 +67,6 @@
 - (void)setMapViewType:(DGMapViewActionType) type {
   
     _chooseType = type;
-
-    [self.mapView removeAnnotations:self.mapView.annotations];
-    [self.mapView removeOverlays:self.mapView.overlays];
 
     if(_chooseType == DGMapViewActionType_PickStartLocation){
         _mapView.showsUserLocation = YES;
@@ -92,26 +88,19 @@
 #pragma mark -- DGMapServiceViewInterface
  
 - (void)showAnAnnotationWithData:(DGMapLocationModel *)model {
-    CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(model.location.latitude, model.location.longitude);
+    CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(model.validLocation.latitude, model.validLocation.longitude);
     [self centerAnnotationAnimimate];
-    
-    dispatch_after(1.0, dispatch_get_main_queue(), ^{
-        [self.mapView setCenterCoordinate:location animated:YES];
-    });
-    
-    
+
+    [self.mapView setCenterCoordinate:location animated:YES];
+
+    [self.mapView removeAnnotations:self.mapView.annotations];
     
     [self.centerAnnotationView removeFromSuperview];
-    
-    [self.mapView removeAnnotation:  self.choosedPointAnnotation];
-    [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
-    
-    [self.centerAnnotationView removeFromSuperview];
+
     
     NSString * addres = model.poi.name.length>0?model.poi.name:@"当前位置";
-//    NSString * addres = [self shortAddressWithResponse:response];
-    PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:addres andLocation:model.location];
-    self.choosedPointAnnotation = point;
+    PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:addres andLocation:location];
+
     [self.mapView addAnnotation:point];
     
     
@@ -149,10 +138,9 @@
 
 - (void)showAnPoiPoint:(AMapPOI *)poi {
     CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(poi.location.latitude, poi.location.longitude);
-    
+
     if([self.eventHandler respondsToSelector:@selector(confirmedUserLocationCoordinate:withType:)]) {
         [self.eventHandler confirmedUserLocationCoordinate:location withType:_chooseType];
-        
     }
 
 }
@@ -219,9 +207,7 @@
     if(wasUserAction) {
         [self.mapView addSubview:self.centerAnnotationView];
         self.centerAnnotationView.center = CGPointMake(self.mapView.center.x, self.mapView.center.y - CGRectGetHeight(self.centerAnnotationView.bounds) / 2);
-        [self.mapView removeAnnotation:  self.choosedPointAnnotation];
-        [self.mapView removeAnnotation:  self.choosedPointAnnotation];
-        [self.mapView removeAnnotation:self.choosedPOIAnnotaion];
+
        
     }
 }
@@ -252,37 +238,6 @@
     }
 
 }
- 
-- (NSString *) shortAddressWithResponse:(AMapReGeocodeSearchResponse *)response {
-    NSString * string =@"";
-    NSString * street = @"";
-   
-    street = [NSString stringWithFormat:@"%@%@", response.regeocode.addressComponent.streetNumber.street,
-              response.regeocode.addressComponent.streetNumber.number];
-    
-    NSString * road = @"";
-    if(street.length==0 && response.regeocode.roads.count>0) {
-        AMapRoad * roadObj = response.regeocode.roads[0];
-        road = roadObj.name;
-    }
-    
-    NSString * aoiName = @"";
-    
-    if(response.regeocode.aois.count>0){
-        AMapAOI * aoi =response.regeocode.aois[0];
-        aoiName = aoi.name;
-    }
-    
-    string = [NSString stringWithFormat:@"%@%@%@%@%@%@",
-              response.regeocode.addressComponent.city,
-              response.regeocode.addressComponent.district,
-              response.regeocode.addressComponent.township,
-              street,
-              road,
-              aoiName];
-    return string;
-}
- 
 
 - (void)updateChoosedAnnotaionsViewWithResponse:(DGMapLocationModel *)model{
     [self.mapView setCenterCoordinate:model.location];

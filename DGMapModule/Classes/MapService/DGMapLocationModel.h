@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong)NSArray <AMapPOI *>* aroundPois;
 @property (nonatomic, strong) AMapReGeocode *regeocode; 
 
+- (CLLocationCoordinate2D)validLocation;
 - (instancetype)initWithLocation:(CLLocationCoordinate2D )location;
 
 - (void)fillWtihRegeoResponse:(AMapReGeocodeSearchResponse *)response;

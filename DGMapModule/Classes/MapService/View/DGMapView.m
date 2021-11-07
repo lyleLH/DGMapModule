@@ -51,8 +51,9 @@
     _mapViewActionType = type;
     [self.mapContainerView removeFromSuperview];
     self.mapContainerView = nil;
+
    if(type == DGMapViewActionType_PickStartLocation){
-       [self reConfigMapView];
+
        self.mapChooseView.mapView = self.mapView;
         self.mapContainerView = self.mapChooseView;
         
@@ -82,7 +83,14 @@
     [super layoutSubviews];
     [self.mapContainerView setFrame:self.bounds];
 }
+//- (void)showAnPoiPoint:(AMapPOI *)poi {
+//    [self.mapChooseView showAnPoiPoint:poi];
+//}
 
+- (void)showAnAnnotationWithData:(DGMapLocationModel *)model {
+    [self.mapChooseView showAnAnnotationWithData:model];
+
+}
 
 - (DGPathRouteMapView *)pathRouteView {
     if(!_pathRouteView){
@@ -101,22 +109,21 @@
     return _mapChooseView;
 }
 
-- (void)reConfigMapView {
-    _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
-
+- (MAMapView *)mapView {
+    if(!_mapView){
+        _mapView = [[MAMapView alloc] initWithFrame:CGRectZero];
 //        _mapView.scrollEnabled = NO;
-    _mapView.mapType = MAMapTypeBus;
-    ///下面两行代码 进入地图就显示定位小蓝点
-    _mapView.showsUserLocation = YES;
-    _mapView.userTrackingMode = MAUserTrackingModeFollow;
-    //设置地图缩放比例，即显示区域
-    [_mapView setZoomLevel:17 animated:YES];
-    //设置定位精度
-    _mapView.desiredAccuracy = kCLLocationAccuracyBest;
-    //设置定位距离
-    _mapView.distanceFilter = 5.0f;
+        _mapView.mapType = MAMapTypeBus;
+        ///下面两行代码 进入地图就显示定位小蓝点
+        _mapView.showsUserLocation = YES;
+        _mapView.userTrackingMode = MAUserTrackingModeFollow;
+        //设置地图缩放比例，即显示区域
+        [_mapView setZoomLevel:17 animated:YES];
+        //设置定位精度
+        _mapView.desiredAccuracy = kCLLocationAccuracyBest;
+        //设置定位距离
+        _mapView.distanceFilter = 5.0f;
+    }
+    return _mapView;
 }
-
-
-
 @end

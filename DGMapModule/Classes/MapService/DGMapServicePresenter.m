@@ -30,9 +30,28 @@
     return  self.userInterface;
 }
 
-
-- (void)userSearchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate  {
+- (void)searchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate  {
    [self.interactor searchAroundWithKeyWords:keyword InCity:city andCoordinate:coordinate];
+}
+
+
+- (void)userChooseAnPOIResult:(AMapAOI *)poi inMapViewWithType:(DGMapViewActionType)type {
+    [self.userInterface setMapViewType:type];
+    DGMapLocationModel * model = [[DGMapLocationModel alloc] init];
+    model.poi = poi;
+    if(type == DGMapViewActionType_PickStartLocation){
+        self.interactor.dataManager.startLocationData = model;
+    } else if(type == DGMapViewActionType_PickEndLocation){
+        self.interactor.dataManager.endLocationData = model;
+    }
+//    [self.userInterface showAnPoiPoint:poi];
+    [self.userInterface showAnAnnotationWithData:model];
+}
+
+
+- (void)onReGeocodeSearchDone:(AMapReGeocodeSearchRequest *)request response:(AMapReGeocodeSearchResponse *)response {
+
+    [self.delegate userSearchKeyWordsResponse:response withType:self.interactor.dataManager.currentType];
 }
 
 
@@ -63,11 +82,6 @@
 
 
 #pragma -- private
-
-- (void)userSelectAPOIPointToShowInMap:(NSDictionary*)poi {
-    [self.userInterface showAnPoiPoint:[AMapPOI mj_objectWithKeyValues:poi]];
-}
-
 
 - (void)searchRouterWithStartLocation:(CLLocationCoordinate2D)start endLocation:(CLLocationCoordinate2D)end {
     [self.interactor routeSearchWithStart:start end:end];

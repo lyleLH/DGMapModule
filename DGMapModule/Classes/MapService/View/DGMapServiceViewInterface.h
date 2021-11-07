@@ -22,7 +22,9 @@
 
 - (void)showReGeoSearchResult:(DGMapLocationModel *)model;
 
-- (void)showAnPoiPoint:(AMapPOI *)poi;
+- (void)showAnAnnotationWithData:(DGMapLocationModel *)model;
+
+//- (void)showAnPoiPoint:(AMapPOI *)poi;
 
 - (void)showRouterSearchResult:(AMapRouteSearchResponse *)response withStart:(DGMapLocationModel *)start andEnd:(DGMapLocationModel*)end;
 

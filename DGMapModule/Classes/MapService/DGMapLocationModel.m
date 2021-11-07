@@ -60,5 +60,23 @@
     return minIndex;
 }
 
+- (CLLocationCoordinate2D)validLocation {
+
+    CLLocationDegrees lati;
+    if(_location.latitude>0){
+        lati = _location.latitude;
+    } else{
+        lati = _poi.location.latitude;
+    }
+
+    CLLocationDegrees longti;
+
+    if(_location.longitude>0){
+        longti = _location.longitude;
+    } else{
+        longti = _poi.location.longitude;
+    }
+    return CLLocationCoordinate2DMake(lati, longti);
+}
 
 @end

@@ -43,8 +43,8 @@
 }
 
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
-    if([self.delegate respondsToSelector:@selector(userSearchKeyWordsResponse:)]){
-        [self.delegate userSearchKeyWordsResponse:response];
+    if([self.delegate respondsToSelector:@selector(userSearchKeyWordsResponse:withType:)]){
+        [self.delegate userSearchKeyWordsResponse:response withType:self.interactor.dataManager.currentType];
     }
 
 }

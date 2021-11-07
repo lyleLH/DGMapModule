@@ -35,6 +35,7 @@
 
 - (void)searchKeyWord:(NSString *)keyword inCity:(NSString *)city aroundCoordinate:(CLLocationCoordinate2D)coordinate ;
 
+- (void)userChooseAnPOIResult:(AMapAOI *)poi inMapViewWithType:(DGMapViewActionType)type;
 - (void)updateCarLocationInMap:(DGMapLocationModel*)carData;
 
 @end
@@ -50,6 +51,6 @@
 
 - (void)currentChoosedLocationData:(DGMapLocationModel*)data;
 
-- (void)userSearchKeyWordsResponse:(AMapPOISearchResponse *)data;
+- (void)userSearchKeyWordsResponse:(AMapPOISearchResponse *)data withType:(DGMapViewActionType)type;
 
 @end

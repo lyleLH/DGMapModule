@@ -50,31 +50,30 @@
  
 - (void)setMapView:(MAMapView *)mapView {
     _mapView = mapView;
+
     _mapView.delegate = self;
-    [self.mapView removeAnnotations:self.mapView.annotations];
-    [self.mapView removeOverlays:self.mapView.overlays];
-
-
 }
 
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self addSubview:self.mapView];
+
     [self.mapView setFrame:self.bounds];
 }
 
 - (void)setMapViewType:(DGMapViewActionType) type {
   
     _chooseType = type;
-
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    [self.mapView removeOverlays:self.mapView.overlays];
     if(_chooseType == DGMapViewActionType_PickStartLocation){
         _mapView.showsUserLocation = YES;
         _mapView.userTrackingMode = MAUserTrackingModeFollow;
 
         self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_start" inBundle:@"DGMapModule"];
     }else if(_chooseType == DGMapViewActionType_PickEndLocation){
-        [self.mapView removeAnnotations:self.mapView.annotations];
+
         self.mapView.showsUserLocation = NO;
         self.mapView.userTrackingMode = MAUserTrackingModeNone;
 
@@ -82,12 +81,14 @@
         self.centerAnnotationView.image =  [UIImage mt_imageWithName:@"icon_image_end" inBundle:@"DGMapModule"];
 
     }
+
     [self.mapView addSubview:self.centerAnnotationView];
 }
 
 #pragma mark -- DGMapServiceViewInterface
  
 - (void)showAnAnnotationWithData:(DGMapLocationModel *)model {
+
     CLLocationCoordinate2D location =  CLLocationCoordinate2DMake(model.validLocation.latitude, model.validLocation.longitude);
     [self centerAnnotationAnimimate];
 
@@ -99,6 +100,7 @@
 
     
     NSString * addres = model.poi.name.length>0?model.poi.name:@"当前位置";
+
     PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:addres andLocation:location];
 
     [self.mapView addAnnotation:point];
@@ -274,7 +276,8 @@
         PointAnnotation *point = (PointAnnotation *)annotation;
         annotationView.calloutView.textLabel.text = point.title;
         annotationView.calloutView.hidden = NO;
-        annotationView.image = [UIImage mt_imageWithName:_chooseType==DGMapViewActionType_PickEndLocation?@"icon_image_end":@"icon_image_start" inBundle:@"DGMapModule"];;
+        UIImage * image = [UIImage mt_imageWithName:_chooseType==DGMapViewActionType_PickEndLocation?@"icon_image_end":@"icon_image_start" inBundle:@"DGMapModule"];
+        annotationView.image = image;
         return annotationView;
     }
     if ([annotation isKindOfClass:[POIAnnotation class]])

@@ -36,7 +36,7 @@
 
 
 - (void)userChooseAnPOIResult:(AMapAOI *)poi inMapViewWithType:(DGMapViewActionType)type {
-    [self.userInterface setMapViewType:type];
+//    [self.userInterface setMapViewType:type];
     DGMapLocationModel * model = [[DGMapLocationModel alloc] init];
     model.poi = poi;
     if(type == DGMapViewActionType_PickStartLocation){

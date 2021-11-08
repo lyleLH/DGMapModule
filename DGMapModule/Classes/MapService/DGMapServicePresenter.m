@@ -19,9 +19,9 @@
 
 
 - (UIView *) papredMapViewWithType:(DGMapViewActionType )type {
-
     if(type == DGMapViewActionType_ConfirmTwoPoint){
-        [self searchRouterWithStartLocation:self.interactor.dataManager.startLocationData.location endLocation:self.interactor.dataManager.endLocationData.location];
+
+        [self searchRouterWithStartLocation:self.interactor.dataManager.startLocationData.validLocation endLocation:self.interactor.dataManager.endLocationData.validLocation];
     }else if(type == DGMapViewActionType_WaittingCar){
 
     }
@@ -41,10 +41,11 @@
     model.poi = poi;
     if(type == DGMapViewActionType_PickStartLocation){
         self.interactor.dataManager.startLocationData = model;
+
     } else if(type == DGMapViewActionType_PickEndLocation){
         self.interactor.dataManager.endLocationData = model;
     }
-//    [self.userInterface showAnPoiPoint:poi];
+    [self.delegate currentChoosedLocationData:model];
     [self.userInterface showAnAnnotationWithData:model];
 }
 

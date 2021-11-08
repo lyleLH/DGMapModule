@@ -79,11 +79,11 @@ static const NSInteger RoutePlanningPaddingEdge                    = 20;
     [self.mapView removeOverlays:self.mapView.overlays];
     [self.mapView removeAnnotations:self.mapView.annotations];
     
-    PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:start.poi.name.length>0?start.poi.name:@"当前位置" andLocation:start.location];
+    PointAnnotation * point  = [[PointAnnotation  alloc] initWithAddress:start.poi.name.length>0?start.poi.name:@"当前位置" andLocation:start.validLocation];
     self.startPoint = point;
     [self.mapView addAnnotation:point];
 
-    PointAnnotation * point2  = [[PointAnnotation  alloc] initWithAddress:end.poi.name.length>0?end.poi.name:@"当前位置" andLocation:end.location];
+    PointAnnotation * point2  = [[PointAnnotation  alloc] initWithAddress:end.poi.name.length>0?end.poi.name:@"当前位置" andLocation:end.validLocation];
     self.endPoint = point2;
     [self.mapView addAnnotation:point2];
     

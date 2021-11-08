@@ -10,6 +10,11 @@
 
 @implementation DGMapServiceDataManager
 
- 
+ - (DGMapLocationModel *)startLocationData {
+    if(!_startLocationData){
+         _startLocationData  = _userLocationData;
+    }
+     return _startLocationData;
+ }
 
 @end

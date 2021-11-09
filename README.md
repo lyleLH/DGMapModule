@@ -22,7 +22,7 @@ pod 'DGMapModule'
 
 ## Author
 
-Tom.Liu, tomliu@yeahka.com
+Tom.Liu, 
 
 ## License
 

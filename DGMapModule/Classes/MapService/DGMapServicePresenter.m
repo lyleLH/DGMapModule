@@ -20,10 +20,11 @@
 
 - (UIView *) papredMapViewWithType:(DGMapViewActionType )type {
     if(type == DGMapViewActionType_ConfirmTwoPoint){
-
         [self searchRouterWithStartLocation:self.interactor.dataManager.startLocationData.validLocation endLocation:self.interactor.dataManager.endLocationData.validLocation];
     }else if(type == DGMapViewActionType_WaittingCar){
 
+    } else if(type == DGMapViewActionType_PickStartLocation){
+        [self.userInterface showReGeoSearchResult:self.interactor.dataManager.userLocationData];
     }
     [self.userInterface setMapViewType:type];
     self.interactor.dataManager.intialType = type;

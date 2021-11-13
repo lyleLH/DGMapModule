@@ -50,7 +50,7 @@
  
 - (void)setMapView:(MAMapView *)mapView {
     _mapView = mapView;
-
+    [self.mapView removeOverlays:self.mapView.overlays];
     _mapView.delegate = self;
 }
 
@@ -65,9 +65,10 @@
 - (void)setMapViewType:(DGMapViewActionType) type {
   
     _chooseType = type;
-    [self.mapView removeAnnotations:self.mapView.annotations];
-    [self.mapView removeOverlays:self.mapView.overlays];
+//    [self.mapView removeAnnotations:self.mapView.annotations];
+
     if(_chooseType == DGMapViewActionType_PickStartLocation){
+
         _mapView.showsUserLocation = YES;
         _mapView.userTrackingMode = MAUserTrackingModeFollow;
 
